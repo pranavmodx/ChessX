@@ -16,13 +16,15 @@ class Piece:
 
     def set_pos(self, pos):
         screen_obj = screen.blit(self.img, (pos[0], pos[1]))
+        self.pos = screen_obj.topleft
+        self.center_pos = screen_obj.center
+
+    def update_pos(self, pos, center_pos):
         self.pos = pos
-
-    def update_pos(self, pos):
-        self.pos = pos
+        self.center_pos = center_pos
 
 
-class Pawn(Piece):
+class Pawn(Piece): 
     pass
 
 

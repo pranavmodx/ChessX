@@ -60,6 +60,9 @@ w_knight1.load_img('../assets/img/pieces/w_knight.png')
 w_knight2 = Knight()
 w_knight2.load_img('../assets/img/pieces/w_knight.png')
 
+w_pieces_list = [w_rook1, w_knight1, w_bishop1, w_queen, 
+                w_king, w_bishop2, w_knight2, w_rook2]
+
 # Black pawns
 b_pawns_list = []
 for i in range(8):
@@ -89,6 +92,9 @@ b_knight1.load_img('../assets/img/pieces/b_knight.png')
 b_knight2 = Knight()
 b_knight2.load_img('../assets/img/pieces/b_knight.png')
 
+b_pieces_list = [b_rook1, b_knight1, b_bishop1, b_queen, 
+                b_king, b_bishop2, b_knight2, b_rook2]
+
 
 # Set position of pieces
 # White
@@ -98,7 +104,6 @@ for pawn in w_pawns_list:
     x_change += SQ_SIZE
 
 w_rook1.set_pos((x_pos + (SQ_SIZE * 0), down_y_pos))
-print(w_rook1.pos)
 w_knight1.set_pos((x_pos + (SQ_SIZE * 1), down_y_pos))
 w_bishop1.set_pos((x_pos + (SQ_SIZE * 2), down_y_pos))
 w_queen.set_pos((x_pos + (SQ_SIZE * 3), down_y_pos))
@@ -130,6 +135,38 @@ while not game_over:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+
+            idx = int(mouse_pos[0] // SQ_SIZE)
+            # print(idx)
+
+            pawn = w_pawns_list[idx]
+            # print(f'mouse_pos : {mouse_pos}, pos : {pawn.pos} center_pos : {pawn.center_pos}')
+            if abs(mouse_pos[0] - pawn.center_pos[0]) < 32 and \
+                abs(mouse_pos[1] - pawn.center_pos[1]) < 32:
+                pawn.update_pos((pawn.pos[0], pawn.pos[1] - 75), 
+                                (pawn.center_pos[0], pawn.center_pos[1] - 75))
+                # print(f'update_pos : {pawn.pos}, update_center_pos : {pawn.center_pos}')
+
+            pawn = b_pawns_list[idx]
+            if abs(mouse_pos[0] - pawn.center_pos[0]) < 32 and \
+                abs(mouse_pos[1] - pawn.center_pos[1]) < 32:
+                pawn.update_pos((pawn.pos[0], pawn.pos[1] + 75), 
+                                (pawn.center_pos[0], pawn.center_pos[1] + 75))
+
+            piece = w_pieces_list[idx]
+            if abs(mouse_pos[0] - piece.center_pos[0]) < 32 and \
+                abs(mouse_pos[1] - piece.center_pos[1]) < 32:
+                piece.update_pos((piece.pos[0], piece.pos[1] - 150), 
+                                (piece.center_pos[0], piece.center_pos[1] - 150))
+
+            piece = b_pieces_list[idx]
+            if abs(mouse_pos[0] - piece.center_pos[0]) < 32 and \
+                abs(mouse_pos[1] - piece.center_pos[1]) < 32:
+                piece.update_pos((piece.pos[0], piece.pos[1] + 150), 
+                                (piece.center_pos[0], piece.center_pos[1] + 150))
             
     # Display board 
     chess_board.show() 
