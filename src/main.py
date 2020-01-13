@@ -170,6 +170,7 @@ while not game_over:
             
     # Display board 
     chess_board.show() 
+    # chess_board.highlight_square(screen, RED, (75*3, 75*3, 75, 75))
 
     # Display white pieces
     x_change = x_pos

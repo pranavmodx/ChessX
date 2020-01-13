@@ -18,3 +18,8 @@ class Board:
     def set_pos(self, pos):
         screen_obj = screen.blit(self.img, (pos[0], pos[1]))
         self.pos = pos
+
+    @staticmethod
+    def highlight_square(surface, color, rect, width=3):
+        left, top, rect_width, height = rect
+        pygame.draw.rect(surface, color, pygame.Rect(left, top, rect_width, height), width)

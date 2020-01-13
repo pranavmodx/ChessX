@@ -15,7 +15,8 @@ class Piece:
         screen_obj = screen.blit(self.img, (self.pos[0], self.pos[1]))
 
     def set_pos(self, pos):
-        screen_obj = screen.blit(self.img, (pos[0], pos[1]))
+        x, y = pos
+        screen_obj = screen.blit(self.img, (x, y))
         self.pos = screen_obj.topleft
         self.center_pos = screen_obj.center
 
@@ -25,7 +26,8 @@ class Piece:
 
 
 class Pawn(Piece): 
-    pass
+    def valid_moves():
+        pass
 
 
 class Knight(Piece):
