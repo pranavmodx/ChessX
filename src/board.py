@@ -1,19 +1,14 @@
-from window import *
+import window
 import pygame
 
 
 class Board:
-    # def __init__(self, height, width):
-    #     self.height = height
-    #     self.width = width
-
     def load_img(self, path):
         self.img = pygame.image.load(path)
-        # print(self.img.__dir__())
         self.size = self.img.get_height()
 
     def show(self):
-        screen_obj = screen.blit(self.img, (self.pos[0], self.pos[1]))
+        screen_obj = window.screen.blit(self.img, (self.pos[0], self.pos[1]))
 
     def set_pos(self, pos):
         self.pos = pos
