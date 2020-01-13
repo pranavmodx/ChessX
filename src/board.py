@@ -16,7 +16,6 @@ class Board:
         screen_obj = screen.blit(self.img, (self.pos[0], self.pos[1]))
 
     def set_pos(self, pos):
-        screen_obj = screen.blit(self.img, (pos[0], pos[1]))
         self.pos = pos
 
     @staticmethod

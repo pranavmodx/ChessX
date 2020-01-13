@@ -3,10 +3,9 @@ import pygame
 
 
 class Piece:
-    # def __init__(self, pos=None, img_path=None):
-    #     if img_path != None:
-    #         self.img = pygame.image.load(img_path)
-    #     self.pos = pos
+    def __init__(self, colour='White', captured=False):
+        self.colour = colour
+        self.captured = captured
 
     def load_img(self, img_path):
         self.img = pygame.image.load(img_path)
@@ -15,8 +14,7 @@ class Piece:
         screen_obj = screen.blit(self.img, (self.pos[0], self.pos[1]))
 
     def set_pos(self, pos):
-        x, y = pos
-        screen_obj = screen.blit(self.img, (x, y))
+        screen_obj = screen.blit(self.img, (pos[0], pos[1]))
         self.pos = screen_obj.topleft
         self.center_pos = screen_obj.center
 
@@ -24,27 +22,52 @@ class Piece:
         self.pos = pos
         self.center_pos = center_pos
 
+    def update_capture_stat(self, captured):
+        self.captured = captured
+
+    def move(self, obj, new_pos):
+        pass
 
 class Pawn(Piece): 
+    value = 1
+
+    # def __init__(self, colour='White', captured=False):
+    # super().__init__(colour, captured)
+
     def valid_moves():
         pass
 
 
 class Knight(Piece):
-    pass
+    value = 3
+
+    def valid_moves():
+        pass
 
 
 class Bishop(Piece):
-    pass
+    value = 3
+
+    def valid_moves():
+        pass
 
 
 class Rook(Piece):
-    pass
+    value = 5
+
+    def valid_moves():
+        pass
 
 
 class Queen(Piece):
-    pass
+    value = 9
+
+    def valid_moves():
+        pass
 
 
 class King(Piece):
-    pass
+    value = 0
+
+    def valid_moves():
+        pass
