@@ -1,5 +1,4 @@
 import window
-from main import SQ_SIZE
 
 import pygame
 
@@ -17,17 +16,17 @@ class Piece:
 
     def set_pos(self, pos):
         self.pos = (int(pos[0]), int(pos[1]))
-        self.c_pos = (self.pos[0] + int(SQ_SIZE // 2), self.pos[1] + int(SQ_SIZE // 2))
+        self.c_pos = (self.pos[0] + int(75 // 2), self.pos[1] + int(75 // 2))
 
     def update_pos(self, pos):
         self.pos = pos
-        self.c_pos = (pos[0] + int(SQ_SIZE // 2), pos[1] + int(SQ_SIZE // 2))
+        self.c_pos = (pos[0] + int(75 // 2), pos[1] + int(75 // 2))
 
     def update_capture_stat(self, captured):
         self.captured = captured
 
     def move(self, coeff):
-        new_pos = (self.pos[0] + SQ_SIZE * coeff[0], self.pos[1] + SQ_SIZE * coeff[1])
+        new_pos = (self.pos[0] + 75 * coeff[0], self.pos[1] + 75 * coeff[1])
 
         self.update_pos(new_pos)
 
@@ -40,10 +39,10 @@ class Pawn(Piece):
         self.p_no = p_no
 
     def __repr__(self):
-        print(f'Pawn{self.p_no}({self.colour})')
+        return f'Pawn{self.p_no + 1}({self.colour})'
 
     def __str__(self):
-        print(f'Pawn{self.p_no}({self.colour})')
+        return f'Pawn{self.p_no + 1}({self.colour})'
 
     def valid_moves():
         pass
@@ -57,10 +56,10 @@ class Knight(Piece):
         self.k_no = k_no
 
     def __repr__(self):
-        return f'Knight{self.p_no}({self.colour})'
+        return f'Knight{self.k_no}({self.colour})'
 
     def __str__(self):
-        return f'Knight{self.p_no}({self.colour})'
+        return f'Knight{self.k_no}({self.colour})'
 
     def valid_moves():
         pass

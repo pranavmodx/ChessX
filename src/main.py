@@ -164,13 +164,50 @@ def display_all():
     for b_piece in b_pieces:
         b_piece.show()
 
+def calc_sq_topleft(mouse_pos):
+    coeff_x = int(mouse_pos[0] // SQ_SIZE)
+    coeff_y = int(mouse_pos[1] // SQ_SIZE)
+
+    return (int(SQ_SIZE * coeff_x + 5), int(SQ_SIZE * coeff_y + 5))
+
+def piece_clicked(req_pos):
+    flag = 0
+
+    for w_pawn in w_pawns:
+        if w_pawn.pos == req_pos:
+            flag = 1
+            clicked_once = True
+            print(w_pawn)
+            return True
+
+    for w_piece in w_pieces:
+        if w_piece.pos == req_pos:
+            flag = 1
+            clicked_once = True
+            print(w_piece)
+            return True
+
+    for b_pawn in b_pawns:
+        if b_pawn.pos == req_pos:
+            flag = 1
+            clicked_once = True
+            print(b_pawn)
+            return True
+
+    for b_piece in b_pieces:
+        if b_piece.pos == req_pos:
+            flag = 1
+            clicked_once = True
+            print(b_piece)
+            return True
+
+    return False
+
 
 def gameplay():
     '''Main game loop'''
 
     game_over = False
-    mouse_pos1 = ()
-    mouse_pos2 = ()
     clicked_once = False
 
     while not game_over:
@@ -182,37 +219,29 @@ def gameplay():
                 exit()
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
-                # if piece_present:
-                    # clicked_once = True
+                print('Click 1')
 
-                # clicked_once = True
-                # mouse_pos1 = pygame.mouse.get_pos()
-                # print('Click 1', mouse_pos1)
-                
-                # # Selects right square
-                # coeff_x1 = int(mouse_pos1[0] // SQ_SIZE)
-                # coeff_y1 = int(mouse_pos1[1] // SQ_SIZE)
+                mouse_pos1 = pygame.mouse.get_pos()
 
-                # board.highlight_square(window.screen, RED, 
-                #                         (SQ_SIZE * coeff_x1, SQ_SIZE * coeff_y1, SQ_SIZE, SQ_SIZE))
+                sq_topleft = calc_sq_topleft(mouse_pos1)
+
+                if piece_clicked(sq_topleft):
+                    clicked_once = True
+                else:
+                    print('Empty square')
 
             elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
-                # clicked_once = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # mouse_pos2 = pygame.mouse.get_pos()
-                    # print('Click 2', mouse_pos2)
+                    print('Click 2')
 
-                    # coeff_x2 = int(mouse_pos2[0] // SQ_SIZE)
-                    # coeff_y2 = int(mouse_pos2[1] // SQ_SIZE)
+                    mouse_pos2 = pygame.mouse.get_pos()
 
-                    # idx = int(mouse_pos1[0] // SQ_SIZE)
-                    # piece = w_pieces[idx]
-                    # print('Old', piece.pos, piece.c_pos)
-                    # piece.move((coeff_y1, coeff_y2))
-                    # print('New', piece.pos, piece.c_pos)
+                    sq_topleft = calc_sq_topleft(mouse_pos2)
 
-                    # board.highlight_square(window.screen, RED, 
-                    #                         (SQ_SIZE * coeff_x2, SQ_SIZE * coeff_y2, SQ_SIZE, SQ_SIZE))
+                    if piece_clicked(sq_topleft):
+                        clicked_once = False
+                    else:
+                        print('Empty square')
     
         pygame.display.flip()
 
