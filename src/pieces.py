@@ -1,4 +1,6 @@
 import window
+from main import SQ_SIZE
+
 import pygame
 
 
@@ -14,22 +16,22 @@ class Piece:
         screen_obj = window.screen.blit(self.img, (self.pos[0], self.pos[1]))
 
     def set_pos(self, pos):
-        screen_obj = window.screen.blit(self.img, (pos[0], pos[1]))
-        #Blits unnecessarily; tbf
-        self.pos = screen_obj.topleft
-        self.c_pos = screen_obj.center
+        self.pos = (int(pos[0]), int(pos[1]))
+        self.c_pos = (self.pos[0] + int(SQ_SIZE // 2), self.pos[1] + int(SQ_SIZE // 2))
 
-    def update_pos(self, pos, c_pos):
+    def update_pos(self, pos):
         self.pos = pos
-        self.c_pos = c_pos
+        self.c_pos = (pos[0] + int(SQ_SIZE // 2), pos[1] + int(SQ_SIZE // 2))
 
     def update_capture_stat(self, captured):
         self.captured = captured
 
-    def move(self, obj, new_pos):
-        pass
+    def move(self, coeff):
+        new_pos = (self.pos[0] + SQ_SIZE * coeff[0], self.pos[1] + SQ_SIZE * coeff[1])
 
+        self.update_pos(new_pos)
 
+ 
 class Pawn(Piece): 
     value = 1 
 

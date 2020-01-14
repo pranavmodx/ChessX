@@ -14,6 +14,6 @@ class Board:
         self.pos = pos
 
     @staticmethod
-    def highlight_square(surface, color, rect, width=3):
-        left, top, rect_width, height = rect
-        pygame.draw.rect(surface, color, pygame.Rect(left, top, rect_width, height), width)
+    def highlight_square(surface, color, rect_dim, width=3):
+        left, top, r_width, height = rect_dim
+        pygame.draw.rect(surface, color, pygame.Rect(left, top, r_width, height), width)

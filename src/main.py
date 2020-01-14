@@ -169,14 +169,51 @@ def gameplay():
     '''Main game loop'''
 
     game_over = False
+    mouse_pos1 = ()
+    mouse_pos2 = ()
+    clicked_once = False
 
     while not game_over:
+        display_all()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-        display_all()
+            elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
+                # if piece_present:
+                    # clicked_once = True
+
+                # clicked_once = True
+                # mouse_pos1 = pygame.mouse.get_pos()
+                # print('Click 1', mouse_pos1)
+                
+                # # Selects right square
+                # coeff_x1 = int(mouse_pos1[0] // SQ_SIZE)
+                # coeff_y1 = int(mouse_pos1[1] // SQ_SIZE)
+
+                # board.highlight_square(window.screen, RED, 
+                #                         (SQ_SIZE * coeff_x1, SQ_SIZE * coeff_y1, SQ_SIZE, SQ_SIZE))
+
+            elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
+                # clicked_once = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    # mouse_pos2 = pygame.mouse.get_pos()
+                    # print('Click 2', mouse_pos2)
+
+                    # coeff_x2 = int(mouse_pos2[0] // SQ_SIZE)
+                    # coeff_y2 = int(mouse_pos2[1] // SQ_SIZE)
+
+                    # idx = int(mouse_pos1[0] // SQ_SIZE)
+                    # piece = w_pieces[idx]
+                    # print('Old', piece.pos, piece.c_pos)
+                    # piece.move((coeff_y1, coeff_y2))
+                    # print('New', piece.pos, piece.c_pos)
+
+                    # board.highlight_square(window.screen, RED, 
+                    #                         (SQ_SIZE * coeff_x2, SQ_SIZE * coeff_y2, SQ_SIZE, SQ_SIZE))
+    
         pygame.display.flip()
 
 
@@ -185,8 +222,6 @@ def main():
 
     load_all_img()
     set_pos_all()
-
-    print(b_bishop2)
 
     gameplay()
 
