@@ -25,12 +25,10 @@ class Piece:
     def update_capture_stat(self, captured):
         self.captured = captured
 
-    def move(self, coeff):
-        new_pos = (self.pos[0] + 75 * coeff[0], self.pos[1] + 75 * coeff[1])
-
+    def move(self, new_pos):
         self.update_pos(new_pos)
 
- 
+
 class Pawn(Piece): 
     value = 1 
 

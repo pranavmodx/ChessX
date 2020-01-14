@@ -150,19 +150,23 @@ def display_all():
 
     x_change = x_pos
     for pawn in w_pawns:
-        pawn.show() 
+        if not pawn.captured:
+            pawn.show() 
         x_change += SQ_SIZE
 
     for w_piece in w_pieces:
-        w_piece.show()
+        if not w_piece.captured:
+            w_piece.show()
 
     x_change = x_pos
     for pawn in b_pawns:
-        pawn.show() 
+        if not pawn.captured:
+            pawn.show() 
         x_change += SQ_SIZE
     
     for b_piece in b_pieces:
-        b_piece.show()
+        if not b_piece.captured:
+            b_piece.show()
 
 def calc_sq_topleft(mouse_pos):
     coeff_x = int(mouse_pos[0] // SQ_SIZE)
@@ -178,30 +182,30 @@ def piece_clicked(req_pos):
             flag = 1
             clicked_once = True
             print(w_pawn)
-            return True
+            return w_pawn
 
     for w_piece in w_pieces:
         if w_piece.pos == req_pos:
             flag = 1
             clicked_once = True
             print(w_piece)
-            return True
+            return w_piece
 
     for b_pawn in b_pawns:
         if b_pawn.pos == req_pos:
             flag = 1
             clicked_once = True
             print(b_pawn)
-            return True
+            return b_pawn
 
     for b_piece in b_pieces:
         if b_piece.pos == req_pos:
             flag = 1
             clicked_once = True
             print(b_piece)
-            return True
+            return b_piece
 
-    return False
+    return None
 
 
 def gameplay():
@@ -225,7 +229,8 @@ def gameplay():
 
                 sq_topleft = calc_sq_topleft(mouse_pos1)
 
-                if piece_clicked(sq_topleft):
+                piece = piece_clicked(sq_topleft)
+                if piece != None:
                     clicked_once = True
                 else:
                     print('Empty square')
@@ -233,15 +238,20 @@ def gameplay():
             elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     print('Click 2')
+                    clicked_once = False
 
                     mouse_pos2 = pygame.mouse.get_pos()
 
                     sq_topleft = calc_sq_topleft(mouse_pos2)
 
-                    if piece_clicked(sq_topleft):
-                        clicked_once = False
+                    piece2 = piece_clicked(sq_topleft)
+                    if piece2 == None:
+                        piece.move(sq_topleft)
                     else:
-                        print('Empty square')
+                        # capture
+                        piece2.captured = True
+                        piece.move(sq_topleft)
+                        
     
         pygame.display.flip()
 
