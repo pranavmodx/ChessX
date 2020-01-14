@@ -35,6 +35,7 @@ class Pawn(Piece):
     def __init__(self, p_no, colour='White', captured=False):
         super().__init__(colour, captured)
         self.p_no = p_no
+        self.start_pos = True
 
     def __repr__(self):
         return f'Pawn{self.p_no + 1}({self.colour})'
@@ -42,8 +43,17 @@ class Pawn(Piece):
     def __str__(self):
         return f'Pawn{self.p_no + 1}({self.colour})'
 
-    def valid_moves():
-        pass
+    def valid_moves(self):
+        # print(self.start_pos)
+        # if self.start_pos:
+            # print(self.pos)
+            # print(self.pos[1])
+            # print(self.pos[2])
+            if self.pos[1] == 455:
+                return [(self.pos[0], 375), self.pos[0], 300]
+            elif self.pos[1] == 75:
+                return [(self.pos[0], 150), self.pos[0], 225]
+
 
 
 class Knight(Piece):
