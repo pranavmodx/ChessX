@@ -31,14 +31,14 @@ def display_all(screen):
             b_piece.show(screen)
 
 
-def calc_sq_topleft(mouse_pos):
+def calc_sq_pos(mouse_pos):
     coeff_x = int(mouse_pos[0] // board.SQ_SZ)
     coeff_y = int(mouse_pos[1] // board.SQ_SZ)
 
     return (int(board.SQ_SZ * coeff_x + 5), int(board.SQ_SZ * coeff_y + 5))
 
 
-def piece_clicked(req_pos):
+def fetch_piece(req_pos):
     found = 0
 
     for w_pawn in w_pawns:
@@ -65,3 +65,17 @@ def piece_clicked(req_pos):
                 return b_piece
 
     return None
+
+
+def delete_piece(piece):
+    if piece.p_type == 'Pawn':
+        if piece.colour == 'White':
+            w_pawns.remove(piece)
+        else:
+            b_pawns.remove(piece)
+
+    else:
+        if piece.colour == 'White':
+            w_majors.remove(piece)
+        else:
+            b_majors.remove(piece)

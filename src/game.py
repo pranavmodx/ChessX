@@ -2,8 +2,9 @@ import colour
 from config import *
 from utilities import (
     display_all,
-    calc_sq_topleft,
-    piece_clicked
+    calc_sq_pos,
+    fetch_piece, 
+    delete_piece
 )
 
 import pygame
@@ -35,7 +36,7 @@ def gameplay(screen):
                 # board.bd_obj.highlight_square(
                 #     window.screen, 
                 #     colour.RED, 
-                #     (sq_topleft[0] - 5, sq_topleft[1] - 5, bd.bd_obj.SQ_SZ, bd.bd_obj.SQ_SZ)
+                #     (sq_pos[0] - 5, sq_pos[1] - 5, bd.bd_obj.SQ_SZ, bd.bd_obj.SQ_SZ)
                 # )
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
@@ -43,18 +44,20 @@ def gameplay(screen):
 
                 mouse_pos1 = pygame.mouse.get_pos()
 
-                sq_topleft = calc_sq_topleft(mouse_pos1)
+                sq_pos1 = calc_sq_pos(mouse_pos1)
+                print('Sq pos 1 :', sq_pos1)
 
                 # bd.bd_obj.highlight_square(
                 #     window.screen, 
                 #     colour.RED, 
-                #     (sq_topleft[0] - 5, sq_topleft[1] - 5, bd.bd_obj.SQ_SZ, bd.bd_obj.SQ_SZ)
+                #     (sq_pos[0] - 5, sq_pos[1] - 5, bd.bd_obj.SQ_SZ, bd.bd_obj.SQ_SZ)
                 # )
 
-                piece = piece_clicked(sq_topleft)
+                piece = fetch_piece(sq_pos1)
 
                 if piece != None:
                     clicked_once = True
+                    print('Piece 1 :', piece)
                 else:
                     print('Empty square')
 
@@ -62,20 +65,23 @@ def gameplay(screen):
                 print('Click 2')
                 clicked_once = False
 
-                mouse_pos2 = pygame.mouse.get_pos()
+                mouse_pos = pygame.mouse.get_pos()
 
-                sq_topleft = calc_sq_topleft(mouse_pos2)
+                sq_pos2 = calc_sq_pos(mouse_pos)
+                print('Sq pos 2 :', sq_pos2)
 
-                piece2 = piece_clicked(sq_topleft)
+                if sq_pos2 != sq_pos1:
+                    piece2 = fetch_piece(sq_pos2)
 
-                if piece2 == None:
-                    new_sq_tl = (sq_topleft[0], sq_topleft[1] - 5)
-                    # if new_sq_tl in piece.valid_moves():
-                    piece.move(new_sq_tl)
-                else:
-                    if piece2 != piece:
+                    if piece2 == None:
+                        print('Empty square')
+                        # if new_sq_tl in piece.valid_moves():
+                        piece.move(sq_pos2)
+                    else:
+                        print('Piece 2 :', piece)
                         piece2.captured = True
-                    piece.move(sq_topleft)
+                        delete_piece(piece2)
+                        piece.move(sq_pos2)
                         
     
         pygame.display.flip()

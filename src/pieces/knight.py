@@ -4,15 +4,8 @@ from .piece import Piece
 class Knight(Piece):
     value = 3
 
-    def __init__(self, k_no, colour='White', captured=False):
-        super().__init__(colour, captured)
-        self.k_no = k_no
-
-    def __repr__(self):
-        return f'Knight{self.k_no}({self.colour})'
-
-    def __str__(self):
-        return f'Knight{self.k_no}({self.colour})'
+    def __init__(self, p_no=None, colour='White', p_type='Knight', captured=False):
+        super().__init__(p_type, p_no, colour, captured)
 
     def valid_moves():
         pass

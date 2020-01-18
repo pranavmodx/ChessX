@@ -13,12 +13,12 @@ import pygame
 
 w_pawns = []
 for i in range(8):
-    p = Pawn(i)
+    p = Pawn(i + 1)
     w_pawns.append(p)
 
 b_pawns = []
 for i in range(8):
-    p = Pawn(i, 'Black')
+    p = Pawn(i + 1, 'Black')
     b_pawns.append(p)
 
 w_majors = [
