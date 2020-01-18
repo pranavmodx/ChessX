@@ -32,6 +32,8 @@ def display_all(screen):
 
 
 def calc_sq_pos(mouse_pos):
+    '''Calculates and returns topleft position of the square clicked'''
+
     coeff_x = int(mouse_pos[0] // board.SQ_SZ)
     coeff_y = int(mouse_pos[1] // board.SQ_SZ)
 
@@ -39,6 +41,8 @@ def calc_sq_pos(mouse_pos):
 
 
 def fetch_piece(req_pos):
+    '''Fetches piece present at a given position'''
+
     found = 0
 
     for w_pawn in w_pawns:
@@ -68,6 +72,8 @@ def fetch_piece(req_pos):
 
 
 def delete_piece(piece):
+    '''Deletes a given piece from the list of pieces'''
+
     if piece.p_type == 'Pawn':
         if piece.colour == 'White':
             w_pawns.remove(piece)
