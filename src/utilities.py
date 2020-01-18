@@ -5,10 +5,13 @@ from pieces.pieces import (
     w_majors, b_majors
 )
 
+import pygame
+
+
 def display_all(screen):
     '''Display(show) all objects'''
 
-    bd_obj.show(screen) 
+    bd_obj.show(screen)
 
     x_change = x_pos
     for pawn in w_pawns:
@@ -106,7 +109,7 @@ def flip_board():
 
     for w_major in w_majors:
         w_major.set_pos(
-            ( 
+            (
                 BD_SZ - w_major.pos[0] - p_size,
                 BD_SZ - w_major.pos[1] - p_size
             )
@@ -119,3 +122,16 @@ def flip_board():
                 BD_SZ - b_major.pos[1] - p_size
             )
         )
+
+
+def highlight_square(surface, color, rect_dim, width=3):
+    r_left, r_top = rect_dim
+    r_width = SQ_SZ
+    r_height = SQ_SZ
+
+    pygame.draw.rect(
+        surface,
+        color,
+        pygame.Rect(r_left, r_top, r_width, r_height),
+        width
+    )

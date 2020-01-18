@@ -1,11 +1,13 @@
 import colour
+from board import bd_obj
 from config import S_WIDTH, S_HEIGHT
 from utilities import (
     display_all,
     calc_sq_pos,
-    fetch_piece, 
+    fetch_piece,
     delete_piece,
-    flip_board
+    flip_board,
+    highlight_square
 )
 
 import pygame
@@ -26,34 +28,27 @@ def gameplay(screen):
 
     while not game_over:
         display_all(screen)
-        
+
+        if clicked_once == True:
+                highlight_square(
+                    screen,
+                    colour.RED,
+                    (sq_pos1[0] - 5, sq_pos1[1] - 5)
+                )
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-            elif event.type == pygame.MOUSEBUTTONUP and clicked_once:
-                pass
-                # board.bd_obj.highlight_square(
-                #     window.screen, 
-                #     colour.RED, 
-                #     (sq_pos[0] - 5, sq_pos[1] - 5, bd.bd_obj.SQ_SZ, bd.bd_obj.SQ_SZ)
-                # )
-
             elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
-                flip_board()
+                # flip_board()
                 print('Click 1')
 
                 mouse_pos1 = pygame.mouse.get_pos()
 
                 sq_pos1 = calc_sq_pos(mouse_pos1)
                 print('Sq pos 1 :', sq_pos1)
-
-                # bd.bd_obj.highlight_square(
-                #     window.screen, 
-                #     colour.RED, 
-                #     (sq_pos[0] - 5, sq_pos[1] - 5, bd.bd_obj.SQ_SZ, bd.bd_obj.SQ_SZ)
-                # )
 
                 piece = fetch_piece(sq_pos1)
 
@@ -84,8 +79,8 @@ def gameplay(screen):
                         piece2.captured = True
                         delete_piece(piece2)
                         piece.move(sq_pos2)
-                        
-    
+
+
         pygame.display.flip()
 
 

@@ -13,16 +13,6 @@ class Board:
     def set_pos(self, x, y):
         self.pos = (x, y)
 
-    @staticmethod
-    def highlight_square(surface, color, rect_dim, width=5):
-        r_left, r_top, r_width, r_height = rect_dim
-        pygame.draw.rect(
-            surface, 
-            color, 
-            pygame.Rect(r_left, r_top, r_width, r_height), 
-            width
-        )
-
 
 bd_obj = Board()
 bd_obj.load_img(board_rel_path + 'board' + img_ext)
