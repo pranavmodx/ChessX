@@ -1,10 +1,11 @@
 import colour
-from config import *
+from config import S_WIDTH, S_HEIGHT
 from utilities import (
     display_all,
     calc_sq_pos,
     fetch_piece, 
-    delete_piece
+    delete_piece,
+    flip_board
 )
 
 import pygame
@@ -25,7 +26,7 @@ def gameplay(screen):
 
     while not game_over:
         display_all(screen)
-
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -40,6 +41,7 @@ def gameplay(screen):
                 # )
 
             elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
+                flip_board()
                 print('Click 1')
 
                 mouse_pos1 = pygame.mouse.get_pos()

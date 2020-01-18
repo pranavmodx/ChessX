@@ -19,3 +19,6 @@ img_ext = '.png'
 x_pos = bd_x + 5
 up_y_pos = bd_y + 5
 down_y_pos = up_y_pos + (BD_SZ - SQ_SZ)
+
+# Piece image size
+p_size = 65

@@ -51,25 +51,25 @@ def load_all_img():
         img_obj = pygame.image.load(
             pieces_rel_path + 'w_pawn' + img_ext
         )
-        w_pawn.img = img_obj
+        w_pawn.set_img(img_obj)
 
     for i, w_piece in enumerate(w_majors):
         img_obj = pygame.image.load(
             pieces_rel_path + 'w_' + img_names[i] + img_ext
         )
-        w_piece.img = img_obj
+        w_piece.set_img(img_obj)
 
     for b_pawn in b_pawns:
         img_obj = pygame.image.load(
             pieces_rel_path + 'b_pawn' + img_ext
         )
-        b_pawn.img = img_obj
+        b_pawn.set_img(img_obj)
 
     for i, b_piece in enumerate(b_majors):
         img_obj = pygame.image.load(
             pieces_rel_path + 'b_' + img_names[i] + img_ext
         )
-        b_piece.img = img_obj
+        b_piece.set_img(img_obj)
 
 
 def set_pos_all():

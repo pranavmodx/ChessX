@@ -7,6 +7,12 @@ class Piece:
         self.colour = colour
         self.captured = captured
 
+    def set_img(self, img):
+        self.img = img
+
+    def img_size(self):
+        return self.img
+
     def show(self, screen):
         screen_obj = screen.blit(self.img, self.pos)
 
