@@ -24,15 +24,24 @@ def gameplay(screen):
 
     game_over = False
     clicked_once = False
+    turn = 'White'
+    is_flipped = False
 
     while not game_over:
         display_all(screen)
 
         if clicked_once == True:
+            highlight_square(
+                screen,
+                colour.RED,
+                sq_pos1
+            )
+
+            for valid_move in valid_moves:
                 highlight_square(
-                    screen,
-                    colour.RED,
-                    (sq_pos1[0], sq_pos1[1])
+                    screen, 
+                    colour.GREEN, 
+                    valid_move
                 )
 
         for event in pygame.event.get():
@@ -51,9 +60,11 @@ def gameplay(screen):
 
                 piece = fetch_piece(sq_pos1)
 
-                if piece != None:
+                if piece != None and piece.colour == turn:
                     clicked_once = True
                     print('Piece 1 :', piece)
+
+                    valid_moves = piece.valid_moves(is_flipped)
                 else:
                     print('Empty square')
 
@@ -67,20 +78,28 @@ def gameplay(screen):
                 print('Sq pos 2 :', sq_pos2)
 
                 if sq_pos2 != sq_pos1:
+                    if turn == 'White':
+                        turn = 'Black'
+                    else:
+                        turn = 'White'
+
                     piece2 = fetch_piece(sq_pos2)
 
                     if piece2 == None:
                         print('Empty square')
-                        # if new_sq_tl in piece.valid_moves():
-                        piece.move(sq_pos2)
+                        if sq_pos2 in valid_moves:
+                            piece.move(sq_pos2)
+
                     else:
+                        if sq_pos2 in valid_moves:
+                            delete_piece(piece2)
+                            piece.move(sq_pos2)
+
                         print('Piece 2 :', piece)
                         # piece2.captured = True 
                         ''' Doesn't quite work because 
                         the one in the list is unaffected'''
-                        delete_piece(piece2)
                         # For now it's ok, but later preserve state to move back & forth
-                        piece.move(sq_pos2)
 
 
         pygame.display.flip()
