@@ -1,7 +1,7 @@
 from board import bd_obj, BD_SZ, SQ_SZ
 from pieces.pieces import (
     w_pawns, b_pawns,
-    w_majors, b_majors
+    w_pieces, b_pieces
 )
 
 import pygame
@@ -13,20 +13,20 @@ def display_all(screen):
     bd_obj.show(screen)
 
     for pawn in w_pawns:
-        # if not pawn.captured:
-        pawn.show(screen)
+        if not pawn.captured:
+            pawn.show(screen)
 
-    for w_piece in w_majors:
-        # if not w_piece.captured:
-        w_piece.show(screen)
+    for w_piece in w_pieces:
+        if not w_piece.captured:
+            w_piece.show(screen)
 
     for pawn in b_pawns:
-        # if not pawn.captured:
-        pawn.show(screen) 
+        if not pawn.captured:
+            pawn.show(screen) 
 
-    for b_piece in b_majors:
-        # if not b_piece.captured:
-        b_piece.show(screen)
+    for b_piece in b_pieces:
+        if not b_piece.captured:
+            b_piece.show(screen)
 
 
 def calc_sq_pos(mouse_pos):
@@ -38,35 +38,35 @@ def calc_sq_pos(mouse_pos):
     return (SQ_SZ * coeff_x, SQ_SZ * coeff_y)
 
 
-def fetch_piece(req_pos):
+def fetch_piece_loc(req_pos):
     '''Fetches piece present at a given position'''
 
     found = 0
 
-    for w_pawn in w_pawns:
+    for i, w_pawn in enumerate(w_pawns):
         if w_pawn.pos == req_pos:
             found = 1
-            return w_pawn
+            return i, w_pawns
 
     if found == 0:
-        for w_piece in w_majors:
+        for i, w_piece in enumerate(w_pieces):
             if w_piece.pos == req_pos:
                 found = 1
-                return w_piece
+                return i, w_pieces
 
     if found == 0:
-        for b_pawn in b_pawns:
+        for i, b_pawn in enumerate(b_pawns):
             if b_pawn.pos == req_pos:
                 found = 1
-                return b_pawn
+                return i, b_pawns
 
     if found == 0:
-        for b_piece in b_majors:
+        for i, b_piece in enumerate(b_pieces):
             if b_piece.pos == req_pos:
                 found = 1
-                return b_piece
+                return i, b_pieces
 
-    return None
+    return None, None
 
 
 def delete_piece(piece):

@@ -21,7 +21,7 @@ for i in range(8):
     p = Pawn(i + 1, 'Black')
     b_pawns.append(p)
 
-w_majors = [
+w_pieces = [
     Rook(1),
     Knight(1),
     Bishop(1),
@@ -32,7 +32,7 @@ w_majors = [
     Rook(2),
 ]
 
-b_majors = [
+b_pieces = [
     Rook(1, 'Black'),
     Knight(1, 'Black'),
     Bishop(1, 'Black'),
@@ -53,7 +53,7 @@ def load_all_img():
         )
         w_pawn.set_img(img_obj)
 
-    for i, w_piece in enumerate(w_majors):
+    for i, w_piece in enumerate(w_pieces):
         img_obj = pygame.image.load(
             pieces_rel_path + 'w_' + img_names[i] + img_ext
         )
@@ -65,7 +65,7 @@ def load_all_img():
         )
         b_pawn.set_img(img_obj)
 
-    for i, b_piece in enumerate(b_majors):
+    for i, b_piece in enumerate(b_pieces):
         img_obj = pygame.image.load(
             pieces_rel_path + 'b_' + img_names[i] + img_ext
         )
@@ -80,7 +80,7 @@ def set_pos_all():
         pawn.set_pos((bd_x + x_change, bd_y + BD_SZ - 2 * SQ_SZ)) 
         x_change += SQ_SZ
 
-    for i, w_piece in enumerate(w_majors):
+    for i, w_piece in enumerate(w_pieces):
         w_piece.set_pos((bd_x + SQ_SZ * i, bd_y + BD_SZ - SQ_SZ))
 
     x_change = 0
@@ -88,7 +88,7 @@ def set_pos_all():
         pawn.set_pos((bd_x + x_change, bd_y + SQ_SZ)) 
         x_change += SQ_SZ
 
-    for i, b_piece in enumerate(b_majors):
+    for i, b_piece in enumerate(b_pieces):
         b_piece.set_pos((bd_x + SQ_SZ * i, bd_y))
 
 
