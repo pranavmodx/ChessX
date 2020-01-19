@@ -1,4 +1,4 @@
-from board import BD_SZ, SQ_SZ
+from board import BD_SZ, SQ_SZ, bd_x, bd_y
 from .config import *
 
 from .pawn import Pawn
@@ -75,21 +75,21 @@ def load_all_img():
 def set_pos_all():
     '''Set position of all objects'''
 
-    x_change = x_pos
+    x_change = 0
     for pawn in w_pawns:
-        pawn.set_pos((x_change, down_y_pos - SQ_SZ)) 
+        pawn.set_pos((bd_x + x_change, bd_y + BD_SZ - 2 * SQ_SZ)) 
         x_change += SQ_SZ
 
     for i, w_piece in enumerate(w_majors):
-        w_piece.set_pos((x_pos + (SQ_SZ * i), down_y_pos))
+        w_piece.set_pos((bd_x + SQ_SZ * i, bd_y + BD_SZ - SQ_SZ))
 
-    x_change = x_pos
+    x_change = 0
     for pawn in b_pawns:
-        pawn.set_pos((x_change, up_y_pos + SQ_SZ)) 
+        pawn.set_pos((bd_x + x_change, bd_y + SQ_SZ)) 
         x_change += SQ_SZ
 
     for i, b_piece in enumerate(b_majors):
-        b_piece.set_pos((x_pos + (SQ_SZ * i), up_y_pos))
+        b_piece.set_pos((bd_x + SQ_SZ * i, bd_y))
 
 
 def main():

@@ -1,5 +1,4 @@
 import colour
-from board import bd_obj
 from config import S_WIDTH, S_HEIGHT
 from utilities import (
     display_all,
@@ -33,7 +32,7 @@ def gameplay(screen):
                 highlight_square(
                     screen,
                     colour.RED,
-                    (sq_pos1[0] - 5, sq_pos1[1] - 5)
+                    (sq_pos1[0], sq_pos1[1])
                 )
 
         for event in pygame.event.get():
@@ -76,8 +75,11 @@ def gameplay(screen):
                         piece.move(sq_pos2)
                     else:
                         print('Piece 2 :', piece)
-                        piece2.captured = True
+                        # piece2.captured = True 
+                        ''' Doesn't quite work because 
+                        the one in the list is unaffected'''
                         delete_piece(piece2)
+                        # For now it's ok, but later preserve state to move back & forth
                         piece.move(sq_pos2)
 
 
