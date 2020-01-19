@@ -1,5 +1,6 @@
 import colour
 from config import S_WIDTH, S_HEIGHT
+from board import SQ_SZ
 from utilities import (
     display_all,
     calc_sq_pos,
@@ -45,8 +46,6 @@ def gameplay(screen):
 
             # Click 1
             elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
-                print('Click 1')
-
                 mouse_pos = pygame.mouse.get_pos()
 
                 sq_pos1 = calc_sq_pos(mouse_pos)
@@ -63,17 +62,18 @@ def gameplay(screen):
 
             # Click 2
             elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
-                print('Click 2')
-
                 clicked_once = False
 
                 mouse_pos = pygame.mouse.get_pos()
 
                 sq_pos2 = calc_sq_pos(mouse_pos)
 
+                # If new click pos is not the same as first
                 if sq_pos2 != sq_pos1:
                     idx2, pieces2 = fetch_piece_loc(sq_pos2)
+                    p_type = pieces1[idx1].p_type
 
+                    # If empty square
                     if not pieces2:
                         if sq_pos2 in valid_moves:
                             if turn == 'White':
@@ -83,16 +83,37 @@ def gameplay(screen):
 
                             pieces1[idx1].move(sq_pos2)
 
+                            if p_type == 'Pawn' \
+                            and pieces1[idx1].start_pos == True:
+                                pieces1[idx1].start_pos = False
+
+                    # If piece present
                     else:
                         if sq_pos2 in valid_moves:
+                            pos = pieces2[idx2].pos
+
+                            dist = abs(pieces2[idx2].pos[1] - \
+                                    pieces1[idx1].pos[1])
+
                             if turn == 'White':
-                                turn = 'Black'
+                                # If there's a piece directly in front of pawn
+                                # 1 or 2 squares (2 if at start pos)
+                                if p_type == 'Pawn' and dist != SQ_SZ and dist != 2 * SQ_SZ:
+                                    pieces2[idx2].captured = True
+                                    pieces1[idx1].move(sq_pos2)
+
+                                    turn = 'Black'
+
+                                # else:
+
                             else:
-                                turn = 'White'
+                                if p_type == 'Pawn' and dist != SQ_SZ and dist != 2 * SQ_SZ:
+                                    pieces2[idx2].captured = True
+                                    pieces1[idx1].move(sq_pos2)
 
-                            pieces2[idx2].captured = True
-
-                            pieces1[idx1].move(sq_pos2)
+                                    turn = 'White'
+                                
+                                # else:
 
 
         pygame.display.flip()

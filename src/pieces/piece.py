@@ -18,15 +18,9 @@ class Piece:
 
     def set_pos(self, pos):
         self.pos = pos
-        self.c_pos = (
-            self.pos[0] + SQ_SZ // 2, self.pos[1] + SQ_SZ // 2
-        )
 
     def move(self, pos):
         self.pos = pos
-        self.c_pos = (
-            pos[0] + SQ_SZ // 2, pos[1] + SQ_SZ // 2
-        )
 
     def __repr__(self):
         if self.p_no:
