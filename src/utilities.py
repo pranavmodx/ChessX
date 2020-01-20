@@ -12,17 +12,17 @@ def display_all(screen):
 
     bd_obj.show(screen)
 
-    for pawn in w_pawns:
-        if not pawn.captured:
-            pawn.show(screen)
+    for w_pawn in w_pawns:
+        if not w_pawn.captured:
+            w_pawn.show(screen)
 
     for w_piece in w_pieces:
         if not w_piece.captured:
             w_piece.show(screen)
 
-    for pawn in b_pawns:
-        if not pawn.captured:
-            pawn.show(screen) 
+    for b_pawn in b_pawns:
+        if not b_pawn.captured:
+            b_pawn.show(screen) 
 
     for b_piece in b_pieces:
         if not b_piece.captured:
@@ -130,3 +130,12 @@ def highlight_square(surface, color, rect_dim, width=3):
         pygame.Rect(r_left, r_top, r_width, r_height),
         width
     )
+
+
+def next_turn(turn):
+    if turn == 'White':
+        return 'Black'
+    return 'White'
+
+
+# def validate_pawn_

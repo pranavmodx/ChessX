@@ -41,19 +41,19 @@ class Pawn(Piece):
 				valids.append((x + SQ_SZ, y - SQ_SZ))
 
 				if self.start_pos:
-					valids.append((x, y + SQ_SZ))
-					valids.append((x, y + 2 * SQ_SZ))
+					valids.append((x, y - SQ_SZ))
+					valids.append((x, y - 2 * SQ_SZ))
 				else:
-					valids.append((x, y + SQ_SZ))
+					valids.append((x, y - SQ_SZ))
 
 			else:
 				valids.append((x - SQ_SZ, y + SQ_SZ))
 				valids.append((x + SQ_SZ, y + SQ_SZ))
 
 				if self.start_pos:
-					valids.append((x, y - SQ_SZ))
-					valids.append((x, y - 2 * SQ_SZ))
+					valids.append((x, y + SQ_SZ))
+					valids.append((x, y + 2 * SQ_SZ))
 				else:
-					valids.append((x, y - SQ_SZ))
+					valids.append((x, y + SQ_SZ))
 
 		return valids
