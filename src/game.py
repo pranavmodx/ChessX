@@ -73,32 +73,42 @@ def gameplay(screen):
                     idx2, pieces2 = fetch_piece_loc(sq_pos2)
                     p_type = pieces1[idx1].p_type
 
+                    dist_x = abs(sq_pos2[0] - sq_pos1[0])
+                    dist_y = abs(sq_pos2[1] - sq_pos1[1])
+                    print(dist_x)
+                    print(dist_y)
+
                     # If empty square
                     if not pieces2:
-                        if sq_pos2 in valid_moves:
-                            if turn == 'White':
-                                turn = 'Black'
-                            else:
-                                turn = 'White'
+                        if p_type == 'Pawn':
+                            if dist_x != SQ_SZ and sq_pos2 in valid_moves:
+                                if turn == 'White':
+                                    turn = 'Black'
+                                else:
+                                    turn = 'White'
+                                pieces1[idx1].move(sq_pos2)
 
-                            pieces1[idx1].move(sq_pos2)
+                                if pieces1[idx1].start_pos == True:
+                                    pieces1[idx1].start_pos = False
 
-                            if p_type == 'Pawn' \
-                            and pieces1[idx1].start_pos == True:
-                                pieces1[idx1].start_pos = False
+                        else:
+                            if sq_pos2 in valid_moves:
+                                if turn == 'White':
+                                    turn = 'Black'
+                                else:
+                                    turn = 'White'
+
+                                pieces1[idx1].move(sq_pos2)
 
                     # If piece present
                     else:
                         if sq_pos2 in valid_moves:
                             pos = pieces2[idx2].pos
 
-                            dist = abs(pieces2[idx2].pos[1] - \
-                                    pieces1[idx1].pos[1])
-
                             if turn == 'White':
                                 # If there's a piece directly in front of pawn
                                 # 1 or 2 squares (2 if at start pos)
-                                if p_type == 'Pawn' and dist != SQ_SZ and dist != 2 * SQ_SZ:
+                                if p_type == 'Pawn' and (dist_y != SQ_SZ and dist_y != 2 * SQ_SZ and dist_x == 0) or dist_x == SQ_SZ:
                                     pieces2[idx2].captured = True
                                     pieces1[idx1].move(sq_pos2)
 
@@ -107,7 +117,7 @@ def gameplay(screen):
                                 # else:
 
                             else:
-                                if p_type == 'Pawn' and dist != SQ_SZ and dist != 2 * SQ_SZ:
+                                if p_type == 'Pawn' and (dist_y != SQ_SZ and dist_y != 2 * SQ_SZ and dist_x == 0) or dist_x == SQ_SZ:
                                     pieces2[idx2].captured = True
                                     pieces1[idx1].move(sq_pos2)
 
