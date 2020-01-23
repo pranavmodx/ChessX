@@ -27,7 +27,7 @@ def gameplay(screen):
     game_over = False
     clicked_once = False
     turn = 'White'
-    # is_flipped = False
+    is_flipped = False
 
     while not game_over:
         # Display board and highlight screen
@@ -52,16 +52,16 @@ def gameplay(screen):
                 sq_pos1 = calc_sq_pos(mouse_pos)
 
                 idx1, pieces1 = fetch_piece_loc(sq_pos1)
-                    
+
                 if pieces1 and pieces1[idx1].colour == turn:
                     piece1_type = pieces1[idx1].p_type
 
                     clicked_once = True
 
                     if piece1_type == 'Pawn':
+                        valid_moves = pieces1[idx1].valid_moves(is_flipped)
+                    else:
                         valid_moves = pieces1[idx1].valid_moves()
-                    # else:
-                    #     valid_moves = pieces1[idx1].valid_moves()
 
             # Click 2
             elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
@@ -102,14 +102,21 @@ def gameplay(screen):
 
                             # If there's a piece directly in front of pawn
                             # 1 or 2 squares (2 if at start pos)
-                            if piece1_type == 'Pawn' and (dist_y != SQ_SZ and dist_y != 2 * SQ_SZ and dist_x == 0) or dist_x == SQ_SZ:
+                            if piece1_type == 'Pawn':
+                                if (dist_y != SQ_SZ and dist_y != 2 * SQ_SZ and dist_x == 0) or dist_x == SQ_SZ:
                                 # pieces2[idx2].captured = True
-                                del pieces2[idx2]
-                                pieces1[idx1].move(sq_pos2)
+                                    if pieces1[idx1].colour != pieces2[idx2].colour:
+                                        del pieces2[idx2]
+                                        pieces1[idx1].move(sq_pos2)
 
-                                turn = next_turn(turn)
+                                        turn = next_turn(turn)
 
-                            # else:
+                            else:
+                                if pieces1[idx1].colour != pieces2[idx2].colour:
+                                    del pieces2[idx2]
+                                    pieces1[idx1].move(sq_pos2)
+
+                                    turn = next_turn(turn)
 
 
         pygame.display.flip()
