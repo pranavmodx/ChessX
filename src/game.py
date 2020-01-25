@@ -99,7 +99,7 @@ def gameplay(screen):
 def main():
     init_pygame()
 
-    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + SQ_SZ))
+    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
     screen.fill(colour.BLACK)
 
     gameplay(screen)
