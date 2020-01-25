@@ -91,10 +91,14 @@ def gameplay(screen):
                                 turn = next_turn(turn)
 
                         elif piece1.p_type == 'King':
-                            if sq2_pos in valid_moves:
-                                piece1.move(sq2_pos)
-                                piece1.start_pos = False
+                            # vidx = valid_moves.find(sq2_pos)
+                            #     for i in range(vidx):
+                            #         k, l = fetch_piece_loc(sq2_pos)
+                            #         if k:
+                            #             valid_moves = valid_moves[:i]
+                            #             break
 
+                            if sq2_pos in valid_moves:
                                 # Checking for castling
                                 if abs(dist_x) == 2 * SQ_SZ:
                                     rook1 = piece_store[key1][0]
@@ -102,21 +106,38 @@ def gameplay(screen):
 
                                     # Short castling
                                     if sq1_pos[0] < sq2_pos[0] and rook2.start_pos:
+                                        piece1.move(sq2_pos)
+                                        piece1.start_pos = False
                                         rook2.move((rook2.pos[0] - 2 * SQ_SZ, rook2.pos[1]))
                                         rook2.start_pos = False
+        
                                     # Long castling
                                     elif sq1_pos[0] > sq2_pos[0] and rook1.start_pos:
+                                        piece1.move(sq2_pos)
+                                        piece1.start_pos = False
                                         rook1.move((rook1.pos[0] + 3 * SQ_SZ, rook1.pos[1]))
                                         rook1.start_pos = False
 
-                                turn = next_turn(turn)
+                                    turn = next_turn(turn)
+
+                                else:
+                                    piece1.move(sq2_pos)
+                                    piece1.start_pos = False
+                                    turn = next_turn(turn)
 
                         # For all other pieces
                         else:
+                            vidx = valid_moves.index(sq2_pos)
+                            for i in range(vidx):
+                                k, l = fetch_piece_loc(sq2_pos)
+                                if k:
+                                    valid_moves = valid_moves[:i]
+                                    break
+
                             if sq2_pos in valid_moves:
                                 piece1.move(sq2_pos)
 
-                                if piece1_type == 'Rook' and piece1.start_pos:
+                                if piece1.p_type == 'Rook' and piece1.start_pos:
                                     piece1.start_pos = False
 
                                 turn = next_turn(turn)
