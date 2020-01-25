@@ -9,22 +9,10 @@ def display_all(screen):
 
     bd_obj.show(screen)
 
-    for w_pawn in piece_store['w_pawns']:
-        if not w_pawn.captured:
-            w_pawn.show(screen)
-
-    for w_piece in piece_store['w_pieces']:
-        if not w_piece.captured:
-            w_piece.show(screen)
-
-    for b_pawn in piece_store['b_pawns']:
-        if not b_pawn.captured:
-            b_pawn.show(screen) 
-
-    for b_piece in piece_store['b_pieces']:
-        if not b_piece.captured:
-            b_piece.show(screen)
-
+    for piece_list in piece_store.values():
+        for piece in piece_list:
+            # if not piece.captured:
+            piece.show(screen)
 
 def calc_sq_pos(mouse_pos):
     '''Calculates and returns topleft position of the square clicked'''
@@ -65,6 +53,12 @@ def fetch_piece_loc(req_pos):
 
     return None, None
 
+
+def fetch_piece(key, idx):
+    if key and idx:
+        return piece_store[key][idx]
+    
+    return None
 
 def delete_piece(piece):
     '''Deletes a given piece from the list of pieces'''

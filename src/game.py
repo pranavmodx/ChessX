@@ -6,9 +6,10 @@ from utilities import (
     display_all,
     calc_sq_pos,
     fetch_piece_loc,
+    fetch_piece,
     delete_piece,
     flip_board,
-    highlight_square, 
+    highlight_square,
     next_turn
 )
 
@@ -53,16 +54,15 @@ def gameplay(screen):
                 sq1_pos = calc_sq_pos(mouse_pos)
 
                 key1, idx1 = fetch_piece_loc(sq1_pos)
+                piece1 = fetch_piece(key1, idx1)
 
-                if key1 and piece_store[key1][idx1].colour == turn:
+                if piece1 and piece1.colour == turn:
                     clicked_once = True
 
-                    piece1_type = piece_store[key1][idx1].p_type
-
-                    if piece1_type == 'Pawn':
-                        valid_moves = piece_store[key1][idx1].valid_moves(is_flipped)
+                    if piece1.p_type == 'Pawn':
+                        valid_moves = piece1.valid_moves(is_flipped)
                     else:
-                        valid_moves = piece_store[key1][idx1].valid_moves()
+                        valid_moves = piece1.valid_moves()
 
             # Click 2
             elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
@@ -75,24 +75,25 @@ def gameplay(screen):
                 # If second click is not the same as first, move the piece
                 if sq2_pos != sq1_pos:
                     key2, idx2 = fetch_piece_loc(sq2_pos)
+                    piece2 = fetch_piece(key2, idx2)
 
                     dist_x = sq2_pos[0] - sq1_pos[0]
                     dist_y = sq2_pos[1] - sq1_pos[1]
 
                     # If piece not present (empty square)
                     if not key2:
-                        if piece1_type == 'Pawn':
+                        if piece1.p_type == 'Pawn':
                             if dist_x == 0 and sq2_pos in valid_moves:
-                                piece_store[key1][idx1].move(sq2_pos)
-                                if piece_store[key1][idx1].start_pos == True:
-                                    piece_store[key1][idx1].start_pos = False
+                                piece1.move(sq2_pos)
+                                if piece1.start_pos == True:
+                                    piece1.start_pos = False
 
                                 turn = next_turn(turn)
 
-                        elif piece1_type == 'King':
+                        elif piece1.p_type == 'King':
                             if sq2_pos in valid_moves:
-                                piece_store[key1][idx1].move(sq2_pos)
-                                piece_store[key1][idx1].start_pos = False
+                                piece1.move(sq2_pos)
+                                piece1.start_pos = False
 
                                 # Checking for castling
                                 if abs(dist_x) == 2 * SQ_SZ:
@@ -113,10 +114,10 @@ def gameplay(screen):
                         # For all other pieces
                         else:
                             if sq2_pos in valid_moves:
-                                piece_store[key1][idx1].move(sq2_pos)
+                                piece1.move(sq2_pos)
 
-                                if piece1_type == 'Rook' and piece_store[key1][idx1].start_pos:
-                                    piece_store[key1][idx1].start_pos = False
+                                if piece1_type == 'Rook' and piece1.start_pos:
+                                    piece1.start_pos = False
 
                                 turn = next_turn(turn)
 
@@ -125,24 +126,26 @@ def gameplay(screen):
                         if sq2_pos in valid_moves:
                             # If there's a piece directly in front of pawn
                             # 1 or 2 squares (2 if at start pos)
-                            if piece1_type == 'Pawn':
+                            if piece1.p_type == 'Pawn':
                                 if (abs(dist_y) != SQ_SZ and abs(dist_y) != 2 * SQ_SZ) or abs(dist_x) == SQ_SZ:
-                                    if piece_store[key1][idx1].colour != piece_store[key2][idx2].colour:
-                                        # pieces2[idx2].captured = True
+                                    if piece1.colour != piece2.colour:
+                                        # piece2.captured = True
+                                        # piece2.set_pos = None
                                         del piece_store[key2][idx2]
 
-                                        piece_store[key1][idx1].move(sq2_pos)
-                                        if piece_store[key1][idx1].start_pos == True:
-                                            piece_store[key1][idx1].start_pos = False
+                                        piece1.move(sq2_pos)
+                                        if piece1.start_pos == True:
+                                            piece1.start_pos = False
 
                                         turn = next_turn(turn)
 
                             # For all other pieces
                             else:
-                                if piece_store[key1][idx1].colour != piece_store[key2][idx2].colour:
-                                    # pieces2[idx2].captured = True
+                                if piece1.colour != piece2.colour:
+                                    # piece2.captured = True
+                                    # piece2.set_pos = None
                                     del piece_store[key2][idx2]
-                                    piece_store[key1][idx1].move(sq2_pos)
+                                    piece1.move(sq2_pos)
 
                                     turn = next_turn(turn)
 

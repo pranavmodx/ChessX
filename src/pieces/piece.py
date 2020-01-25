@@ -5,7 +5,7 @@ class Piece:
         self.p_type = p_type
         self.p_no = p_no
         self.colour = colour
-        self.captured = captured
+        # self.captured = captured
 
     def set_img(self, img):
         self.img = img
