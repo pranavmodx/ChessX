@@ -1,16 +1,18 @@
 import colour
 from config import S_WIDTH, S_HEIGHT
 from board import SQ_SZ
-from pieces.piece_store import piece_store
 from utilities import (
     display_all,
     calc_sq_pos,
-    fetch_piece_loc,
-    fetch_piece,
-    delete_piece,
-    flip_board,
     highlight_square,
-    next_turn
+    flip_board,
+    fetch_piece,
+    handle_pawn_move,
+    handle_bishop_move,
+    handle_knight_move,
+    handle_rook_move,
+    handle_queen_move,
+    handle_king_move,
 )
 
 import pygame
@@ -27,9 +29,10 @@ def gameplay(screen):
     '''Main game loop'''
 
     game_over = False
+    is_flipped = False
     clicked_once = False
     turn = 'White'
-    is_flipped = False
+    valid_moves = []
 
     while not game_over:
         # Display board and highlight screen
@@ -53,8 +56,7 @@ def gameplay(screen):
 
                 sq1_pos = calc_sq_pos(mouse_pos)
 
-                key1, idx1 = fetch_piece_loc(sq1_pos)
-                piece1 = fetch_piece(key1, idx1)
+                key1, idx1, piece1 = fetch_piece(sq1_pos)
 
                 if piece1 and piece1.colour == turn:
                     clicked_once = True
@@ -69,107 +71,27 @@ def gameplay(screen):
                 clicked_once = False
 
                 mouse_pos = pygame.mouse.get_pos()
-
                 sq2_pos = calc_sq_pos(mouse_pos)
 
                 # If second click is not the same as first, move the piece
                 if sq2_pos != sq1_pos:
-                    key2, idx2 = fetch_piece_loc(sq2_pos)
-                    piece2 = fetch_piece(key2, idx2)
+                    if piece1.p_type == 'Pawn':
+                        turn = handle_pawn_move(sq1_pos, sq2_pos, valid_moves, turn)
 
-                    dist_x = sq2_pos[0] - sq1_pos[0]
-                    dist_y = sq2_pos[1] - sq1_pos[1]
+                    elif piece1.p_type == 'Bishop':
+                        turn = handle_bishop_move(sq1_pos, sq2_pos, valid_moves, turn)
 
-                    # If piece not present (empty square)
-                    if not key2:
-                        if piece1.p_type == 'Pawn':
-                            if dist_x == 0 and sq2_pos in valid_moves:
-                                piece1.move(sq2_pos)
-                                if piece1.start_pos == True:
-                                    piece1.start_pos = False
+                    elif piece1.p_type == 'Knight':
+                        turn = handle_knight_move(sq1_pos, sq2_pos, valid_moves, turn)
 
-                                turn = next_turn(turn)
+                    elif piece1.p_type == 'Rook':
+                        turn = handle_rook_move(sq1_pos, sq2_pos, valid_moves, turn)
 
-                        elif piece1.p_type == 'King':
-                            # vidx = valid_moves.find(sq2_pos)
-                            #     for i in range(vidx):
-                            #         k, l = fetch_piece_loc(sq2_pos)
-                            #         if k:
-                            #             valid_moves = valid_moves[:i]
-                            #             break
+                    elif piece1.p_type == 'Queen':
+                        turn = handle_queen_move(sq1_pos, sq2_pos, valid_moves, turn)
 
-                            if sq2_pos in valid_moves:
-                                # Checking for castling
-                                if abs(dist_x) == 2 * SQ_SZ:
-                                    rook1 = piece_store[key1][0]
-                                    rook2 = piece_store[key1][-1]
-
-                                    # Short castling
-                                    if sq1_pos[0] < sq2_pos[0] and rook2.start_pos:
-                                        piece1.move(sq2_pos)
-                                        piece1.start_pos = False
-                                        rook2.move((rook2.pos[0] - 2 * SQ_SZ, rook2.pos[1]))
-                                        rook2.start_pos = False
-        
-                                    # Long castling
-                                    elif sq1_pos[0] > sq2_pos[0] and rook1.start_pos:
-                                        piece1.move(sq2_pos)
-                                        piece1.start_pos = False
-                                        rook1.move((rook1.pos[0] + 3 * SQ_SZ, rook1.pos[1]))
-                                        rook1.start_pos = False
-
-                                    turn = next_turn(turn)
-
-                                else:
-                                    piece1.move(sq2_pos)
-                                    piece1.start_pos = False
-                                    turn = next_turn(turn)
-
-                        # For all other pieces
-                        else:
-                            vidx = valid_moves.index(sq2_pos)
-                            for i in range(vidx):
-                                k, l = fetch_piece_loc(sq2_pos)
-                                if k:
-                                    valid_moves = valid_moves[:i]
-                                    break
-
-                            if sq2_pos in valid_moves:
-                                piece1.move(sq2_pos)
-
-                                if piece1.p_type == 'Rook' and piece1.start_pos:
-                                    piece1.start_pos = False
-
-                                turn = next_turn(turn)
-
-                    # If piece present
-                    else:
-                        if sq2_pos in valid_moves:
-                            # If there's a piece directly in front of pawn
-                            # 1 or 2 squares (2 if at start pos)
-                            if piece1.p_type == 'Pawn':
-                                if (abs(dist_y) != SQ_SZ and abs(dist_y) != 2 * SQ_SZ) or abs(dist_x) == SQ_SZ:
-                                    if piece1.colour != piece2.colour:
-                                        # piece2.captured = True
-                                        # piece2.set_pos = None
-                                        del piece_store[key2][idx2]
-
-                                        piece1.move(sq2_pos)
-                                        if piece1.start_pos == True:
-                                            piece1.start_pos = False
-
-                                        turn = next_turn(turn)
-
-                            # For all other pieces
-                            else:
-                                if piece1.colour != piece2.colour:
-                                    # piece2.captured = True
-                                    # piece2.set_pos = None
-                                    del piece_store[key2][idx2]
-                                    piece1.move(sq2_pos)
-
-                                    turn = next_turn(turn)
-
+                    elif piece1.p_type == 'King':
+                        turn = handle_king_move(sq1_pos, sq2_pos, valid_moves, turn)
 
         pygame.display.flip()
 
@@ -177,7 +99,7 @@ def gameplay(screen):
 def main():
     init_pygame()
 
-    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
+    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + SQ_SZ))
     screen.fill(colour.BLACK)
 
     gameplay(screen)
