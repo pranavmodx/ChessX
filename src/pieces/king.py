@@ -6,6 +6,7 @@ class King(Piece):
 
     def __init__(self, p_no=None, colour='White', p_type='King', captured=False):
         super().__init__(p_type, p_no, colour, captured)
+        self.start_pos = True # For checking castling ability
 
     def valid_moves(self):
         x = self.pos[0]
@@ -20,5 +21,9 @@ class King(Piece):
             (x + SQ_SZ, y - SQ_SZ),
             (x - SQ_SZ, y - SQ_SZ),
         ]
+
+        if self.start_pos:
+            valids.append((x + 2 * SQ_SZ, y))
+            valids.append((x - 2 * SQ_SZ, y))
 
         return valids

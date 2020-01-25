@@ -7,6 +7,7 @@ class Rook(Piece):
 
     def __init__(self, p_no=None, colour='White', p_type='Rook', captured=False):
         super().__init__(p_type, p_no, colour, captured)
+        self.start_pos = True # For checking castling ability
 
     def valid_moves(self):
         x = self.pos[0]
