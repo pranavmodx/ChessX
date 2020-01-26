@@ -5,14 +5,14 @@ import pygame
 
 
 def display_all(screen):
-    '''Display(show) all objects'''
+    '''Display all objects'''
 
-    bd_obj.show(screen)
+    bd_obj.display(screen)
 
     for piece_list in piece_store.values():
         for piece in piece_list:
             # if not piece.captured:
-            piece.show(screen)
+            piece.display(screen)
 
 
 def flip_board():

@@ -13,7 +13,7 @@ class Piece:
     def img_size(self):
         return self.img
 
-    def show(self, screen):
+    def display(self, screen):
         screen_obj = screen.blit(self.img, self.pos)
 
     def set_pos(self, pos):

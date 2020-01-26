@@ -26,7 +26,7 @@ class Queen(Piece):
             if dec_x >= bd_x:
                 valids.append((dec_x, y))
 
-            if inc_y > BD_SZ:
+            if inc_y < BD_SZ:
                 valids.append((x, inc_y))
 
             if dec_y >= bd_y:

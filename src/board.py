@@ -7,7 +7,7 @@ class Board:
         self.img = pygame.image.load(path)
         self.size = self.img.get_height()
 
-    def show(self, screen):
+    def display(self, screen):
         screen_obj = screen.blit(self.img, self.pos)
 
     def set_pos(self, x, y):
