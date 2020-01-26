@@ -1,5 +1,5 @@
 from .piece import Piece
-from board import SQ_SZ
+from board import BD_SZ, SQ_SZ
 
 class Knight(Piece):
     value = 3
@@ -11,14 +11,14 @@ class Knight(Piece):
         x = self.pos[0]
         y = self.pos[1]
         valids = [
-            (x + SQ_SZ, y + 2 * SQ_SZ),
-            (x - SQ_SZ, y + 2 * SQ_SZ),
-            (x + SQ_SZ, y - 2 * SQ_SZ),
-            (x - SQ_SZ, y - 2 * SQ_SZ),
-            (x + 2 * SQ_SZ, y + SQ_SZ),
-            (x - 2 * SQ_SZ, y + SQ_SZ),
-            (x + 2 * SQ_SZ, y - SQ_SZ),
-            (x - 2 * SQ_SZ, y - SQ_SZ),
+            ((x + SQ_SZ) % BD_SZ, (y + 2 * SQ_SZ) % BD_SZ),
+            ((x - SQ_SZ) % BD_SZ, (y + 2 * SQ_SZ) % BD_SZ),
+            ((x + SQ_SZ) % BD_SZ, (y - 2 * SQ_SZ) % BD_SZ),
+            ((x - SQ_SZ) % BD_SZ, (y - 2 * SQ_SZ) % BD_SZ),
+            ((x + 2 * SQ_SZ) % BD_SZ, (y + SQ_SZ) % BD_SZ),
+            ((x - 2 * SQ_SZ) % BD_SZ, (y + SQ_SZ) % BD_SZ),
+            ((x + 2 * SQ_SZ) % BD_SZ, (y - SQ_SZ) % BD_SZ),
+            ((x - 2 * SQ_SZ) % BD_SZ, (y - SQ_SZ) % BD_SZ),
         ]
 
         return valids

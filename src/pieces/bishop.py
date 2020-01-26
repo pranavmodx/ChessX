@@ -1,5 +1,5 @@
 from .piece import Piece
-from board import SQ_SZ
+from board import BD_SZ, SQ_SZ
 
 
 class Bishop(Piece):
@@ -14,9 +14,9 @@ class Bishop(Piece):
         valids = []
 
         for i in range(8):
-            valids.append((x + i * SQ_SZ, y + i * SQ_SZ))
-            valids.append((x - i * SQ_SZ, y + i * SQ_SZ))
-            valids.append((x + i * SQ_SZ, y - i * SQ_SZ))
-            valids.append((x - i * SQ_SZ, y - i * SQ_SZ))
+            valids.append(((x + i * SQ_SZ) % BD_SZ, (y + i * SQ_SZ) % BD_SZ))
+            valids.append(((x - i * SQ_SZ) % BD_SZ, (y + i * SQ_SZ) % BD_SZ))
+            valids.append(((x + i * SQ_SZ) % BD_SZ, (y - i * SQ_SZ) % BD_SZ))
+            valids.append(((x - i * SQ_SZ) % BD_SZ, (y - i * SQ_SZ) % BD_SZ))
 
-        return valids
+        return list(set(valids))

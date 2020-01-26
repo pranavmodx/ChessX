@@ -1,5 +1,5 @@
 from .piece import Piece
-from board import SQ_SZ
+from board import BD_SZ, SQ_SZ
 
 
 class Rook(Piece):
@@ -16,9 +16,9 @@ class Rook(Piece):
         valids = []
 
         for i in range(1, 8):
-            valids.append((x + i * SQ_SZ, y))
-            valids.append((x - i * SQ_SZ, y))
-            valids.append((x, y + i * SQ_SZ))
-            valids.append((x, y - i * SQ_SZ))
+            valids.append(((x + i * SQ_SZ) % BD_SZ, y))
+            valids.append(((x - i * SQ_SZ) % BD_SZ, y))
+            valids.append((x, (y + i * SQ_SZ) % BD_SZ))
+            valids.append((x, (y - i * SQ_SZ) % BD_SZ))
 
-        return valids
+        return list(set(valids))

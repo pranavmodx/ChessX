@@ -1,5 +1,5 @@
 from .piece import Piece
-from board import SQ_SZ
+from board import BD_SZ, SQ_SZ
 
 
 class Queen(Piece):
@@ -15,16 +15,16 @@ class Queen(Piece):
 
         for i in range(8):
             # Rook
-            valids.append((x + i * SQ_SZ, y))
-            valids.append((x - i * SQ_SZ, y))
-            valids.append((x, y + i * SQ_SZ))
-            valids.append((x, y - i * SQ_SZ))
+            valids.append(((x + i * SQ_SZ) % BD_SZ, y))
+            valids.append(((x - i * SQ_SZ) % BD_SZ, y))
+            valids.append((x, (y + i * SQ_SZ) % BD_SZ))
+            valids.append((x, (y - i * SQ_SZ) % BD_SZ))
 
             # Bishop
-            valids.append((x + i * SQ_SZ, y + i * SQ_SZ))
-            valids.append((x - i * SQ_SZ, y + i * SQ_SZ))
-            valids.append((x + i * SQ_SZ, y - i * SQ_SZ))
-            valids.append((x - i * SQ_SZ, y - i * SQ_SZ))
+            valids.append(((x + i * SQ_SZ) % BD_SZ, (y + i * SQ_SZ) % BD_SZ))
+            valids.append(((x - i * SQ_SZ) % BD_SZ, (y + i * SQ_SZ) % BD_SZ))
+            valids.append(((x + i * SQ_SZ) % BD_SZ, (y - i * SQ_SZ) % BD_SZ))
+            valids.append(((x - i * SQ_SZ) % BD_SZ, (y - i * SQ_SZ) % BD_SZ))
 
-        return valids
+        return list(set(valids))
 

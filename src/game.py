@@ -119,7 +119,7 @@ def main():
     screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + int(SQ_SZ)))
     screen.fill(colour.WHITE)
 
-    flip_board_pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
+    flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + SQ_SZ / 4))
     flip_board_icon = screen.blit(
         pygame.image.load(flip_board_rel_path + 'flip_board' + img_ext), 
         flip_board_pos

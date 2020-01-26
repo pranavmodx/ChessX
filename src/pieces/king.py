@@ -1,5 +1,5 @@
 from .piece import Piece
-from board import SQ_SZ
+from board import BD_SZ, SQ_SZ
 
 class King(Piece):
     value = None
@@ -12,14 +12,14 @@ class King(Piece):
         x = self.pos[0]
         y = self.pos[1]
         valids = [
-            (x + SQ_SZ, y),
-            (x - SQ_SZ, y),
-            (x, y + SQ_SZ),
-            (x, y - SQ_SZ),
-            (x + SQ_SZ, y + SQ_SZ),
-            (x - SQ_SZ, y + SQ_SZ),
-            (x + SQ_SZ, y - SQ_SZ),
-            (x - SQ_SZ, y - SQ_SZ),
+            ((x + SQ_SZ) % BD_SZ, y),
+            ((x - SQ_SZ) % BD_SZ, y),
+            (x, (y + SQ_SZ) % BD_SZ),
+            (x, (y - SQ_SZ) % BD_SZ),
+            ((x + SQ_SZ) % BD_SZ, (y + SQ_SZ) % BD_SZ),
+            ((x - SQ_SZ) % BD_SZ, (y + SQ_SZ) % BD_SZ),
+            ((x + SQ_SZ) % BD_SZ, (y - SQ_SZ) % BD_SZ),
+            ((x - SQ_SZ) % BD_SZ, (y - SQ_SZ) % BD_SZ),
         ]
 
         if self.start_pos:
