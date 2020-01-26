@@ -21,25 +21,25 @@ class King(Piece):
         if inc_x < BD_SZ:
             valids.append((inc_x, y))
 
-        if dec_x > bd_x:
+        if dec_x >= bd_x:
             valids.append((dec_x, y))
 
         if inc_y < BD_SZ:
             valids.append((x, inc_y))
 
-        if dec_y > bd_y:
+        if dec_y >= bd_y:
             valids.append((x, dec_y))
 
         if inc_x < BD_SZ and inc_y < BD_SZ:
             valids.append((inc_x, inc_y))
 
-        if dec_x > bd_x and inc_y < BD_SZ:
+        if dec_x >= bd_x and inc_y < BD_SZ:
             valids.append((dec_x, inc_y))
 
-        if inc_x < BD_SZ and dec_y > bd_y:
+        if inc_x < BD_SZ and dec_y >= bd_y:
             valids.append((inc_x, dec_y))
             
-        if dec_x > bd_x and dec_y > bd_y:
+        if dec_x >= bd_x and dec_y >= bd_y:
             valids.append((dec_x, dec_y))      
 
         if self.start_pos:
