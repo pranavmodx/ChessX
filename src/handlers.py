@@ -146,7 +146,7 @@ def handle_bishop_move(sq1_pos, sq2_pos, valid_moves, turn):
 
     else:
         if sq2_pos in valid_moves:
-            if pawn.colour != piece2.colour and \
+            if bishop.colour != piece2.colour and \
                 not bishop_move_through(sq1_pos, sq2_pos, dist_x, dist_y):
                 # piece2.captured = True
                 # piece2.set_pos = None
@@ -248,7 +248,7 @@ def handle_queen_move(sq1_pos, sq2_pos, valid_moves, turn):
                 if not bishop_move_through(sq1_pos, sq2_pos, dist_x, dist_y):
                     queen.move(sq2_pos)
                     turn = next_turn(turn)
-            else:
+            elif (dist_x == 0 and dist_y) or (dist_y == 0 and dist_x):
                 if not rook_move_through(sq1_pos, sq2_pos, dist_x, dist_y):
                     queen.move(sq2_pos)
                     turn = next_turn(turn)
@@ -256,7 +256,8 @@ def handle_queen_move(sq1_pos, sq2_pos, valid_moves, turn):
     else:
         if sq2_pos in valid_moves:
             if queen.colour != piece2.colour and \
-                not rook_move_through(sq1_pos, sq2_pos, dist_x, dist_y):
+                not rook_move_through(sq1_pos, sq2_pos, dist_x, dist_y) and \
+                    not bishop_move_through(sq1_pos, sq2_pos, dist_x, dist_y):
                 # piece2.captured = True
                 # piece2.set_pos = None
                 delete_piece(piece2, next_turn(turn))
