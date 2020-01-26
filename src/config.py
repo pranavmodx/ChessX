@@ -1,5 +1,6 @@
 # Image path specifications
 board_rel_path = '../assets/img/board/'
+flip_board_rel_path = '../assets/img/icons/'
 img_ext = '.png'
 
 # Screen size

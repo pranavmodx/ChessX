@@ -1,5 +1,8 @@
 import colour
-from config import S_WIDTH, S_HEIGHT
+from config import (
+    S_WIDTH, S_HEIGHT, 
+    flip_board_rel_path, img_ext
+)
 from board import SQ_SZ
 from utilities import (
     display_all,
@@ -7,6 +10,8 @@ from utilities import (
     highlight_square,
     flip_board,
     fetch_piece,
+)
+from handlers import (
     handle_pawn_move,
     handle_bishop_move,
     handle_knight_move,
@@ -54,6 +59,17 @@ def gameplay(screen):
             elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
                 mouse_pos = pygame.mouse.get_pos()
 
+                pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
+
+                if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
+                    mouse_pos[1] in range(pos[1], pos[1] + 100):
+                    flip_board()
+                    if is_flipped == False:
+                        is_flipped = True
+                    else:
+                        is_flipped = False
+                    continue
+
                 sq1_pos = calc_sq_pos(mouse_pos)
 
                 key1, idx1, piece1 = fetch_piece(sq1_pos)
@@ -99,8 +115,14 @@ def gameplay(screen):
 def main():
     init_pygame()
 
-    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT))
-    screen.fill(colour.BLACK)
+    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + int(SQ_SZ)))
+    screen.fill(colour.WHITE)
+
+    flip_board_pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
+    flip_board_icon = screen.blit(
+        pygame.image.load(flip_board_rel_path + 'flip_board' + img_ext), 
+        flip_board_pos
+    )
 
     gameplay(screen)
 
