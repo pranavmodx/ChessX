@@ -58,51 +58,79 @@ def calc_sq_pos(mouse_pos):
     return (SQ_SZ * coeff_x, SQ_SZ * coeff_y)
 
 
+def fetch_piece_by_turn(req_pos, turn):
+    '''Fetches piece (by turn) present at a given position on the board'''
+
+    if turn == 'White':
+        for idx, w_pawn in enumerate(piece_store['w_pawns']):
+            if w_pawn.pos == req_pos:
+                return w_pawn
+
+        for idx, w_piece in enumerate(piece_store['w_pieces']):
+            if w_piece.pos == req_pos:
+                return w_piece
+
+    else:
+        for idx, b_pawn in enumerate(piece_store['b_pawns']):
+            if b_pawn.pos == req_pos:
+                return b_pawn
+
+        for idx, b_piece in enumerate(piece_store['b_pieces']):
+            if b_piece.pos == req_pos:
+                return b_piece
+
+    return None
+
+
 def fetch_piece(req_pos):
     '''Fetches piece present at a given position on the board'''
 
-    found = 0
-
     for idx, w_pawn in enumerate(piece_store['w_pawns']):
         if w_pawn.pos == req_pos:
-            found = 1
-            return 'w_pawns', idx, piece_store['w_pawns'][idx]
+            return w_pawn
 
-    if found == 0:
-        for idx, w_piece in enumerate(piece_store['w_pieces']):
-            if w_piece.pos == req_pos:
-                found = 1
-                return 'w_pieces', idx, piece_store['w_pieces'][idx]
+    for idx, w_piece in enumerate(piece_store['w_pieces']):
+        if w_piece.pos == req_pos:
+            return w_piece
 
-    if found == 0:
-        for idx, b_pawn in enumerate(piece_store['b_pawns']):
-            if b_pawn.pos == req_pos:
-                found = 1
-                return 'b_pawns', idx, piece_store['b_pawns'][idx]
+    for idx, b_pawn in enumerate(piece_store['b_pawns']):
+        if b_pawn.pos == req_pos:
+            return b_pawn
 
-    if found == 0:
-        for idx, b_piece in enumerate(piece_store['b_pieces']):
-            if b_piece.pos == req_pos:
-                found = 1
-                return 'b_pieces', idx, piece_store['b_pieces'][idx]
+    for idx, b_piece in enumerate(piece_store['b_pieces']):
+        if b_piece.pos == req_pos:
+            return b_piece
 
-    return None, None, None
+    return None
 
 
-# def delete_piece(piece):
-#     '''Deletes a given piece from the list of pieces'''
+def king_is_present(req_pos, turn):
+    if turn == 'White':
+        for w_piece in piece_store['w_pieces']:
+            if w_piece.p_type == 'King' and w_piece.pos == req_pos:
+                return True
+    else:
+        for b_piece in piece_store['b_pieces']:
+            if b_piece.p_type == 'King' and b_piece.pos == req_pos:
+                return True
 
-#     if piece.p_type == 'Pawn':
-#         if piece.colour == 'White':
-#             piece_store['w_pawns'].remove(piece)
-#         else:
-#             piece_store['b_pawns'].remove(piece)
+    return False
 
-#     else:
-#         if piece.colour == 'White':
-#             piece_store['w_pieces'].remove(piece)
-#         else:
-#             piece_store['b_pieces'].remove(piece)
+
+def delete_piece(piece, turn):
+    '''Deletes a given piece from the list of pieces'''
+
+    if turn == 'White':
+        if piece.p_type == 'Pawn':
+            piece_store['w_pawns'].remove(piece)
+        else:
+            piece_store['w_pieces'].remove(piece)
+
+    else:
+        if piece.p_type == 'Pawn':
+            piece_store['b_pawns'].remove(piece)
+        else:
+            piece_store['b_pieces'].remove(piece)
 
 
 def highlight_square(surface, color, rect_dim, width=3):

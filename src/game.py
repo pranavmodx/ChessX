@@ -10,6 +10,7 @@ from utilities import (
     highlight_square,
     flip_board,
     fetch_piece,
+    fetch_piece_by_turn,
 )
 from handlers import (
     handle_pawn_move,
@@ -72,7 +73,7 @@ def gameplay(screen):
 
                 sq1_pos = calc_sq_pos(mouse_pos)
 
-                key1, idx1, piece1 = fetch_piece(sq1_pos)
+                piece1 = fetch_piece_by_turn(sq1_pos, turn)
 
                 if piece1 and piece1.colour == turn:
                     clicked_once = True
