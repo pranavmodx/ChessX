@@ -152,3 +152,9 @@ def next_turn(turn):
     return 'White'
 
 
+# def checks_king(piece, turn):
+#     for pos in piece.valid_moves():
+#         if(king_is_present(pos, turn)):
+#             return True
+    
+#     return False
