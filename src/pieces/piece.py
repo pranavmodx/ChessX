@@ -1,17 +1,16 @@
-from board import SQ_SZ
-
 class Piece:
-    def __init__(self, p_type, p_no, colour='White', captured=False):
+    def __init__(self, p_type, p_no, colour='White'):
         self.p_type = p_type
         self.p_no = p_no
         self.colour = colour
         # self.captured = captured
 
-    def set_img(self, img):
+    def load_img(self, img):
+        '''Loads image of piece'''
         self.img = img
 
-    def img_size(self):
-        return self.img
+    def size(self):
+        return self.img.get_height()
 
     def display(self, screen):
         screen_obj = screen.blit(self.img, self.pos)

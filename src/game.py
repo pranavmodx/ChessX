@@ -1,130 +1,125 @@
+from board import Board
+from move import Move
+from config import *
 import colour
-from config import (
-    S_WIDTH, S_HEIGHT, 
-    flip_board_rel_path, img_ext
-)
-from board import SQ_SZ
-from utilities import (
-    display_all,
-    calc_sq_pos,
-    highlight_square,
-    flip_board,
-    fetch_piece,
-    fetch_piece_by_turn,
-)
-from handlers import (
-    handle_pawn_move,
-    handle_bishop_move,
-    handle_knight_move,
-    handle_rook_move,
-    handle_queen_move,
-    handle_king_move,
-)
-
 import pygame
 
 
-def init_pygame():
-    '''For initializing and managing pygame module'''
+class Game:
+    def __init__(self):
+        pygame.init()
+        pygame.display.set_caption('ChessX')
 
-    pygame.init()
-    pygame.display.set_caption('ChessX')
+        self.screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + 75))
+        self.screen.fill(colour.WHITE)
+
+        self.board = Board((BD_X, BD_Y))
+        self.board.load_all_img()
+        self.board.set_pos_all()
+        self.board.display_all(self.screen)
+
+        flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
+        flip_board_icon = self.screen.blit(
+            pygame.image.load(flip_board_rel_path + 'flip_board' + img_ext), 
+            flip_board_pos
+        )
+
+        self.move = Move()
 
 
-def gameplay(screen):
-    '''Main game loop'''
+    # Helper methods
+    def king_is_present(self, board, req_pos, turn):
+        if self.move.turn == 'White':
+            for w_piece in board.pieces['w_pieces']:
+                if w_piece.p_type == 'King' and w_piece.pos == req_pos:
+                    return True
+        else:
+            for b_piece in board.pieces['b_pieces']:
+                if b_piece.p_type == 'King' and b_piece.pos == req_pos:
+                    return True
 
-    game_over = False
-    is_flipped = False
-    clicked_once = False
-    turn = 'White'
-    valid_moves = []
+        return False
 
-    while not game_over:
-        # Display board and highlight screen
-        display_all(screen)
+    def delete_piece(self, board, piece):
+        '''Deletes a given piece from the list of self.pieces'''
 
-        if clicked_once == True:
-            highlight_square(screen, colour.RED, sq1_pos)
+        if self.move.turn == 'White':
+            if piece.p_type == 'Pawn':
+                board.pieces['w_pawns'].remove(piece)
+            else:
+                board.pieces['w_pieces'].remove(piece)
 
-            for valid_move in valid_moves:
-                highlight_square(screen, colour.GREEN, valid_move)
+        else:
+            if piece.p_type == 'Pawn':
+                board.pieces['b_pawns'].remove(piece)
+            else:
+                board.pieces['b_pieces'].remove(piece)
 
-        # Event loop
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
+    
+    # Main method
+    def start(self):
+        '''Main game loop'''
 
-            # Click 1
-            elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
-                mouse_pos = pygame.mouse.get_pos()
+        sq1_pos = None
+        sq2_pos = None
+        game_over = False
+        clicked_once = False
 
-                pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
+        while not game_over:
+            # Display board and highlight screen
+            self.board.display_all(self.screen)
 
-                if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
-                    mouse_pos[1] in range(pos[1], pos[1] + 100):
-                    flip_board()
-                    if is_flipped == False:
-                        is_flipped = True
-                    else:
-                        is_flipped = False
-                    continue
+            if clicked_once == True:
+                self.board.highlight_square(self.screen, colour.RED, sq1_pos)
 
-                sq1_pos = calc_sq_pos(mouse_pos)
+                for valid_move in self.move.valid_moves:
+                    self.board.highlight_square(self.screen, colour.GREEN, valid_move)
 
-                piece1 = fetch_piece_by_turn(sq1_pos, turn)
+            # Event loop
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
 
-                if piece1 and piece1.colour == turn:
-                    clicked_once = True
+                # Click 1
+                elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
+                    mouse_pos = pygame.mouse.get_pos()
 
-                    if piece1.p_type == 'Pawn':
-                        valid_moves = piece1.valid_moves(is_flipped)
-                    else:
-                        valid_moves = piece1.valid_moves()
+                    # Flip board
+                    pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(75 / 4))
+                    if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
+                        mouse_pos[1] in range(pos[1], pos[1] + 100):
+                        self.board.flip_board()
+                        if self.board.is_flipped == False:
+                            self.board.is_flipped = True
+                        else:
+                            self.board.is_flipped = False
+                        continue
 
-            # Click 2
-            elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
-                clicked_once = False
+                    sq1_pos = self.board.calc_sq_pos(mouse_pos)
+                    print(sq1_pos)
+                    self.piece1 = self.move.fetch_piece_by_turn(self.board, sq1_pos)
+                    print(self.piece1)
 
-                mouse_pos = pygame.mouse.get_pos()
-                sq2_pos = calc_sq_pos(mouse_pos)
+                    if self.piece1 and self.piece1.colour == self.move.turn:
+                        clicked_once = True
 
-                # If second click is not the same as first, move the piece
-                if sq2_pos != sq1_pos:
-                    if piece1.p_type == 'Pawn':
-                        turn = handle_pawn_move(sq1_pos, sq2_pos, valid_moves, turn)
+                # Click 2
+                elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
+                    clicked_once = False
 
-                    elif piece1.p_type == 'Bishop':
-                        turn = handle_bishop_move(sq1_pos, sq2_pos, valid_moves, turn)
+                    mouse_pos = pygame.mouse.get_pos()
+                    sq2_pos = self.board.calc_sq_pos(mouse_pos)
 
-                    elif piece1.p_type == 'Knight':
-                        turn = handle_knight_move(sq1_pos, sq2_pos, valid_moves, turn)
+                    # If second click is not the same as first, move the piece
+                    if sq2_pos != sq1_pos:
+                        self.move.handle_piece(self.board, sq1_pos, sq2_pos)
 
-                    elif piece1.p_type == 'Rook':
-                        turn = handle_rook_move(sq1_pos, sq2_pos, valid_moves, turn)
-
-                    elif piece1.p_type == 'Queen':
-                        turn = handle_queen_move(sq1_pos, sq2_pos, valid_moves, turn)
-
-                    elif piece1.p_type == 'King':
-                        turn = handle_king_move(sq1_pos, sq2_pos, valid_moves, turn)
-
-        pygame.display.flip()
+            pygame.display.flip()
 
 
 def main():
-    init_pygame()
-
-    screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + int(SQ_SZ)))
-    screen.fill(colour.WHITE)
-
-    flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + SQ_SZ / 4))
-    flip_board_icon = screen.blit(
-        pygame.image.load(flip_board_rel_path + 'flip_board' + img_ext), 
-        flip_board_pos
-    )
-
-    gameplay(screen)
+    new_game = Game()
+    new_game.start()
 
 main()
