@@ -18,5 +18,15 @@ img_ext = '.png'
 S_WIDTH = 600
 S_HEIGHT = 600
 
+# Board position (relative to screen)
 BD_X = S_WIDTH * 0
 BD_Y = S_HEIGHT * 0
+
+# Main colours
+Colour = {
+    'BLACK' : (0, 0, 0),
+    'WHITE' : (255, 255, 255),
+    'RED' : (255, 0, 0),
+    'GREEN' : (0, 255, 0),
+    'BLUE' : (0, 0, 255),
+}

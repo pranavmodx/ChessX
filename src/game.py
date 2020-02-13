@@ -1,7 +1,6 @@
 from board import Board
 from move import Move
 from config import *
-import colour
 import pygame
 
 
@@ -11,7 +10,7 @@ class Game:
         pygame.display.set_caption('ChessX')
 
         self.screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + 75))
-        self.screen.fill(colour.WHITE)
+        self.screen.fill(Colour['WHITE'])
 
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
@@ -70,11 +69,11 @@ class Game:
             self.board.display_all(self.screen)
 
             if clicked_once:
-                self.board.highlight_square(self.screen, colour.RED, sq1_pos)
+                self.board.highlight_square(self.screen, Colour['RED'], sq1_pos)
 
                 for valid_move in self.move.valid_moves:
                     # print(valid_move)
-                    self.board.highlight_square(self.screen, colour.GREEN, valid_move)
+                    self.board.highlight_square(self.screen, Colour['GREEN'], valid_move)
 
             # Event loop
             for event in pygame.event.get():
