@@ -1,4 +1,5 @@
 from .piece import Piece
+from config import BD_X, BD_Y
 
 
 class King(Piece):
@@ -11,41 +12,41 @@ class King(Piece):
     def valid_moves(self):
         x = self.pos[0]
         y = self.pos[1]
-        sq_size = self.size()
-        bd_size = sq_size * 8
+        SQ_SZ = self.size()
+        BD_SZ = SQ_SZ * 8
         valids = []
 
-        inc_x = x + sq_size
-        dec_x = x - sq_size
-        inc_y = y + sq_size
-        dec_y = y - sq_size
+        inc_x = x + SQ_SZ
+        dec_x = x - SQ_SZ
+        inc_y = y + SQ_SZ
+        dec_y = y - SQ_SZ
 
-        if inc_x < bd_size:
+        if inc_x < BD_SZ:
             valids.append((inc_x, y))
 
-        if dec_x >= bd_x:
+        if dec_x >= BD_X:
             valids.append((dec_x, y))
 
-        if inc_y < bd_size:
+        if inc_y < BD_SZ:
             valids.append((x, inc_y))
 
-        if dec_y >= bd_y:
+        if dec_y >= BD_Y:
             valids.append((x, dec_y))
 
-        if inc_x < bd_size and inc_y < bd_size:
+        if inc_x < BD_SZ and inc_y < BD_SZ:
             valids.append((inc_x, inc_y))
 
-        if dec_x >= bd_x and inc_y < bd_size:
+        if dec_x >= BD_X and inc_y < BD_SZ:
             valids.append((dec_x, inc_y))
 
-        if inc_x < bd_size and dec_y >= bd_y:
+        if inc_x < BD_SZ and dec_y >= BD_Y:
             valids.append((inc_x, dec_y))
             
-        if dec_x >= bd_x and dec_y >= bd_y:
+        if dec_x >= BD_X and dec_y >= BD_Y:
             valids.append((dec_x, dec_y))      
 
         if self.start_pos:
-            valids.append((x + 2 * sq_size, y))
-            valids.append((x - 2 * sq_size, y))
+            valids.append((x + 2 * SQ_SZ, y))
+            valids.append((x - 2 * SQ_SZ, y))
 
         return valids

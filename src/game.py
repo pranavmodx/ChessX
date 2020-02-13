@@ -16,7 +16,7 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        self.board.display_all(self.screen)
+        # self.board.display_all(self.screen)
 
         flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
         flip_board_icon = self.screen.blit(
@@ -69,10 +69,11 @@ class Game:
             # Display board and highlight screen
             self.board.display_all(self.screen)
 
-            if clicked_once == True:
+            if clicked_once:
                 self.board.highlight_square(self.screen, colour.RED, sq1_pos)
 
                 for valid_move in self.move.valid_moves:
+                    # print(valid_move)
                     self.board.highlight_square(self.screen, colour.GREEN, valid_move)
 
             # Event loop
@@ -103,6 +104,7 @@ class Game:
 
                     if self.piece1 and self.piece1.colour == self.move.turn:
                         clicked_once = True
+                        self.move.valid_moves = self.piece1.valid_moves()
 
                 # Click 2
                 elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
@@ -112,7 +114,7 @@ class Game:
                     sq2_pos = self.board.calc_sq_pos(mouse_pos)
 
                     # If second click is not the same as first, move the piece
-                    if sq2_pos != sq1_pos:
+                    if sq2_pos != sq1_pos and sq2_pos in self.move.valid_moves:
                         self.move.handle_piece(self.board, sq1_pos, sq2_pos)
 
             pygame.display.flip()

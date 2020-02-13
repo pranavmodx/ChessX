@@ -1,4 +1,5 @@
 from .piece import Piece
+from config import BD_X, BD_Y
 
 
 class Bishop(Piece):
@@ -8,8 +9,8 @@ class Bishop(Piece):
         super().__init__(p_type, p_no, colour)
 
     def valid_moves(self):
-        BD_X = self.pos[0]
-        BD_Y = self.pos[1]
+        x = self.pos[0]
+        y = self.pos[1]
         SQ_SZ = self.size() # Square size = Piece size
         BD_SZ = SQ_SZ * 8
         valids = []
@@ -23,13 +24,13 @@ class Bishop(Piece):
             if inc_x < BD_SZ and inc_y < BD_SZ:
                 valids.append((inc_x, inc_y))
 
-            if dec_x >= bd_x and inc_y < BD_SZ:
+            if dec_x >= BD_X and inc_y < BD_SZ:
                 valids.append((dec_x, inc_y))
 
             if inc_x < BD_SZ and dec_y >= BD_Y:
                 valids.append((inc_x, dec_y))
 
-            if inc_x >= bd_x and dec_y >= BD_Y:
+            if inc_x >= BD_X and dec_y >= BD_Y:
                 valids.append((dec_x, dec_y))
 
         return valids

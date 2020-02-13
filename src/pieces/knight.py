@@ -1,4 +1,5 @@
 from .piece import Piece
+from config import BD_X, BD_Y
 
 
 class Knight(Piece):
@@ -10,42 +11,42 @@ class Knight(Piece):
     def valid_moves(self):
         x = self.pos[0]
         y = self.pos[1]
-        sq_size = self.size()
-        bd_size = sq_size * 8
+        SQ_SZ = self.size()
+        BD_SZ = SQ_SZ * 8
         valids = []
 
-        inc_x1 = x + sq_size
-        dec_x1 = x - sq_size
-        inc_y1 = y + sq_size
-        dec_y1 = y - sq_size
+        inc_x1 = x + SQ_SZ
+        dec_x1 = x - SQ_SZ
+        inc_y1 = y + SQ_SZ
+        dec_y1 = y - SQ_SZ
 
-        inc_x2 = x + 2 * sq_size
-        dec_x2 = x - 2 * sq_size
-        inc_y2 = y + 2 * sq_size
-        dec_y2 = y - 2 * sq_size
+        inc_x2 = x + 2 * SQ_SZ
+        dec_x2 = x - 2 * SQ_SZ
+        inc_y2 = y + 2 * SQ_SZ
+        dec_y2 = y - 2 * SQ_SZ
 
         if inc_x1 < BD_SZ and inc_y2 < BD_SZ:  
             valids.append((inc_x1, inc_y2))
 
-        if dec_x1 >= bd_x and inc_y2 < BD_SZ:  
+        if dec_x1 >= BD_X and inc_y2 < BD_SZ:  
             valids.append((dec_x1, inc_y2))
 
-        if inc_x1 < BD_SZ and dec_y2 >= bd_y:  
+        if inc_x1 < BD_SZ and dec_y2 >= BD_Y:  
             valids.append((inc_x1, dec_y2))
 
-        if dec_x1 >= bd_x and dec_y2 >= bd_y:  
+        if dec_x1 >= BD_X and dec_y2 >= BD_Y:  
             valids.append((dec_x1, dec_y2))
 
         if inc_x2 < BD_SZ and inc_y1 < BD_SZ:  
             valids.append((inc_x2, inc_y1))
 
-        if dec_x2 >= bd_x and inc_y1 < BD_SZ:  
+        if dec_x2 >= BD_X and inc_y1 < BD_SZ:  
             valids.append((dec_x2, inc_y1))
 
-        if inc_x2 < BD_SZ and dec_y1 >= bd_y:  
+        if inc_x2 < BD_SZ and dec_y1 >= BD_Y:  
             valids.append((inc_x2, dec_y1))
 
-        if dec_x2 >= bd_x and dec_y1 >= bd_y:  
+        if dec_x2 >= BD_X and dec_y1 >= BD_Y:  
             valids.append((dec_x2, dec_y1))
             
         return valids

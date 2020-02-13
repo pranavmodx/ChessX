@@ -1,4 +1,5 @@
 from .piece import Piece
+from config import BD_X, BD_Y
 
 
 class Rook(Piece):
@@ -11,27 +12,27 @@ class Rook(Piece):
     def valid_moves(self):
         x = self.pos[0]
         y = self.pos[1]
-        sq_size = self.size()
-        bd_size = sq_size * 8
+        SQ_SZ = self.size()
+        BD_SZ = SQ_SZ * 8
         valids = []
 
         for i in range(1, 8):
-            inc_x = x + i * sq_size
-            dec_x = x - i * sq_size
-            inc_y = y + i * sq_size
-            dec_y = y - i * sq_size
+            inc_x = x + i * SQ_SZ
+            dec_x = x - i * SQ_SZ
+            inc_y = y + i * SQ_SZ
+            dec_y = y - i * SQ_SZ
 
             # Rook
-            if inc_x < bd_size:
+            if inc_x < BD_SZ:
                 valids.append((inc_x, y))
 
-            if dec_x >= bd_x:
+            if dec_x >= BD_X:
                 valids.append((dec_x, y))
 
-            if inc_y < bd_size:
+            if inc_y < BD_SZ:
                 valids.append((x, inc_y))
 
-            if dec_y >= bd_y:
+            if dec_y >= BD_Y:
                 valids.append((x, dec_y))
 
         return valids
