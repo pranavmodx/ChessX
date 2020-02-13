@@ -15,6 +15,10 @@ class Board:
         # Board attributes
         self.pos = pos
         self.is_flipped = False
+        self.king_pos = {
+            'White': None,
+            'Black': None,
+        }
 
         # Piece attributes
         self.pieces = {
@@ -111,6 +115,9 @@ class Board:
 
         for i, b_piece in enumerate(self.pieces['b_pieces']):
             b_piece.set_pos((BD_X + self.SQ_SZ * i, BD_Y))
+
+        self.king_pos['White'] = self.pieces['w_pieces'][4].pos
+        self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
 
     def flip_board(self):
         '''Flips the board and the pieces'''

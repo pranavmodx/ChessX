@@ -20,25 +20,13 @@ class Game:
         flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
         flip_board_icon = self.screen.blit(
             pygame.image.load(flip_board_rel_path + 'flip_board' + img_ext), 
-            flip_board_pos
+            flip_board_pos,
         )
 
         self.move = Move()
 
 
     # Helper methods
-    def king_is_present(self, board, req_pos, turn):
-        if self.move.turn == 'White':
-            for w_piece in board.pieces['w_pieces']:
-                if w_piece.p_type == 'King' and w_piece.pos == req_pos:
-                    return True
-        else:
-            for b_piece in board.pieces['b_pieces']:
-                if b_piece.p_type == 'King' and b_piece.pos == req_pos:
-                    return True
-
-        return False
-
     def delete_piece(self, board, piece):
         '''Deletes a given piece from the list of self.pieces'''
 
