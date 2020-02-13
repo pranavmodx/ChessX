@@ -179,32 +179,32 @@ class Move:
                 self.turn = self.next_turn(self.turn)
 
 
-    def bishop_through(self, board, sq1_pos, dist_x, dist_y):
+    def bishop_through(self, board, sq_pos, dist_x, dist_y):
         # Topleft
         if dist_x < 0 and dist_y < 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = self.fetch_piece(board, (sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1] - i * board.SQ_SZ))
+                k = self.fetch_piece(board, (sq_pos[0] - i * board.SQ_SZ, sq_pos[1] - i * board.SQ_SZ))
                 if k:
                     return True
 
         # Topright
         elif dist_x > 0 and dist_y < 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = self.fetch_piece(board, (sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1] - i * board.SQ_SZ))
+                k = self.fetch_piece(board, (sq_pos[0] + i * board.SQ_SZ, sq_pos[1] - i * board.SQ_SZ))
                 if k:
                     return True
 
         # Bottomleft
         elif dist_x < 0 and dist_y > 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = self.fetch_piece(board, (sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1] + i * board.SQ_SZ))
+                k = self.fetch_piece(board, (sq_pos[0] - i * board.SQ_SZ, sq_pos[1] + i * board.SQ_SZ))
                 if k:
                     return True
 
         # Bottomright
         elif dist_x > 0 and dist_y > 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = self.fetch_piece(board, (sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1] + i * board.SQ_SZ))
+                k = self.fetch_piece(board, (sq_pos[0] + i * board.SQ_SZ, sq_pos[1] + i * board.SQ_SZ))
                 if k:
                     return True
 
@@ -226,10 +226,6 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
-                    if board.king_pos[self.turn] in bishop.valid_moves():
-                        self.under_check = True
-                        print('Yes')
-
         else:
             if sq2_pos in self.valid_moves:
                 if bishop.colour != piece2.colour and \
@@ -241,9 +237,15 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
-                    if board.king_pos[self.turn] in bishop.valid_moves():
-                        self.under_check = True
-                        print('Yes')
+        if board.king_pos[self.turn] in bishop.valid_moves() and \
+            not self.bishop_through(
+                board, 
+                sq2_pos, 
+                board.king_pos[self.turn][0] - sq2_pos[0], 
+                board.king_pos[self.turn][1] - sq2_pos[1]
+            ):
+            self.under_check = True
+            print('Yes')
 
     def handle_knight(self, board, sq1_pos, sq2_pos):
         knight = self.fetch_piece_by_turn(board, sq1_pos)
@@ -323,10 +325,6 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
-                    if board.king_pos[self.turn] in rook.valid_moves():
-                        self.under_check = True
-                        print('Yes')
-
         else:
             if sq2_pos in self.valid_moves:
                 if rook.colour != piece2.colour and \
@@ -338,9 +336,15 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
-                    if board.king_pos[self.turn] in rook.valid_moves():
-                        self.under_check = True
-                        print('Yes')
+        if board.king_pos[self.turn] in rook.valid_moves() and \
+            not self.rook_through(
+                board, 
+                sq2_pos, 
+                board.king_pos[self.turn][0] - sq2_pos[0], 
+                board.king_pos[self.turn][1] - sq2_pos[1]
+            ):
+            self.under_check = True
+            print('Yes')
 
     def handle_queen(self, board, sq1_pos, sq2_pos):
         queen = self.fetch_piece_by_turn(board, sq1_pos)
@@ -353,25 +357,19 @@ class Move:
 
         if not piece2:
             if sq2_pos in self.valid_moves:
+                # Bishop move
                 if dist_x and dist_y:
                     if not self.bishop_through(board, sq1_pos, dist_x, dist_y):
                         queen.move(sq2_pos)
 
                         self.turn = self.next_turn(self.turn)
 
-                        if board.king_pos[self.turn] in queen.valid_moves():
-                            self.under_check = True
-                            print('Yes')
-
+                # Rook move
                 elif (dist_x == 0 and dist_y) or (dist_y == 0 and dist_x):
                     if not self.rook_through(board, sq1_pos, dist_x, dist_y):
                         queen.move(sq2_pos)
 
                         self.turn = self.next_turn(self.turn)
-
-                        if board.king_pos[self.turn] in queen.valid_moves():
-                            self.under_check = True
-                            print('Yes')
 
         else:
             if sq2_pos in self.valid_moves:
@@ -385,9 +383,21 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
-                    if board.king_pos[self.turn] in queen.valid_moves():
-                        self.under_check = True
-                        print('Yes')
+        if board.king_pos[self.turn] in queen.valid_moves() and \
+            not self.bishop_through(
+                board, 
+                sq2_pos, 
+                board.king_pos[self.turn][0] - sq2_pos[0], 
+                board.king_pos[self.turn][1] - sq2_pos[1]
+            ) and \
+            not self.rook_through(
+                board, 
+                sq2_pos, 
+                board.king_pos[self.turn][0] - sq2_pos[0], 
+                board.king_pos[self.turn][1] - sq2_pos[1]
+            ):
+            self.under_check = True
+            print('Yes')
 
     def handle_piece(self, board, sq1_pos, sq2_pos):
         piece1 = self.fetch_piece_by_turn(board, sq1_pos)

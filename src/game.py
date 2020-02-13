@@ -86,12 +86,19 @@ class Game:
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
                     print(sq1_pos)
-                    self.piece1 = self.move.fetch_piece_by_turn(self.board, sq1_pos)
-                    print(self.piece1)
+                    piece1 = self.move.fetch_piece_by_turn(self.board, sq1_pos)
+                    print(piece1)
 
-                    if self.piece1 and self.piece1.colour == self.move.turn:
-                        clicked_once = True
-                        self.move.valid_moves = self.piece1.valid_moves()
+                    if piece1 and piece1.colour == self.move.turn:
+                        if not self.move.under_check:
+                            clicked_once = True
+                            # Pawn valid moves - handle flip board
+                            self.move.valid_moves = piece1.valid_moves() # For highlighting beforehand
+                        else:
+                            if piece1.p_type == 'King':
+                                clicked_once = True
+                                self.move.valid_moves = piece1.valid_moves()
+                                self.move.under_check = False
 
                 # Click 2
                 elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
