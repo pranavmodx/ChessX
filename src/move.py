@@ -119,9 +119,9 @@ class Move:
                     abs(dist_y) != 2 * board.SQ_SZ) \
                     or abs(dist_x) == board.SQ_SZ:
                     if pawn.colour != piece2.colour:
-                        # piece2.captured = True
+                        piece2.captured = True
                         # piece2.set_pos = None
-                        board.delete_piece(self.turn, piece2)
+                        # board.delete_piece(self.turn, piece2)
                         pawn.move(sq2_pos)
                         if pawn.start_pos == True:
                             pawn.start_pos = False
@@ -197,9 +197,9 @@ class Move:
         else:
             if not self.is_controlled_sq(board, sq2_pos):
                 if king.colour != piece2.colour:
-                    # piece2.captured = True
+                    piece2.captured = True
                     # piece2.set_pos = None
-                    board.delete_piece(self.turn, piece2)
+                    # board.delete_piece(self.turn, piece2)
                     king.move(sq2_pos)
                     board.king_pos[self.turn] = sq2_pos
 
@@ -259,9 +259,9 @@ class Move:
             if sq2_pos in self.valid_moves:
                 if bishop.colour != piece2.colour and \
                     not self.bishop_through(board, sq1_pos, dist_x, dist_y):
-                    # piece2.captured = True
+                    piece2.captured = True
                     # piece2.set_pos = None
-                    board.delete_piece(self.turn, piece2)
+                    # board.delete_piece(self.turn, piece2)
                     bishop.move(sq2_pos)
 
                     self.turn = self.next_turn(self.turn)
@@ -301,9 +301,9 @@ class Move:
         else:
             if sq2_pos in self.valid_moves:
                 if knight.colour != piece2.colour:
-                    # piece2.captured = True
+                    piece2.captured = True
                     # piece2.set_pos = None
-                    board.delete_piece(self.turn, piece2)
+                    # board.delete_piece(self.turn, piece2)
                     knight.move(sq2_pos)
 
                     self.turn = self.next_turn(self.turn)
@@ -370,9 +370,9 @@ class Move:
             if sq2_pos in self.valid_moves:
                 if rook.colour != piece2.colour and \
                     not self.rook_through(board, sq1_pos, dist_x, dist_y):
-                    # piece2.captured = True
+                    piece2.captured = True
                     # piece2.set_pos = None
-                    board.delete_piece(self.turn, piece2)
+                    # board.delete_piece(self.turn, piece2)
                     rook.move(sq2_pos)
 
                     self.turn = self.next_turn(self.turn)
@@ -423,9 +423,9 @@ class Move:
                 if queen.colour != piece2.colour and \
                     not self.rook_through(board, sq1_pos, dist_x, dist_y) and \
                         not self.bishop_through(board, sq1_pos, dist_x, dist_y):
-                    # piece2.captured = True
+                    piece2.captured = True
                     # piece2.set_pos = None
-                    board.delete_piece(self.turn, piece2)
+                    # board.delete_piece(self.turn, piece2)
                     queen.move(sq2_pos)
 
                     self.turn = self.next_turn(self.turn)

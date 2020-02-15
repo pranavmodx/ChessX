@@ -90,8 +90,8 @@ class Board:
 
         for piece_list in self.pieces.values():
             for piece in piece_list:
-                # if not piece.captured:
-                piece.display(screen)
+                if not piece.captured:
+                    piece.display(screen)
 
     def set_pos(self, pos):
         '''Sets or changes the position of board'''
@@ -184,20 +184,24 @@ class Board:
         if turn == 'White':
             for w_pawn in self.pieces['w_pawns']:
                 if w_pawn.pos == req_pos:
-                    return w_pawn
+                    if not w_pawn.captured:
+                        return w_pawn
 
             for w_piece in self.pieces['w_pieces']:
                 if w_piece.pos == req_pos:
-                    return w_piece
+                    if not w_piece.captured:
+                        return w_piece
 
         else:
             for b_pawn in self.pieces['b_pawns']:
                 if b_pawn.pos == req_pos:
-                    return b_pawn
+                    if not b_pawn.captured:
+                        return b_pawn
 
             for b_piece in self.pieces['b_pieces']:
                 if b_piece.pos == req_pos:
-                    return b_piece
+                    if not b_piece.captured:
+                        return b_piece
 
         return None
 
@@ -206,7 +210,7 @@ class Board:
         
         for pieces in self.pieces.values():
             for piece in pieces:
-                if piece.pos == req_pos:
+                if piece.pos == req_pos and not piece.captured:
                     return piece
 
         return None
