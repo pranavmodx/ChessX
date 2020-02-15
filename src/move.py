@@ -123,6 +123,13 @@ class Move:
                         # piece2.set_pos = None
                         # board.delete_piece(self.turn, piece2)
                         pawn.move(sq2_pos)
+
+                        if self.under_check:
+                            if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                                piece2.captured = False
+                                pawn.move(sq1_pos)
+                                return
+
                         if pawn.start_pos == True:
                             pawn.start_pos = False
 
@@ -264,6 +271,12 @@ class Move:
                     # board.delete_piece(self.turn, piece2)
                     bishop.move(sq2_pos)
 
+                    if self.under_check:
+                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                            piece2.captured = False
+                            bishop.move(sq1_pos)
+                            return
+
                     self.turn = self.next_turn(self.turn)
 
         # Check if the bishop move caused a check to king
@@ -305,6 +318,12 @@ class Move:
                     # piece2.set_pos = None
                     # board.delete_piece(self.turn, piece2)
                     knight.move(sq2_pos)
+
+                    if self.under_check:
+                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                            piece2.captured = False
+                            knight.move(sq1_pos)
+                            return
 
                     self.turn = self.next_turn(self.turn)
 
@@ -375,6 +394,12 @@ class Move:
                     # board.delete_piece(self.turn, piece2)
                     rook.move(sq2_pos)
 
+                    if self.under_check:
+                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                            piece2.captured = False
+                            rook.move(sq1_pos)
+                            return
+
                     self.turn = self.next_turn(self.turn)
 
         # Check if the rook move caused a check to king
@@ -427,6 +452,12 @@ class Move:
                     # piece2.set_pos = None
                     # board.delete_piece(self.turn, piece2)
                     queen.move(sq2_pos)
+
+                    if self.under_check:
+                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                            piece2.captured = False
+                            queen.move(sq1_pos)
+                            return
 
                     self.turn = self.next_turn(self.turn)
 
