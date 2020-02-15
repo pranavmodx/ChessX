@@ -178,4 +178,51 @@ class Board:
             width
         )
 
+    def fetch_piece_by_turn(self, turn, req_pos):
+        '''Fetches piece (by turn) present at a given position on the board'''
+
+        if turn == 'White':
+            for w_pawn in self.pieces['w_pawns']:
+                if w_pawn.pos == req_pos:
+                    return w_pawn
+
+            for w_piece in self.pieces['w_pieces']:
+                if w_piece.pos == req_pos:
+                    return w_piece
+
+        else:
+            for b_pawn in self.pieces['b_pawns']:
+                if b_pawn.pos == req_pos:
+                    return b_pawn
+
+            for b_piece in self.pieces['b_pieces']:
+                if b_piece.pos == req_pos:
+                    return b_piece
+
+        return None
+
+    def fetch_piece(self, req_pos):
+        '''Fetches piece present at a given position on the board'''
+        
+        for pieces in self.pieces.values():
+            for piece in pieces:
+                if piece.pos == req_pos:
+                    return piece
+
+        return None
+
+    def delete_piece(self, turn, piece):
+        '''Deletes a given piece from the list of pieces'''
+
+        if turn == 'Black':
+            if piece.p_type == 'Pawn':
+                self.pieces['w_pawns'].remove(piece)
+            else:
+                self.pieces['w_pieces'].remove(piece)
+
+        else:
+            if piece.p_type == 'Pawn':
+                self.pieces['b_pawns'].remove(piece)
+            else:
+                self.pieces['b_pieces'].remove(piece)
 

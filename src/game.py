@@ -86,7 +86,7 @@ class Game:
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
                     print(sq1_pos)
-                    piece1 = self.move.fetch_piece_by_turn(self.board, sq1_pos)
+                    piece1 = self.board.fetch_piece_by_turn(self.move.turn, sq1_pos)
                     print(piece1)
 
                     if piece1 and piece1.colour == self.move.turn:
