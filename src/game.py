@@ -93,7 +93,10 @@ class Game:
                         if not self.move.under_check:
                             clicked_once = True
                             # Pawn valid moves - handle flip board
-                            self.move.valid_moves = piece1.valid_moves() # For highlighting beforehand
+                            if piece1.p_type == 'Pawn':
+                                self.move.valid_moves = piece1.valid_moves(self.board.is_flipped)
+                            else:
+                                self.move.valid_moves = piece1.valid_moves() # For highlighting beforehand
                         else:
                             if piece1.p_type == 'King':
                                 clicked_once = True
