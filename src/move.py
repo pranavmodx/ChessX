@@ -1,3 +1,10 @@
+from pieces import (
+    Knight,
+    Bishop,
+    Rook,
+    Queen,
+)
+
 class Move:
     def __init__(self):
         self.turn = 'White'
@@ -10,61 +17,51 @@ class Move:
         return 'White'
 
     def is_controlled_sq(self, board, req_pos):
-        # Along ranks
-            # y is constant
-            # loop for x from 0 to board size
-                # check if given square is valid move of piece (rook or queen) (of opposite colour) fetched from x
-                    # check if it's move through a piece
-                        # if it's not, return True for 1st such piece found
-        x = req_pos[0]
-        y = req_pos[1]
-
-        for i in range(0, int(board.BD_SZ / board.SQ_SZ)):
-            # if i * board.SQ_SZ == x:
-            #     continue
-            piece = board.fetch_piece((i * board.SQ_SZ, y))
-            # print(i + 1, piece)
-
-            if piece and piece.colour != self.turn and req_pos in piece.valid_moves():
-                print("in valid moves of the other piece")
-                if piece.p_type == 'Rook' or piece.p_type == 'Queen':
-                    if not self.rook_through(board, req_pos, piece.pos[0] - x, piece.pos[1] - y):
-                        return True
-
-        # Along files
-            # same as ranks
-        for i in range(0, int(board.BD_SZ / board.SQ_SZ)):
-            piece = board.fetch_piece((x, i * board.SQ_SZ))
-            # print(i + 1, piece)
-
-            if piece and piece.colour != self.turn and req_pos in piece.valid_moves():
-                print("in valid moves of the other piece")
-                if piece.p_type == 'Rook' or piece.p_type == 'Queen':
-                    if not self.rook_through(board, req_pos, piece.pos[0] - x, piece.pos[1] - y):
-                        return True
-
-        # Along diagonals
-            # both x and y are variables
-            # loop for x,y from 0 to board size
-                # check if given square is valid move of piece (bishop or queen)
-                # same ...
-        for i in range(0, int(board.BD_SZ / board.SQ_SZ)):
-            piece = board.fetch_piece((i * board.SQ_SZ, i * board.SQ_SZ))
-            # print(i + 1, piece)
-
-            if piece and piece.colour != self.turn and req_pos in piece.valid_moves():
-                print("in valid moves of the other piece")
-                if piece.p_type == 'Bishop' or piece.p_type == 'Queen':
-                    if not self.bishop_through(board, req_pos, piece.pos[0] - x, piece.pos[1] - y):
-                        return True
+        '''Checks whether a square is controlled by a piece'''
 
         # Along knight routes (L)
-        piece = board.fetch_piece(req_pos)
-        # print(i + 1, piece)
-        if piece and piece.colour != self.turn and req_pos in piece.valid_moves():
-            print("in valid moves of the other piece")
-            if piece.p_type == 'Knight':
+        knight = Knight(0)
+        knight.set_pos(req_pos)
+        for move in knight.valid_moves():
+            piece = board.fetch_piece(move)
+            if piece and piece.p_type == 'Knight' and piece.colour != self.turn:
+                del knight
                 return True
+
+        # Along diagonals
+        bishop = Bishop(0)
+        bishop.set_pos(req_pos)
+        for move in bishop.valid_moves():
+            piece = board.fetch_piece(move)
+            dist_x = move[0] - req_pos[0]
+            dist_y = move[1] - req_pos[1]
+
+            if piece and (piece.p_type == 'Bishop' or \
+                piece.p_type == 'Queen') and \
+                piece.colour != self.turn and \
+                not self.bishop_through(board, req_pos, dist_x, dist_y):
+                del bishop
+                return True
+
+        # Along ranks and files
+        rook = Rook(0)
+        rook.set_pos(req_pos)
+        for move in rook.valid_moves():
+            piece = board.fetch_piece(move)
+            dist_x = move[0] - req_pos[0]
+            dist_y = move[1] - req_pos[1]
+
+            if piece and (piece.p_type == 'Rook' or \
+                piece.p_type == 'Queen') and \
+                piece.colour != self.turn and \
+                not self.rook_through(board, req_pos, dist_x, dist_y):
+                del rook
+                return True
+
+        # King opposition
+        
+        # Pawns
+
 
         return False
 
@@ -122,22 +119,22 @@ class Move:
         if self.is_controlled_sq(board, sq2_pos):
             print("Controlled sq")
 
-        if not piece2:
+        if not piece2 and not self.is_controlled_sq(board, sq2_pos):
             if sq2_pos in self.valid_moves:
-                allow_castling = True
+                castling_allowed = True
                 # Checking for castling
                 if abs(dist_x) == 2 * board.SQ_SZ:
                     # Checking if piece present in b/w
                     if dist_x < 0:
                         k = board.fetch_piece((king.pos[0] - board.SQ_SZ, king.pos[1]))
                         if k:
-                            allow_castling = False
+                            castling_allowed = False
                     else:
                         k = board.fetch_piece((king.pos[0] + board.SQ_SZ, king.pos[1]))
                         if k:
-                            allow_castling = False
+                            castling_allowed = False
 
-                    if allow_castling:
+                    if castling_allowed:
                         if self.turn == 'White':
                             rook1 = board.pieces['w_pieces'][0]
                             rook2 = board.pieces['w_pieces'][-1]
@@ -171,7 +168,7 @@ class Move:
                     king.start_pos = False
                     self.turn = self.next_turn(self.turn)
         
-        else:
+        elif not self.is_controlled_sq(board, sq2_pos):
             if king.colour != piece2.colour:
                 # piece2.captured = True
                 # piece2.set_pos = None
@@ -237,6 +234,7 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
+        # Check if the bishop move caused a check to king
         if board.king_pos[self.turn] in bishop.valid_moves() and \
             not self.bishop_through(
                 board, 
@@ -273,6 +271,7 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
+                    # Check if the knight move caused a check to king
                     if board.king_pos[self.turn] in knight.valid_moves():
                         self.under_check = True
                         print('Yes')
@@ -336,6 +335,7 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
+        # Check if the rook move caused a check to king
         if board.king_pos[self.turn] in rook.valid_moves() and \
             not self.rook_through(
                 board,
@@ -383,17 +383,18 @@ class Move:
 
                     self.turn = self.next_turn(self.turn)
 
+        # Check if the queen move caused a check to king
         if board.king_pos[self.turn] in queen.valid_moves() and \
             not self.bishop_through(
-                board, 
-                sq2_pos, 
-                board.king_pos[self.turn][0] - sq2_pos[0], 
+                board,
+                sq2_pos,
+                board.king_pos[self.turn][0] - sq2_pos[0],
                 board.king_pos[self.turn][1] - sq2_pos[1]
             ) and \
             not self.rook_through(
-                board, 
-                sq2_pos, 
-                board.king_pos[self.turn][0] - sq2_pos[0], 
+                board,
+                sq2_pos,
+                board.king_pos[self.turn][0] - sq2_pos[0],
                 board.king_pos[self.turn][1] - sq2_pos[1]
             ):
             self.under_check = True

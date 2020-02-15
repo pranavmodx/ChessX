@@ -10,7 +10,11 @@ class Piece:
         self.img = img
 
     def size(self):
-        return self.img.get_height()
+        try:
+            sz = self.img.get_height()
+            return sz
+        except:
+            return 75 # Change later :P
 
     def display(self, screen):
         screen_obj = screen.blit(self.img, self.pos)
