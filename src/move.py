@@ -1,8 +1,9 @@
 from pieces import (
+    Pawn,
     Knight,
     Bishop,
     Rook,
-    Queen,
+    King,
 )
 
 class Move:
@@ -59,9 +60,28 @@ class Move:
                 return True
 
         # King opposition
+        king = King()
+        king.set_pos(req_pos)
+        for move in king.valid_moves():
+            piece = board.fetch_piece(move)
+            if piece and piece.p_type == 'King' and piece.colour != self.turn:
+                del king
+                return True
         
         # Pawns
-
+        if self.turn == 'White':
+            pawn = Pawn()
+        else:
+            pawn = Pawn(colour='Black')
+        pawn.set_pos(req_pos)
+        for move in pawn.valid_moves(board.is_flipped):
+            # If directly in front/back
+            if move[0] - req_pos[0] == 0:
+                continue
+            piece = board.fetch_piece(move)
+            if piece and piece.p_type == 'Pawn' and piece.colour != self.turn:
+                del pawn
+                return True
 
         return False
 
