@@ -90,18 +90,12 @@ class Game:
                     print(piece1)
 
                     if piece1 and piece1.colour == self.move.turn:
-                        if not self.move.under_check:
-                            clicked_once = True
-                            # Pawn valid moves - handle flip board
-                            if piece1.p_type == 'Pawn':
-                                self.move.valid_moves = piece1.valid_moves(self.board.is_flipped)
-                            else:
-                                self.move.valid_moves = piece1.valid_moves() # For highlighting beforehand
+                        clicked_once = True
+                        # Pawn valid moves - handle flip board
+                        if piece1.p_type == 'Pawn':
+                            self.move.valid_moves = piece1.valid_moves(self.board.is_flipped)
                         else:
-                            if piece1.p_type == 'King':
-                                clicked_once = True
-                                self.move.valid_moves = piece1.valid_moves()
-                                self.move.under_check = False
+                            self.move.valid_moves = piece1.valid_moves() # For highlighting beforehand
 
                 # Click 2
                 elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
