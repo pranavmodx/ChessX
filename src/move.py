@@ -97,10 +97,10 @@ class Move:
         if not piece2:
             if dist_x == 0 and sq2_pos in self.valid_moves:
                 pawn.move(sq2_pos)
-                if self.under_check:
-                    if self.is_controlled_sq(board, board.king_pos[self.turn]):
-                        pawn.move(sq1_pos)
-                        return
+                # if self.under_check:
+                if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                    pawn.move(sq1_pos)
+                    return
 
                 if pawn.start_pos:
                     pawn.start_pos = False
@@ -135,7 +135,8 @@ class Move:
 
                         self.turn = self.next_turn(self.turn)
 
-                        if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped):
+                        if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped) or \
+                            self.is_controlled_sq(board, board.king_pos[self.turn]):
                             self.under_check = True
                             print('Yes')
 
@@ -210,6 +211,11 @@ class Move:
                     king.move(sq2_pos)
                     board.king_pos[self.turn] = sq2_pos
 
+        # Discovered attack by king
+        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+            self.under_check = True
+            print("Yes")
+
     def bishop_through(self, board, req_pos, dist_x, dist_y):
         # Topleft
         if dist_x < 0 and dist_y < 0:
@@ -255,10 +261,10 @@ class Move:
                 if not self.bishop_through(board, sq1_pos, dist_x, dist_y):
                     bishop.move(sq2_pos)
 
-                    if self.under_check:
-                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
-                            bishop.move(sq1_pos)
-                            return
+                    # if self.under_check:
+                    if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                        bishop.move(sq1_pos)
+                        return
 
                     self.turn = self.next_turn(self.turn)
 
@@ -286,7 +292,8 @@ class Move:
                 sq2_pos, 
                 board.king_pos[self.turn][0] - sq2_pos[0], 
                 board.king_pos[self.turn][1] - sq2_pos[1]
-            ):
+            ) or \
+            self.is_controlled_sq(board, board.king_pos[self.turn]):
             self.under_check = True
             print('Yes')
 
@@ -300,10 +307,10 @@ class Move:
             if sq2_pos in self.valid_moves:
                 knight.move(sq2_pos)
 
-                if self.under_check:
-                    if self.is_controlled_sq(board, board.king_pos[self.turn]):
-                        knight.move(sq1_pos)
-                        return
+                # if self.under_check:
+                if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                    knight.move(sq1_pos)
+                    return
 
                 self.turn = self.next_turn(self.turn)
 
@@ -319,16 +326,17 @@ class Move:
                     # board.delete_piece(self.turn, piece2)
                     knight.move(sq2_pos)
 
-                    if self.under_check:
-                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
-                            piece2.captured = False
-                            knight.move(sq1_pos)
-                            return
+                    # if self.under_check:
+                    if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                        piece2.captured = False
+                        knight.move(sq1_pos)
+                        return
 
                     self.turn = self.next_turn(self.turn)
 
                     # Check if the knight move caused a check to king
-                    if board.king_pos[self.turn] in knight.valid_moves():
+                    if board.king_pos[self.turn] in knight.valid_moves() or \
+                        self.is_controlled_sq(board, board.king_pos[self.turn]):
                         self.under_check = True
                         print('Yes')
 
@@ -394,11 +402,11 @@ class Move:
                     # board.delete_piece(self.turn, piece2)
                     rook.move(sq2_pos)
 
-                    if self.under_check:
-                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
-                            piece2.captured = False
-                            rook.move(sq1_pos)
-                            return
+                    # if self.under_check:
+                    if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                        piece2.captured = False
+                        rook.move(sq1_pos)
+                        return
 
                     self.turn = self.next_turn(self.turn)
 
@@ -429,10 +437,10 @@ class Move:
                     if not self.bishop_through(board, sq1_pos, dist_x, dist_y):
                         queen.move(sq2_pos)
 
-                        if self.under_check:
-                            if self.is_controlled_sq(board, board.king_pos[self.turn]):
-                                queen.move(sq1_pos)
-                                return
+                        # if self.under_check:
+                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                            queen.move(sq1_pos)
+                            return
 
                         self.turn = self.next_turn(self.turn)
 
@@ -474,7 +482,8 @@ class Move:
                 sq2_pos,
                 board.king_pos[self.turn][0] - sq2_pos[0],
                 board.king_pos[self.turn][1] - sq2_pos[1]
-            ):
+            ) or \
+            self.is_controlled_sq(board, board.king_pos[self.turn]):
             self.under_check = True
             print('Yes')
 
