@@ -63,6 +63,9 @@ class Game:
                     # print(valid_move)
                     self.board.highlight_square(self.screen, Colour['GREEN'], valid_move)
 
+            if self.move.under_check:
+                self.board.highlight_square(self.screen, Colour['RED'], self.board.king_pos[self.move.turn])
+
             # Event loop
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
