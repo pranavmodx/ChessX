@@ -24,24 +24,6 @@ class Game:
         )
 
         self.move = Move()
-
-
-    # Helper methods
-    def delete_piece(self, board, piece):
-        '''Deletes a given piece from the list of self.pieces'''
-
-        if self.move.turn == 'White':
-            if piece.p_type == 'Pawn':
-                board.pieces['w_pawns'].remove(piece)
-            else:
-                board.pieces['w_pieces'].remove(piece)
-
-        else:
-            if piece.p_type == 'Pawn':
-                board.pieces['b_pawns'].remove(piece)
-            else:
-                board.pieces['b_pieces'].remove(piece)
-
     
     # Main method
     def start(self):

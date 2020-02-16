@@ -14,47 +14,43 @@ class Pawn(Piece):
 		SQ_SZ = self.size()
 		BD_SZ = SQ_SZ * 8
 		valids = []
+		start_pos = self.start_pos
+
+		def gen_valids1():
+			valids = []
+
+			valids.append((x - SQ_SZ, y + SQ_SZ))
+			valids.append((x + SQ_SZ, y + SQ_SZ))
+			valids.append((x, y + SQ_SZ))
+
+			if start_pos:
+				valids.append((x, y + 2 * SQ_SZ))
+
+			return valids
+
+		def gen_valids2():
+			valids = []
+
+			valids.append((x - SQ_SZ, y - SQ_SZ))
+			valids.append((x + SQ_SZ, y - SQ_SZ))
+			valids.append((x, y - SQ_SZ))
+
+			if start_pos:
+				valids.append((x, y - 2 * SQ_SZ))
+
+			return valids
+
 
 		if not is_flipped:
 			if self.colour == 'Black':
-				valids.append((x - SQ_SZ, y + SQ_SZ))
-				valids.append((x + SQ_SZ, y + SQ_SZ))
-
-				if self.start_pos:
-					valids.append((x, y + SQ_SZ))
-					valids.append((x, y + 2 * SQ_SZ))
-				else:
-					valids.append((x, y + SQ_SZ))
-
+				valids = gen_valids1()
 			else:
-				valids.append((x - SQ_SZ, y - SQ_SZ))
-				valids.append((x + SQ_SZ, y - SQ_SZ))
-
-				if self.start_pos:
-					valids.append((x, y - SQ_SZ))
-					valids.append((x, y - 2 * SQ_SZ))
-				else:
-					valids.append((x, y - SQ_SZ))
+				valids = gen_valids2()
 
 		else:
 			if self.colour == 'White':
-				valids.append((x - SQ_SZ, y + SQ_SZ))
-				valids.append((x + SQ_SZ, y + SQ_SZ))
-
-				if self.start_pos:
-					valids.append((x, y + SQ_SZ))
-					valids.append((x, y + 2 * SQ_SZ))
-				else:
-					valids.append((x, y + SQ_SZ))
-
+				valids = gen_valids1()
 			else:
-				valids.append((x - SQ_SZ, y - SQ_SZ))
-				valids.append((x + SQ_SZ, y - SQ_SZ))
-
-				if self.start_pos:
-					valids.append((x, y - SQ_SZ))
-					valids.append((x, y - 2 * SQ_SZ))
-				else:
-					valids.append((x, y - SQ_SZ))
+				valids = gen_valids2()
 
 		return valids

@@ -12,7 +12,8 @@ class Move:
         self.valid_moves = []
         self.under_check = False
 
-    def next_turn(self, turn):
+    @staticmethod
+    def next_turn(turn):
         if turn == 'White':
             return 'Black'
         return 'White'
@@ -216,7 +217,8 @@ class Move:
             self.under_check = True
             print("Yes")
 
-    def bishop_through(self, board, req_pos, dist_x, dist_y):
+    @staticmethod
+    def bishop_through(board, req_pos, dist_x, dist_y):
         # Topleft
         if dist_x < 0 and dist_y < 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
@@ -341,7 +343,8 @@ class Move:
                         print('Yes')
 
 
-    def rook_through(self, board, sq1_pos, dist_x, dist_y):
+    @staticmethod
+    def rook_through(board, sq1_pos, dist_x, dist_y):
         # Top
         if dist_x == 0 and dist_y < 0:
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
