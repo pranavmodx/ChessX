@@ -2,6 +2,7 @@
 board_rel_path = '../assets/img/board/'
 flip_board_rel_path = '../assets/img/icons/'
 pieces_rel_path = '../assets/img/pieces/'
+
 img_names = [
     'rook',
     'knight',
@@ -21,6 +22,10 @@ S_HEIGHT = 600
 # Board position (relative to screen)
 BD_X = S_WIDTH * 0
 BD_Y = S_HEIGHT * 0
+
+# Board size
+BD_SZ = 600
+SQ_SZ = BD_SZ / 8
 
 # Main colours
 Colour = {

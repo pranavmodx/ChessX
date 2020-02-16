@@ -445,7 +445,7 @@ class Move:
                             queen.move(sq1_pos)
                             return
 
-                        self.turn = self.next_turn(self.turn)
+                        self.turn = self.next_turn(self.turn)   
 
                 # Rook move
                 elif (dist_x == 0 and dist_y) or (dist_y == 0 and dist_x):
@@ -453,6 +453,10 @@ class Move:
                         queen.move(sq2_pos)
 
                         self.turn = self.next_turn(self.turn)
+
+                        if self.is_controlled_sq(board, board.king_pos[self.turn]):
+                            queen.move(sq1_pos)
+                            return
 
         else:
             if sq2_pos in self.valid_moves:

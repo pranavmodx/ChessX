@@ -1,3 +1,4 @@
+from .piece import Piece
 from .pawn import Pawn
 from .bishop import Bishop
 from .knight import Knight

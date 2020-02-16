@@ -1,4 +1,4 @@
-from .piece import Piece
+from pieces import Piece
 
 
 class Pawn(Piece): 
@@ -6,13 +6,15 @@ class Pawn(Piece):
 
 	def __init__(self, p_no=None, colour='White', p_type='Pawn'):
 		super().__init__(p_type, p_no, colour)
-		self.start_pos = True # Special case for pawns
+		self.start_pos = True # Special case for pawns - double push
 
 	def valid_moves(self, is_flipped=False):
 		x = self.pos[0]
 		y = self.pos[1]
+
 		SQ_SZ = self.size()
 		BD_SZ = SQ_SZ * 8
+
 		valids = []
 		start_pos = self.start_pos
 
@@ -39,7 +41,6 @@ class Pawn(Piece):
 				valids.append((x, y - 2 * SQ_SZ))
 
 			return valids
-
 
 		if not is_flipped:
 			if self.colour == 'Black':

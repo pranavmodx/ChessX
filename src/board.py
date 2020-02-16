@@ -121,39 +121,15 @@ class Board:
 
     def flip_board(self):
         '''Flips the board and the pieces'''
-        
-        for w_pawn in self.pieces['w_pawns']:
-            w_pawn.set_pos(
-                (
-                    self.BD_SZ - w_pawn.pos[0] - self.SQ_SZ,
-                    self.BD_SZ - w_pawn.pos[1] - self.SQ_SZ
-                )
-            )
 
-        for b_pawn in self.pieces['b_pawns']:
-            b_pawn.set_pos(
-                (
-                    self.BD_SZ - b_pawn.pos[0] - self.SQ_SZ,
-                    self.BD_SZ - b_pawn.pos[1] - self.SQ_SZ
+        for pieces in self.pieces.values():
+            for piece in pieces:
+                piece.set_pos(
+                    (
+                        self.BD_SZ - piece.pos[0] - self.SQ_SZ,
+                        self.BD_SZ - piece.pos[1] - self.SQ_SZ
+                    )
                 )
-            )
-
-        for w_piece in self.pieces['w_pieces']:
-            w_piece.set_pos(
-                (
-                    self.BD_SZ - w_piece.pos[0] - self.SQ_SZ,
-                    self.BD_SZ - w_piece.pos[1] - self.SQ_SZ
-                )
-            )
-
-        for b_piece in self.pieces['b_pieces']:
-            b_piece.set_pos(
-                (
-                    self.BD_SZ - b_piece.pos[0] - self.SQ_SZ,
-                    self.BD_SZ - b_piece.pos[1] - self.SQ_SZ
-                )
-            )
-
 
     def calc_sq_pos(self, mouse_pos):
         '''Calculates and returns topleft position of the square clicked'''
@@ -163,9 +139,8 @@ class Board:
 
         return (self.SQ_SZ * coeff_x, self.SQ_SZ * coeff_y)
 
-
     def highlight_square(self, surface, color, rect_dim, width=3):
-        '''Highlights a particular square'''
+        '''Highlights a particular square with a specified colour'''
 
         r_left, r_top = rect_dim
         r_width = self.SQ_SZ

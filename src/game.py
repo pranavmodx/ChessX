@@ -42,7 +42,6 @@ class Game:
                 self.board.highlight_square(self.screen, Colour['RED'], sq1_pos)
 
                 for valid_move in self.move.valid_moves:
-                    # print(valid_move)
                     self.board.highlight_square(self.screen, Colour['GREEN'], valid_move)
 
             if self.move.under_check:
@@ -73,6 +72,10 @@ class Game:
                     print(sq1_pos)
                     piece1 = self.board.fetch_piece_by_turn(self.move.turn, sq1_pos)
                     print(piece1)
+                    print(piece1.p_type)
+                    print(piece1.colour)
+                    print(piece1.p_no)
+                    # print(piece1.valid_moves())
 
                     if piece1 and piece1.colour == self.move.turn:
                         clicked_once = True
