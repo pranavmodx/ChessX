@@ -56,6 +56,34 @@ class Move:
             self.under_check = True
 
     def handle_king(self, board, piece1, sq1_pos, sq2_pos):
+        def castle_king():
+            if self.turn == 'White':
+                            rook1 = board.pieces['w_pieces'][0]
+                            rook2 = board.pieces['w_pieces'][-1]
+            else:
+                rook1 = board.pieces['b_pieces'][0]
+                rook2 = board.pieces['b_pieces'][-1]
+
+            # Short castling
+            if sq1_pos[0] < sq2_pos[0] and rook2.start_pos:
+                king.move(sq2_pos)
+                board.king_pos[self.turn] = sq2_pos
+                king.start_pos = False
+                rook2.move((rook2.pos[0] - 2 * board.SQ_SZ, rook2.pos[1]))
+                rook2.start_pos = False
+                rook1.start_pos = False
+
+            # Long castling
+            elif sq1_pos[0] > sq2_pos[0] and rook1.start_pos:
+                king.move(sq2_pos)
+                board.king_pos[self.turn] = sq2_pos
+                king.start_pos = False
+                rook1.move((rook1.pos[0] + 3 * board.SQ_SZ, rook1.pos[1]))
+                rook1.start_pos = False
+                rook2.start_pos = False
+
+            self.turn = self.next_turn(self.turn)
+
         king = piece1
         piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn(self.turn))
 
@@ -78,32 +106,7 @@ class Move:
                             castling_allowed = False
 
                     if castling_allowed:
-                        if self.turn == 'White':
-                            rook1 = board.pieces['w_pieces'][0]
-                            rook2 = board.pieces['w_pieces'][-1]
-                        else:
-                            rook1 = board.pieces['b_pieces'][0]
-                            rook2 = board.pieces['b_pieces'][-1]
-
-                        # Short castling
-                        if sq1_pos[0] < sq2_pos[0] and rook2.start_pos:
-                            king.move(sq2_pos)
-                            board.king_pos[self.turn] = sq2_pos
-                            king.start_pos = False
-                            rook2.move((rook2.pos[0] - 2 * board.SQ_SZ, rook2.pos[1]))
-                            rook2.start_pos = False
-                            rook1.start_pos = False
-
-                        # Long castling
-                        elif sq1_pos[0] > sq2_pos[0] and rook1.start_pos:
-                            king.move(sq2_pos)
-                            board.king_pos[self.turn] = sq2_pos
-                            king.start_pos = False
-                            rook1.move((rook1.pos[0] + 3 * board.SQ_SZ, rook1.pos[1]))
-                            rook1.start_pos = False
-                            rook2.start_pos = False
-
-                        self.turn = self.next_turn(self.turn)
+                        castle_king()
 
                 else:
                     king.move(sq2_pos)
