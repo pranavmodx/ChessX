@@ -125,41 +125,42 @@ class Move:
         if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
             self.under_check = True
 
-    def handle_bishop(self, board, piece1, sq1_pos, sq2_pos):
-        bishop = piece1
+    def handle_brq(self, board, piece1, sq1_pos, sq2_pos):
+        # Handles moves of bishop, rook and queen
+
         piece2 = board.fetch_piece(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if not piece2:
             if sq2_pos in self.valid_moves:
-                if not bishop.move_through(board, sq1_pos, dist_x, dist_y):
-                    bishop.move(sq2_pos)
+                if not piece1.move_through(board, sq1_pos, dist_x, dist_y):
+                    piece1.move(sq2_pos)
 
                     if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                        bishop.move(sq1_pos)
+                        piece1.move(sq1_pos)
                         return
 
                     self.turn = self.next_turn(self.turn)
 
         else:
             if sq2_pos in self.valid_moves:
-                if bishop.colour != piece2.colour and \
-                    not bishop.move_through(board, sq1_pos, dist_x, dist_y):
+                if piece1.colour != piece2.colour and \
+                    not piece1.move_through(board, sq1_pos, dist_x, dist_y):
                     piece2.captured = True
-                    bishop.move(sq2_pos)
+                    piece1.move(sq2_pos)
 
                     if self.under_check:
                         if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                             piece2.captured = False
-                            bishop.move(sq1_pos)
+                            piece1.move(sq1_pos)
                             return
 
                     self.turn = self.next_turn(self.turn)
 
-        # Check if the bishop move caused a check to king
-        if board.king_pos[self.turn] in bishop.valid_moves() and \
-            not bishop.move_through(
+        # Check if the piece1 move caused a check to king
+        if board.king_pos[self.turn] in piece1.valid_moves() and \
+            not piece1.move_through(
                 board, 
                 sq2_pos, 
                 board.king_pos[self.turn][0] - sq2_pos[0], 
@@ -203,105 +204,15 @@ class Move:
                         board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                         self.under_check = True
 
-    def handle_rook(self, board, piece1, sq1_pos, sq2_pos):
-        rook = piece1
-        piece2 = board.fetch_piece(sq2_pos)
-
-        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-
-        if not piece2:
-            if sq2_pos in self.valid_moves:
-                if not rook.move_through(board, sq1_pos, dist_x, dist_y):
-                    rook.move(sq2_pos)
-
-                    if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                        rook.move(sq1_pos)
-                        return
-
-                    self.turn = self.next_turn(self.turn)
-
-        else:
-            if sq2_pos in self.valid_moves:
-                if rook.colour != piece2.colour and \
-                    not rook.move_through(board, sq1_pos, dist_x, dist_y):
-                    piece2.captured = True
-                    rook.move(sq2_pos)
-
-                    if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                        piece2.captured = False
-                        rook.move(sq1_pos)
-                        return
-
-                    self.turn = self.next_turn(self.turn)
-
-        # Check if the rook move caused a check to king
-        if board.king_pos[self.turn] in rook.valid_moves() and \
-            not rook.move_through(
-                board,
-                sq2_pos,
-                board.king_pos[self.turn][0] - sq2_pos[0],
-                board.king_pos[self.turn][1] - sq2_pos[1]
-            ):
-            self.under_check = True
-
-    def handle_queen(self, board, piece1, sq1_pos, sq2_pos):
-        queen = piece1
-        piece2 = board.fetch_piece(sq2_pos)
-
-        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-
-        if not piece2:
-            if sq2_pos in self.valid_moves:
-                if not queen.move_through(board, sq1_pos, dist_x, dist_y):
-                    queen.move(sq2_pos)
-
-                    if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                        queen.move(sq1_pos)
-                        return
-
-                    self.turn = self.next_turn(self.turn)   
-
-        else:
-            if sq2_pos in self.valid_moves:
-                if queen.colour != piece2.colour and \
-                    not queen.move_through(board, sq1_pos, dist_x, dist_y):
-                    piece2.captured = True
-                    queen.move(sq2_pos)
-
-                    if self.under_check:
-                        if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                            piece2.captured = False
-                            queen.move(sq1_pos)
-                            return
-
-                    self.turn = self.next_turn(self.turn)
-
-        # Check if the queen move caused a check to king
-        if board.king_pos[self.turn] in queen.valid_moves() and \
-            not queen.move_through(
-                board,
-                sq2_pos,
-                board.king_pos[self.turn][0] - sq2_pos[0],
-                board.king_pos[self.turn][1] - sq2_pos[1]
-            ) or \
-            board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-            self.under_check = True
-
     def handle_piece(self, board, piece1, sq1_pos, sq2_pos):
         if piece1.p_type == 'Pawn':
             self.handle_pawn(board, piece1, sq1_pos, sq2_pos)
 
-        elif piece1.p_type == 'Bishop':
-            self.handle_bishop(board, piece1, sq1_pos, sq2_pos)
-
         elif piece1.p_type == 'Knight':
             self.handle_knight(board, piece1, sq1_pos, sq2_pos)
 
-        elif piece1.p_type == 'Rook':
-            self.handle_rook(board, piece1, sq1_pos, sq2_pos)
-
-        elif piece1.p_type == 'Queen':
-            self.handle_queen(board, piece1, sq1_pos, sq2_pos)
-
         elif piece1.p_type == 'King':
             self.handle_king(board, piece1, sq1_pos, sq2_pos)
+
+        else:
+            self.handle_brq(board, piece1, sq1_pos, sq2_pos)
