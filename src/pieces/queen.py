@@ -10,7 +10,8 @@ class Queen(Bishop, Rook):
 
     def valid_moves(self):
         valids = []
-        valids = Bishop.valid_moves(self).extend(Rook.valid_moves(self))
+        valids = Bishop.valid_moves(self)
+        valids.extend(Rook.valid_moves(self))
 
         return valids
 
