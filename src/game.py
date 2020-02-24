@@ -15,7 +15,6 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        # self.board.display_all(self.screen)
 
         flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
         flip_board_icon = self.screen.blit(

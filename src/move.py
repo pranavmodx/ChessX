@@ -14,13 +14,12 @@ class Move:
         pawn = piece1
         piece2 = board.fetch_piece(sq2_pos)
 
-        dist_x = sq2_pos[0] - sq1_pos[0]
-        dist_y = sq2_pos[1] - sq1_pos[1]
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if not piece2:
             if dist_x == 0 and sq2_pos in self.valid_moves:
                 pawn.move(sq2_pos)
-                # if self.under_check:
+
                 if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                     pawn.move(sq1_pos)
                     return
@@ -32,7 +31,6 @@ class Move:
 
                 if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped):
                     self.under_check = True
-                    print('Yes')
 
         else:
             if sq2_pos in self.valid_moves:
@@ -43,8 +41,6 @@ class Move:
                     or abs(dist_x) == board.SQ_SZ:
                     if pawn.colour != piece2.colour:
                         piece2.captured = True
-                        # piece2.set_pos = None
-                        # board.delete_piece(self.turn, piece2)
                         pawn.move(sq2_pos)
 
                         if self.under_check:
@@ -61,17 +57,12 @@ class Move:
                         if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped) or \
                             board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                             self.under_check = True
-                            print('Yes')
 
     def handle_king(self, board, piece1, sq1_pos, sq2_pos):
         king = piece1
         piece2 = board.fetch_piece(sq2_pos)
 
-        dist_x = sq2_pos[0] - sq1_pos[0]
-        dist_y = sq2_pos[1] - sq1_pos[1]
-
-        if board.is_controlled_sq(sq2_pos):
-            print("Controlled sq")
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if not piece2:
             if sq2_pos in self.valid_moves and not board.is_controlled_sq(sq2_pos, self.turn):
@@ -127,29 +118,24 @@ class Move:
             if not board.is_controlled_sq(sq2_pos, self.turn):
                 if king.colour != piece2.colour:
                     piece2.captured = True
-                    # piece2.set_pos = None
-                    # board.delete_piece(self.turn, piece2)
                     king.move(sq2_pos)
                     board.king_pos[self.turn] = sq2_pos
 
         # Discovered attack by king
         if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
             self.under_check = True
-            print("Yes")
 
     def handle_bishop(self, board, piece1, sq1_pos, sq2_pos):
         bishop = piece1
         piece2 = board.fetch_piece(sq2_pos)
 
-        dist_x = sq2_pos[0] - sq1_pos[0]
-        dist_y = sq2_pos[1] - sq1_pos[1]
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if not piece2:
             if sq2_pos in self.valid_moves:
                 if not bishop.move_through(board, sq1_pos, dist_x, dist_y):
                     bishop.move(sq2_pos)
 
-                    # if self.under_check:
                     if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                         bishop.move(sq1_pos)
                         return
@@ -161,8 +147,6 @@ class Move:
                 if bishop.colour != piece2.colour and \
                     not bishop.move_through(board, sq1_pos, dist_x, dist_y):
                     piece2.captured = True
-                    # piece2.set_pos = None
-                    # board.delete_piece(self.turn, piece2)
                     bishop.move(sq2_pos)
 
                     if self.under_check:
@@ -183,7 +167,6 @@ class Move:
             ) or \
             board.is_controlled_sq(board.king_pos[self.turn], self.turn):
             self.under_check = True
-            print('Yes')
 
     def handle_knight(self, board, piece1, sq1_pos, sq2_pos):
         knight = piece1
@@ -193,7 +176,6 @@ class Move:
             if sq2_pos in self.valid_moves:
                 knight.move(sq2_pos)
 
-                # if self.under_check:
                 if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                     knight.move(sq1_pos)
                     return
@@ -202,17 +184,13 @@ class Move:
 
                 if board.king_pos[self.turn] in knight.valid_moves():
                     self.under_check = True
-                    print('Yes')
 
         else:
             if sq2_pos in self.valid_moves:
                 if knight.colour != piece2.colour:
                     piece2.captured = True
-                    # piece2.set_pos = None
-                    # board.delete_piece(self.turn, piece2)
                     knight.move(sq2_pos)
 
-                    # if self.under_check:
                     if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                         piece2.captured = False
                         knight.move(sq1_pos)
@@ -224,24 +202,21 @@ class Move:
                     if board.king_pos[self.turn] in knight.valid_moves() or \
                         board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                         self.under_check = True
-                        print('Yes')
 
     def handle_rook(self, board, piece1, sq1_pos, sq2_pos):
         rook = piece1
         piece2 = board.fetch_piece(sq2_pos)
 
-        dist_x = sq2_pos[0] - sq1_pos[0]
-        dist_y = sq2_pos[1] - sq1_pos[1]
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if not piece2:
             if sq2_pos in self.valid_moves:
                 if not rook.move_through(board, sq1_pos, dist_x, dist_y):
                     rook.move(sq2_pos)
 
-                    if self.under_check:
-                        if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                            rook.move(sq1_pos)
-                            return
+                    if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
+                        rook.move(sq1_pos)
+                        return
 
                     self.turn = self.next_turn(self.turn)
 
@@ -250,11 +225,8 @@ class Move:
                 if rook.colour != piece2.colour and \
                     not rook.move_through(board, sq1_pos, dist_x, dist_y):
                     piece2.captured = True
-                    # piece2.set_pos = None
-                    # board.delete_piece(self.turn, piece2)
                     rook.move(sq2_pos)
 
-                    # if self.under_check:
                     if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                         piece2.captured = False
                         rook.move(sq1_pos)
@@ -271,21 +243,18 @@ class Move:
                 board.king_pos[self.turn][1] - sq2_pos[1]
             ):
             self.under_check = True
-            print('Yes')
 
     def handle_queen(self, board, piece1, sq1_pos, sq2_pos):
         queen = piece1
         piece2 = board.fetch_piece(sq2_pos)
 
-        dist_x = sq2_pos[0] - sq1_pos[0]
-        dist_y = sq2_pos[1] - sq1_pos[1]
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if not piece2:
             if sq2_pos in self.valid_moves:
                 if not queen.move_through(board, sq1_pos, dist_x, dist_y):
                     queen.move(sq2_pos)
 
-                    # if self.under_check:
                     if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
                         queen.move(sq1_pos)
                         return
@@ -297,8 +266,6 @@ class Move:
                 if queen.colour != piece2.colour and \
                     not queen.move_through(board, sq1_pos, dist_x, dist_y):
                     piece2.captured = True
-                    # piece2.set_pos = None
-                    # board.delete_piece(self.turn, piece2)
                     queen.move(sq2_pos)
 
                     if self.under_check:
@@ -319,7 +286,6 @@ class Move:
             ) or \
             board.is_controlled_sq(board.king_pos[self.turn], self.turn):
             self.under_check = True
-            print('Yes')
 
     def handle_piece(self, board, piece1, sq1_pos, sq2_pos):
         if piece1.p_type == 'Pawn':

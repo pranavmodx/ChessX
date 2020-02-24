@@ -139,6 +139,13 @@ class Board:
 
         return (self.SQ_SZ * coeff_x, self.SQ_SZ * coeff_y)
 
+    @staticmethod
+    def calc_sq_dist(sq1_pos, sq2_pos):
+        return (
+            sq2_pos[0] - sq1_pos[0],
+            sq2_pos[1] - sq1_pos[1],
+        )
+
     def highlight_square(self, surface, color, rect_dim, width=3):
         '''Highlights a particular square with a specified colour'''
 
