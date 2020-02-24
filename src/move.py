@@ -12,7 +12,7 @@ class Move:
 
     def handle_pawn(self, board, piece1, sq1_pos, sq2_pos):
         pawn = piece1
-        piece2 = board.fetch_piece(sq2_pos)
+        piece2 = board.fetch_piece_by_turn(sq2_pos, self.turn)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
@@ -60,7 +60,7 @@ class Move:
 
     def handle_king(self, board, piece1, sq1_pos, sq2_pos):
         king = piece1
-        piece2 = board.fetch_piece(sq2_pos)
+        piece2 = board.fetch_piece_by_turn(sq2_pos, self.turn)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
@@ -128,7 +128,7 @@ class Move:
     def handle_brq(self, board, piece1, sq1_pos, sq2_pos):
         # Handles moves of bishop, rook and queen
 
-        piece2 = board.fetch_piece(sq2_pos)
+        piece2 = board.fetch_piece_by_turn(sq2_pos, self.turn)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
@@ -171,7 +171,7 @@ class Move:
 
     def handle_knight(self, board, piece1, sq1_pos, sq2_pos):
         knight = piece1
-        piece2 = board.fetch_piece(sq2_pos)
+        piece2 = board.fetch_piece_by_turn(sq2_pos, self.turn)
 
         if not piece2:
             if sq2_pos in self.valid_moves:

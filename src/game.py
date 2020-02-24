@@ -68,8 +68,7 @@ class Game:
                         continue
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
-                    piece1 = self.board.fetch_piece_by_turn(self.move.turn, sq1_pos)
-                    # print(piece1.valid_moves())
+                    piece1 = self.board.fetch_piece_by_turn(sq1_pos, self.move.turn)
 
                     if piece1 and piece1.colour == self.move.turn:
                         clicked_once = True

@@ -160,30 +160,26 @@ class Board:
             width
         )
 
-    def fetch_piece_by_turn(self, turn, req_pos):
+    def fetch_piece_by_turn(self, req_pos, turn):
         '''Fetches piece (by turn) present at a given position on the board'''
 
         if turn == 'White':
             for w_pawn in self.pieces['w_pawns']:
-                if w_pawn.pos == req_pos:
-                    if not w_pawn.captured:
-                        return w_pawn
+                if w_pawn.pos == req_pos and w_pawn.captured:
+                    return w_pawn
 
             for w_piece in self.pieces['w_pieces']:
-                if w_piece.pos == req_pos:
-                    if not w_piece.captured:
-                        return w_piece
+                if w_piece.pos == req_pos and w_piece.captured:
+                    return w_piece
 
         else:
             for b_pawn in self.pieces['b_pawns']:
-                if b_pawn.pos == req_pos:
-                    if not b_pawn.captured:
-                        return b_pawn
+                if b_pawn.pos == req_pos and b_pawn.captured:
+                    return b_pawn
 
             for b_piece in self.pieces['b_pieces']:
-                if b_piece.pos == req_pos:
-                    if not b_piece.captured:
-                        return b_piece
+                if b_piece.pos == req_pos and b_piece.captured:
+                    return b_piece
 
         return None
 
