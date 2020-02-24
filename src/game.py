@@ -22,6 +22,12 @@ class Game:
             flip_board_pos,
         )
 
+        reset_board_pos = (int(S_WIDTH / 2.2) + 100, int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
+        reset_board_icon = self.screen.blit(
+            pygame.image.load(reset_board_rel_path + 'reset_board' + img_ext), 
+            reset_board_pos,
+        )
+
         self.move = Move()
     
     # Main method
@@ -60,11 +66,22 @@ class Game:
                     pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(75 / 4))
                     if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
                         mouse_pos[1] in range(pos[1], pos[1] + 100):
-                        self.board.flip_board()
-                        if self.board.is_flipped == False:
-                            self.board.is_flipped = True
-                        else:
-                            self.board.is_flipped = False
+                        # self.board.flip_board()
+                        # if self.board.is_flipped == False:
+                        #     self.board.is_flipped = True
+                        # else:
+                        #     self.board.is_flipped = False
+                        continue
+
+                    # Reset board
+                    pos2 = (int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(75 / 4))
+                    if mouse_pos[0] in range(pos2[0], pos2[0] + 100) and \
+                        mouse_pos[1] in range(pos2[1], pos2[1] + 100):
+                        del self.board
+                        self.board = Board((BD_X, BD_Y))
+                        self.board.load_all_img()
+                        self.board.set_pos_all()
+                        self.move.turn = 'White'
                         continue
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)

@@ -165,20 +165,20 @@ class Board:
 
         if turn == 'White':
             for w_pawn in self.pieces['w_pawns']:
-                if w_pawn.pos == req_pos and w_pawn.captured:
+                if w_pawn.pos == req_pos and not w_pawn.captured:
                     return w_pawn
 
             for w_piece in self.pieces['w_pieces']:
-                if w_piece.pos == req_pos and w_piece.captured:
+                if w_piece.pos == req_pos and not w_piece.captured:
                     return w_piece
 
         else:
             for b_pawn in self.pieces['b_pawns']:
-                if b_pawn.pos == req_pos and b_pawn.captured:
+                if b_pawn.pos == req_pos and not b_pawn.captured:
                     return b_pawn
 
             for b_piece in self.pieces['b_pieces']:
-                if b_piece.pos == req_pos and b_piece.captured:
+                if b_piece.pos == req_pos and not b_piece.captured:
                     return b_piece
 
         return None

@@ -1,6 +1,7 @@
 # Image path specifications
 board_rel_path = '../assets/img/board/'
 flip_board_rel_path = '../assets/img/icons/'
+reset_board_rel_path = '../assets/img/icons/'
 pieces_rel_path = '../assets/img/pieces/'
 
 img_names = [
