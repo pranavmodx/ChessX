@@ -69,12 +69,7 @@ class Game:
                         continue
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
-                    print(sq1_pos)
                     piece1 = self.board.fetch_piece_by_turn(self.move.turn, sq1_pos)
-                    print(piece1)
-                    print(piece1.p_type)
-                    print(piece1.colour)
-                    print(piece1.p_no)
                     # print(piece1.valid_moves())
 
                     if piece1 and piece1.colour == self.move.turn:
@@ -94,7 +89,7 @@ class Game:
 
                     # If second click is not the same as first, move the piece
                     if sq2_pos != sq1_pos and sq2_pos in self.move.valid_moves:
-                        self.move.handle_piece(self.board, sq1_pos, sq2_pos)
+                        self.move.handle_piece(self.board, piece1, sq1_pos, sq2_pos)
 
             pygame.display.flip()
 

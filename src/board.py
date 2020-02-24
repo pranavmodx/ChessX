@@ -205,3 +205,71 @@ class Board:
             else:
                 self.pieces['b_pieces'].remove(piece)
 
+    def is_controlled_sq(self, req_pos, turn):
+        '''Checks whether a square is controlled by a piece'''
+
+        # Along knight routes (L)
+        knight = Knight(0)
+        knight.set_pos(req_pos)
+        for move in knight.valid_moves():
+            piece = self.fetch_piece(move)
+            if piece and piece.p_type == 'Knight' and piece.colour != turn:
+                del knight
+                return True
+
+        # Along diagonals
+        bishop = Bishop(0)
+        bishop.set_pos(req_pos)
+        for move in bishop.valid_moves():
+            piece = self.fetch_piece(move)
+            dist_x = move[0] - req_pos[0]
+            dist_y = move[1] - req_pos[1]
+
+            if piece and (piece.p_type == 'Bishop' or \
+                piece.p_type == 'Queen') and \
+                piece.colour != turn and \
+                not piece.move_through(self, req_pos, dist_x, dist_y):
+                del bishop
+                return True
+
+        # Along ranks and files
+        rook = Rook(0)
+        rook.set_pos(req_pos)
+        for move in rook.valid_moves():
+            piece = self.fetch_piece(move)
+            dist_x = move[0] - req_pos[0]
+            dist_y = move[1] - req_pos[1]
+
+            if piece and (piece.p_type == 'Rook' or \
+                piece.p_type == 'Queen') and \
+                piece.colour != turn and \
+                not piece.move_through(self, req_pos, dist_x, dist_y):
+                del rook
+                return True
+
+        # King opposition
+        king = King()
+        king.set_pos(req_pos)
+        for move in king.valid_moves():
+            piece = self.fetch_piece(move)
+            if piece and piece.p_type == 'King' and piece.colour != turn:
+                del king
+                return True
+        
+        # Pawns
+        if turn == 'White':
+            pawn = Pawn()
+        else:
+            pawn = Pawn(colour='Black')
+        pawn.set_pos(req_pos)
+        for move in pawn.valid_moves(self.is_flipped):
+            # If directly in front/back
+            if move[0] - req_pos[0] == 0:
+                continue
+            piece = self.fetch_piece(move)
+            if piece and piece.p_type == 'Pawn' and piece.colour != turn:
+                del pawn
+                return True
+
+        return False
+

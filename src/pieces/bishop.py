@@ -40,3 +40,35 @@ class Bishop(Piece):
                 valids.append((dec_x, dec_y))
 
         return valids
+
+    @staticmethod
+    def move_through(board, req_pos, dist_x, dist_y):
+        # Topleft
+        if dist_x < 0 and dist_y < 0:
+            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+                k = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                if k:
+                    return True
+
+        # Topright
+        elif dist_x > 0 and dist_y < 0:
+            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+                k = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                if k:
+                    return True
+
+        # Bottomleft
+        elif dist_x < 0 and dist_y > 0:
+            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+                k = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                if k:
+                    return True
+
+        # Bottomright
+        elif dist_x > 0 and dist_y > 0:
+            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+                k = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                if k:
+                    return True
+
+        return False

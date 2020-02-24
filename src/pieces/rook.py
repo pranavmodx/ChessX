@@ -40,3 +40,35 @@ class Rook(Piece):
                 valids.append((x, dec_y))
 
         return valids
+
+    @staticmethod
+    def move_through(board, sq1_pos, dist_x, dist_y):
+        # Top
+        if dist_x == 0 and dist_y < 0:
+            for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
+                k = board.fetch_piece((sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))
+                if k:
+                    return True
+
+        # Bottom
+        elif dist_x == 0 and dist_y > 0:
+            for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
+                k = board.fetch_piece((sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
+                if k:
+                    return True
+
+        # Right
+        elif dist_x > 0 and dist_y == 0:
+            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+                k = board.fetch_piece((sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
+                if k:
+                    return True
+
+        # Left
+        elif dist_x < 0 and dist_y == 0:
+            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+                k = board.fetch_piece((sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
+                if k:
+                    return True
+
+        return False
