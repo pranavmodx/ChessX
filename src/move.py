@@ -29,9 +29,6 @@ class Move:
 
                 self.turn = self.next_turn(self.turn)
 
-                if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped):
-                    self.under_check = True
-
         else:
             if sq2_pos in self.valid_moves:
                 # If there's a piece directly in front of pawn
@@ -54,9 +51,9 @@ class Move:
 
                         self.turn = self.next_turn(self.turn)
 
-                        if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped) or \
-                            board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                            self.under_check = True
+        if board.king_pos[self.turn] in pawn.valid_moves(board.is_flipped) or \
+            board.is_controlled_sq(board.king_pos[self.turn], self.turn):
+            self.under_check = True
 
     def handle_king(self, board, piece1, sq1_pos, sq2_pos):
         king = piece1
@@ -183,26 +180,24 @@ class Move:
 
                 self.turn = self.next_turn(self.turn)
 
-                if board.king_pos[self.turn] in knight.valid_moves():
-                    self.under_check = True
-
         else:
             if sq2_pos in self.valid_moves:
                 if knight.colour != piece2.colour:
                     piece2.captured = True
                     knight.move(sq2_pos)
 
-                    if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                        piece2.captured = False
-                        knight.move(sq1_pos)
-                        return
+                    if self.under_check:
+                        if board.is_controlled_sq(board.king_pos[self.turn], self.turn):
+                            piece2.captured = False
+                            knight.move(sq1_pos)
+                            return
 
                     self.turn = self.next_turn(self.turn)
 
-                    # Check if the knight move caused a check to king
-                    if board.king_pos[self.turn] in knight.valid_moves() or \
-                        board.is_controlled_sq(board.king_pos[self.turn], self.turn):
-                        self.under_check = True
+        # Check if the knight move caused a check to king
+        if board.king_pos[self.turn] in knight.valid_moves() or \
+            board.is_controlled_sq(board.king_pos[self.turn], self.turn):
+            self.under_check = True
 
     def handle_piece(self, board, piece1, sq1_pos, sq2_pos):
         if piece1.p_type == 'Pawn':
