@@ -1,6 +1,6 @@
 # ChessX
 
-A Chess game made in Python using Pygame library with emphasis on Object Oriented Programming and Design.
+A Chess program made in Python using Pygame library with emphasis on Object Oriented Programming and Design.
 
 Note : It is still a work in progress
 
