@@ -1,9 +1,8 @@
 class Piece:
-    def __init__(self, p_type, p_no, colour='White', captured=False):
-        self.p_type = p_type
+    def __init__(self, p_no, colour='White'):
         self.p_no = p_no
         self.colour = colour
-        self.captured = captured
+        self.captured = False
 
     def load_img(self, img):
         '''Loads image of piece'''
@@ -28,6 +27,12 @@ class Piece:
 
     def move(self, pos):
         self.pos = pos
+
+    def next_turn(self):
+        if self.colour == 'White':
+            return 'Black'
+        else:
+            return 'White'
 
     def __repr__(self):
         if self.p_no:

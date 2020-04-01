@@ -5,8 +5,8 @@ from config import BD_X, BD_Y
 class Knight(Piece):
     value = 3
 
-    def __init__(self, p_no=None, colour='White', p_type='Knight'):
-        super().__init__(p_type, p_no, colour)
+    def __init__(self, p_no=None, colour='White'):
+        super().__init__(p_no, colour)
 
     def valid_moves(self):
         x = self.pos[0]
@@ -52,3 +52,35 @@ class Knight(Piece):
             valids.append((dec_x2, dec_y1))
             
         return valids
+
+    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+        piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
+
+        if not piece2:
+            if sq2_pos in self.valid_moves():
+                self.move(sq2_pos)
+
+                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                    self.move(sq1_pos)
+                    return
+
+                return 1
+
+        else:
+            if sq2_pos in self.valid_moves():
+                if self.colour != piece2.colour:
+                    piece2.captured = True
+                    self.move(sq2_pos)
+
+                    if under_check:
+                        if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                            piece2.captured = False
+                            self.move(sq1_pos)
+                            return
+
+                    return 1
+
+        # Check if the self move caused a check to king
+        if board.king_pos[self.colour] in self.valid_moves() or \
+            board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+            under_check = True

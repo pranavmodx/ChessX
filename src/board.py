@@ -197,13 +197,13 @@ class Board:
         '''Deletes a given piece from the list of pieces'''
 
         if turn == 'Black':
-            if piece.p_type == 'Pawn':
+            if type(piece).__name__ == 'Pawn':
                 self.pieces['w_pawns'].remove(piece)
             else:
                 self.pieces['w_pieces'].remove(piece)
 
         else:
-            if piece.p_type == 'Pawn':
+            if type(piece).__name__ == 'Pawn':
                 self.pieces['b_pawns'].remove(piece)
             else:
                 self.pieces['b_pieces'].remove(piece)
@@ -216,7 +216,7 @@ class Board:
         knight.set_pos(req_pos)
         for move in knight.valid_moves():
             piece = self.fetch_piece(move)
-            if piece and piece.p_type == 'Knight' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'Knight' and piece.colour != turn:
                 del knight
                 return True
 
@@ -228,8 +228,8 @@ class Board:
             dist_x = move[0] - req_pos[0]
             dist_y = move[1] - req_pos[1]
 
-            if piece and (piece.p_type == 'Bishop' or \
-                piece.p_type == 'Queen') and \
+            if piece and (type(piece).__name__ == 'Bishop' or \
+                type(piece).__name__ == 'Queen') and \
                 piece.colour != turn and \
                 not piece.move_through(self, req_pos, dist_x, dist_y):
                 del bishop
@@ -243,8 +243,8 @@ class Board:
             dist_x = move[0] - req_pos[0]
             dist_y = move[1] - req_pos[1]
 
-            if piece and (piece.p_type == 'Rook' or \
-                piece.p_type == 'Queen') and \
+            if piece and (type(piece).__name__ == 'Rook' or \
+                type(piece).__name__ == 'Queen') and \
                 piece.colour != turn and \
                 not piece.move_through(self, req_pos, dist_x, dist_y):
                 del rook
@@ -255,7 +255,7 @@ class Board:
         king.set_pos(req_pos)
         for move in king.valid_moves():
             piece = self.fetch_piece(move)
-            if piece and piece.p_type == 'King' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'King' and piece.colour != turn:
                 del king
                 return True
         
@@ -270,7 +270,7 @@ class Board:
             if move[0] - req_pos[0] == 0:
                 continue
             piece = self.fetch_piece(move)
-            if piece and piece.p_type == 'Pawn' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'Pawn' and piece.colour != turn:
                 del pawn
                 return True
 

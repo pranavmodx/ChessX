@@ -5,8 +5,8 @@ from config import BD_X, BD_Y
 class Rook(Piece):
     value = 5
 
-    def __init__(self, p_type='Rook', p_no=None, colour='White'):
-        super().__init__(p_type, p_no, colour)
+    def __init__(self, p_no=None, colour='White'):
+        super().__init__(p_no, colour)
         self.start_pos = True # For checking castling ability
 
     def valid_moves(self):
@@ -72,3 +72,48 @@ class Rook(Piece):
                     return True
 
         return False
+
+    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+        # Handles moves of bishop, rook and queen
+
+        piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
+
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
+
+        if not piece2:
+            if sq2_pos in self.valid_moves():
+                if not self.move_through(board, sq1_pos, dist_x, dist_y):
+                    self.move(sq2_pos)
+
+                    if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                        self.move(sq1_pos)
+                        return
+
+                    return 1
+
+        else:
+            if sq2_pos in self.valid_moves():
+                if self.colour != piece2.colour and \
+                    not self.move_through(board, sq1_pos, dist_x, dist_y):
+                    piece2.captured = True
+                    self.move(sq2_pos)
+
+                    if under_check:
+                        if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                            piece2.captured = False
+                            self.move(sq1_pos)
+                            return
+
+                    return 1
+
+        # Check if the self move caused a check to king
+        if board.king_pos[self.colour] in self.valid_moves() and \
+            not self.move_through(
+                board,
+                sq2_pos,
+                board.king_pos[self.colour][0] - sq2_pos[0],
+                board.king_pos[self.colour][1] - sq2_pos[1]
+            ) or \
+            board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+            return -1
+        
