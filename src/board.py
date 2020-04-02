@@ -138,7 +138,7 @@ class Board:
                 self.coords
             )
         }
-
+        
     def get_notation(self, req_coord):
         for notation, coord in self.annotations.items():
             if coord == req_coord:

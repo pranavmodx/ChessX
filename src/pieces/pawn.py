@@ -58,11 +58,10 @@ class Pawn(Piece):
 		dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
 		if not piece2:
-			if dist_x == 0 and sq2_pos in self.valid_moves():
+			if dist_x == 0 and sq2_pos in self.valid_moves(board.is_flipped):
 				self.move(sq2_pos)
 
 				if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-					print('No')
 					self.move(sq1_pos)
 					return 0
 
@@ -72,7 +71,7 @@ class Pawn(Piece):
 				return 1
 
 		else:
-			if sq2_pos in self.valid_moves():
+			if sq2_pos in self.valid_moves(board.is_flipped):
 				# If there's a piece directly in front of self
 				# 1 or 2 squares (2 if at start pos)
 				if (abs(dist_y) != board.SQ_SZ and \

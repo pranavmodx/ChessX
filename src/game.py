@@ -100,6 +100,9 @@ class Game:
                     print(sq1_pos)
                     print(self.board.get_notation(sq1_pos))
                     piece1 = self.board.fetch_piece_by_turn(sq1_pos, self.turn)
+                    if piece1:
+                        print(piece1)
+                        print(piece1.pos)
 
                     if piece1 and piece1.colour == self.turn:
                         clicked_once = True

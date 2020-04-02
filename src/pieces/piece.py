@@ -36,12 +36,12 @@ class Piece:
 
     def __repr__(self):
         if self.p_no:
-            return f"{self.p_type}{self.p_no + 1}('{self.colour}')"
+            return f"{type(self).__name__}{self.p_no + 1}('{self.colour}')"
         else:
             return f"{self.p_type}('{self.colour}')"
 
     def __str__(self):
         if self.p_no:
-            return f"{self.colour} {self.p_type} {self.p_no}"
+            return f"{self.colour} {type(self).__name__} {self.p_no}"
         else:
-            return f"{self.colour} {self.p_type}"
+            return f"{self.colour} {type(self).__name__}"
