@@ -54,7 +54,7 @@ class Knight(Piece):
         return valids
 
     def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
-        piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
+        piece2 = board.fetch_piece(sq2_pos)
 
         if not piece2:
             if sq2_pos in self.valid_moves():
@@ -62,7 +62,7 @@ class Knight(Piece):
 
                 if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
                     self.move(sq1_pos)
-                    return
+                    return 0 
 
                 return 1
 
@@ -76,7 +76,7 @@ class Knight(Piece):
                         if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
                             piece2.captured = False
                             self.move(sq1_pos)
-                            return
+                            return 0
 
                     return 1
 

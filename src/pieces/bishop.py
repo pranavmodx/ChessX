@@ -74,7 +74,7 @@ class Bishop(Piece):
         return False
 
     def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
-        piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
+        piece2 = board.fetch(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 

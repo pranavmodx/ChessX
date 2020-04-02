@@ -91,7 +91,7 @@ class King(Piece):
 
             self.colour = self.next_turn()
 
-        piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
+        piece2 = board.fetch(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
