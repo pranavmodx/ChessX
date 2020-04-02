@@ -127,6 +127,6 @@ class King(Piece):
                     self.move(sq2_pos)
                     board.king_pos[self.colour] = sq2_pos
 
-        # Discovered attack by self
+        # Discovered attack by king
         if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
             under_check = True

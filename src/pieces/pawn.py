@@ -19,8 +19,6 @@ class Pawn(Piece):
 		start_pos = self.start_pos
 
 		def gen_valids1():
-			valids = []
-
 			valids.append((x - SQ_SZ, y + SQ_SZ))
 			valids.append((x + SQ_SZ, y + SQ_SZ))
 			valids.append((x, y + SQ_SZ))
@@ -31,8 +29,6 @@ class Pawn(Piece):
 			return valids
 
 		def gen_valids2():
-			valids = []
-
 			valids.append((x - SQ_SZ, y - SQ_SZ))
 			valids.append((x + SQ_SZ, y - SQ_SZ))
 			valids.append((x, y - SQ_SZ))
@@ -44,17 +40,17 @@ class Pawn(Piece):
 
 		if not is_flipped:
 			if self.colour == 'Black':
-				valids = gen_valids1()
+				gen = gen_valids1
 			else:
-				valids = gen_valids2()
+				gen =  gen_valids2
 
 		else:
 			if self.colour == 'White':
-				valids = gen_valids1()
+				gen = gen_valids1
 			else:
-				valids = gen_valids2()
+				gen =  gen_valids2
 
-		return valids
+		return gen()
 
 	def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
 		piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
@@ -66,6 +62,7 @@ class Pawn(Piece):
 				self.move(sq2_pos)
 
 				if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+					print('No')
 					self.move(sq1_pos)
 					return 0
 

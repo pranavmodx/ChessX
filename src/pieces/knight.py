@@ -80,7 +80,7 @@ class Knight(Piece):
 
                     return 1
 
-        # Check if the self move caused a check to king
+        # Check if the move caused a check to king
         if board.king_pos[self.colour] in self.valid_moves() or \
             board.is_controlled_sq(board.king_pos[self.colour], self.colour):
             under_check = True

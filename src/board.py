@@ -19,6 +19,13 @@ class Board:
             'White': None,
             'Black': None,
         }
+        self.coords = [(x,y) for x in range(0,BD_SZ,SQ_SZ) 
+                    for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
+                    ]
+        self.files = [chr(x) for x in range(97,105)]
+        self.ranks = list(range(1,9))
+        self.notations = [f'{fil}{rank}' for rank in self.ranks for fil in self.files]
+        self.annotate_board()
 
         # Piece attributes
         self.pieces = {
@@ -119,9 +126,31 @@ class Board:
         self.king_pos['White'] = self.pieces['w_pieces'][4].pos
         self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
 
+    def annotate_board(self):
+        self.annotations = {
+            key:value for (key,value) in 
+            zip(sorted(
+                    sorted(
+                        self.notations, key=lambda x: x[1], reverse=self.is_flipped), 
+                        key=lambda x: x[0], 
+                        reverse=self.is_flipped
+                    ),
+                self.coords
+            )
+        }
+
+    def get_notation(self, req_coord):
+        for notation, coord in self.annotations.items():
+            if coord == req_coord:
+                return notation
+
     def flip_board(self):
         '''Flips the board and the pieces'''
 
+        self.is_flipped = not self.is_flipped
+        print(self.is_flipped)
+
+        # Update position of all pieces
         for pieces in self.pieces.values():
             for piece in pieces:
                 piece.set_pos(
@@ -130,6 +159,13 @@ class Board:
                         self.BD_SZ - piece.pos[1] - self.SQ_SZ
                     )
                 )
+
+        # Update king_pos
+        self.king_pos['White'] = self.pieces['w_pieces'][4].pos
+        self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
+
+        # Update notations
+        self.annotate_board()
 
     def calc_sq_pos(self, mouse_pos):
         '''Calculates and returns topleft position of the square clicked'''

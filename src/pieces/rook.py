@@ -74,8 +74,6 @@ class Rook(Piece):
         return False
 
     def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
-        # Handles moves of bishop, rook and queen
-
         piece2 = board.fetch_piece_by_turn(sq2_pos, self.next_turn())
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
@@ -106,7 +104,7 @@ class Rook(Piece):
 
                     return 1
 
-        # Check if the self move caused a check to king
+        # Check if the move caused a check to king
         if board.king_pos[self.colour] in self.valid_moves() and \
             not self.move_through(
                 board,

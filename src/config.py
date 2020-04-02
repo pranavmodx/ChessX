@@ -26,7 +26,7 @@ BD_Y = S_HEIGHT * 0
 
 # Board size
 BD_SZ = 600
-SQ_SZ = BD_SZ / 8
+SQ_SZ = BD_SZ // 8
 
 # Main colours
 Colour = {

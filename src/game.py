@@ -77,16 +77,13 @@ class Game:
                 # Click 1
                 elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
                     mouse_pos = pygame.mouse.get_pos()
+                    print(mouse_pos)
 
                     # Flip board
                     pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(75 / 4))
                     if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
                         mouse_pos[1] in range(pos[1], pos[1] + 100):
                         self.board.flip_board()
-                        if self.board.is_flipped == False:
-                            self.board.is_flipped = True
-                        else:
-                            self.board.is_flipped = False
 
                     # Reset board
                     pos2 = (int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(75 / 4))
@@ -100,6 +97,8 @@ class Game:
 
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
+                    print(sq1_pos)
+                    print(self.board.get_notation(sq1_pos))
                     piece1 = self.board.fetch_piece_by_turn(sq1_pos, self.turn)
 
                     if piece1 and piece1.colour == self.turn:
