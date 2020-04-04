@@ -19,38 +19,44 @@ class Pawn(Piece):
 		start_pos = self.start_pos
 
 		def gen_valids1():
+			# Diagonal moves
 			valids.append((x - SQ_SZ, y + SQ_SZ))
 			valids.append((x + SQ_SZ, y + SQ_SZ))
+			# Straight 1 sq
 			valids.append((x, y + SQ_SZ))
 
 			if start_pos:
+				# Straight 2 sq
 				valids.append((x, y + 2 * SQ_SZ))
 
 			return valids
 
 		def gen_valids2():
+			# Diagonal moves
 			valids.append((x - SQ_SZ, y - SQ_SZ))
 			valids.append((x + SQ_SZ, y - SQ_SZ))
+			# Straight 1 sq
 			valids.append((x, y - SQ_SZ))
 
 			if start_pos:
+				# Straight 2 sq
 				valids.append((x, y - 2 * SQ_SZ))
 
 			return valids
 
 		if not is_flipped:
 			if self.colour == 'Black':
-				gen = gen_valids1
+				moves = gen_valids1
 			else:
-				gen =  gen_valids2
+				moves =  gen_valids2
 
 		else:
 			if self.colour == 'White':
-				gen = gen_valids1
+				moves = gen_valids1
 			else:
-				gen =  gen_valids2
+				moves =  gen_valids2
 
-		return gen()
+		return moves()
 
 	def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
 		piece2 = board.fetch_piece(sq2_pos)
@@ -95,3 +101,8 @@ class Pawn(Piece):
 		if board.king_pos[self.colour] in self.valid_moves(board.is_flipped) or \
 			board.is_controlled_sq(board.king_pos[self.colour], self.colour):
 			return -1
+
+		return 0
+
+	def handle_promotion(self):
+		pass

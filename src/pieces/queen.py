@@ -17,8 +17,11 @@ class Queen(Bishop, Rook):
 
     @staticmethod
     def move_through(board, req_pos, dist_x, dist_y):
-        return Bishop.move_through(board, req_pos, dist_x, dist_y) \
-            or Rook.move_through(board, req_pos, dist_x, dist_y)
+        return (
+            Bishop.move_through(board, req_pos, dist_x, dist_y)
+            or
+            Rook.move_through(board, req_pos, dist_x, dist_y)
+        )
 
-    def handle_move(self, board, sq1_pos, sq2_pos):
-        return Bishop.handle_move(self, board, sq1_pos, sq2_pos)
+    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+        return Bishop.handle_move(self, board, sq1_pos, sq2_pos, under_check)

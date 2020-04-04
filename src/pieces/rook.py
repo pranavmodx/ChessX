@@ -46,35 +46,35 @@ class Rook(Piece):
         # Top
         if dist_x == 0 and dist_y < 0:
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
-                k = board.fetch_piece((sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))
-                if k:
+                temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))
+                if temp:
                     return True
 
         # Bottom
         elif dist_x == 0 and dist_y > 0:
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
-                k = board.fetch_piece((sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
-                if k:
+                temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
+                if temp:
                     return True
 
         # Right
         elif dist_x > 0 and dist_y == 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = board.fetch_piece((sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
-                if k:
+                temp = board.fetch_piece((sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
+                if temp:
                     return True
 
         # Left
         elif dist_x < 0 and dist_y == 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = board.fetch_piece((sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
-                if k:
+                temp = board.fetch_piece((sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
+                if temp:
                     return True
 
         return False
 
     def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
-        piece2 = board.fetch(sq2_pos)
+        piece2 = board.fetch_piece(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
@@ -114,4 +114,6 @@ class Rook(Piece):
             ) or \
             board.is_controlled_sq(board.king_pos[self.colour], self.colour):
             return -1
+
+        return 0
         

@@ -23,21 +23,23 @@ class Bishop(Piece):
             inc_y = y + i * SQ_SZ
             dec_y = y - i * SQ_SZ
 
-            # Bottomright
-            if inc_x < BD_SZ and inc_y < BD_SZ:
-                valids.append((inc_x, inc_y))
+            # Right
+            if inc_x < BD_SZ:
+                # Down
+                if inc_y < BD_SZ:
+                    valids.append((inc_x, inc_y))
+                # Up
+                if dec_y >= BD_Y:
+                    valids.append((inc_x, dec_y))
 
-            # Bottomleft
-            if dec_x >= BD_X and inc_y < BD_SZ:
-                valids.append((dec_x, inc_y))
-
-            # Topright
-            if inc_x < BD_SZ and dec_y >= BD_Y:
-                valids.append((inc_x, dec_y))
-
-            # Topleft
-            if dec_x >= BD_X and dec_y >= BD_Y:
-                valids.append((dec_x, dec_y))
+            # Left
+            if dec_x >= BD_X:
+                # Down
+                if inc_y < BD_SZ:
+                    valids.append((dec_x, inc_y))
+                # Up
+                if dec_y >= BD_Y:
+                    valids.append((dec_x, dec_y))
 
         return valids
 
@@ -46,29 +48,29 @@ class Bishop(Piece):
         # Topleft
         if dist_x < 0 and dist_y < 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
-                if k:
+                temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                if temp:
                     return True
 
         # Topright
         elif dist_x > 0 and dist_y < 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
-                if k:
+                temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                if temp:
                     return True
 
         # Bottomleft
         elif dist_x < 0 and dist_y > 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
-                if k:
+                temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                if temp:
                     return True
 
         # Bottomright
         elif dist_x > 0 and dist_y > 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                k = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
-                if k:
+                temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                if temp:
                     return True
 
         return False
@@ -114,3 +116,5 @@ class Bishop(Piece):
             ) or \
             board.is_controlled_sq(board.king_pos[self.colour], self.colour):
             return -1
+
+        return 0

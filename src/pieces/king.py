@@ -26,10 +26,22 @@ class King(Piece):
         # Right
         if inc_x < BD_SZ:
             valids.append((inc_x, y))
+            # Down
+            if inc_y < BD_SZ:
+                valids.append((inc_x, inc_y))
+            # Up
+            if dec_y >= BD_Y:
+                valids.append((inc_x, dec_y))
 
         # Left
         if dec_x >= BD_X:
             valids.append((dec_x, y))
+            # Down
+            if inc_y < BD_SZ:
+                valids.append((dec_x, inc_y))
+            # Up
+            if dec_y >= BD_Y:
+                valids.append((dec_x, dec_y))  
 
         # Down
         if inc_y < BD_SZ:
@@ -39,24 +51,8 @@ class King(Piece):
         if dec_y >= BD_Y:
             valids.append((x, dec_y))
 
-        # Bottomright
-        if inc_x < BD_SZ and inc_y < BD_SZ:
-            valids.append((inc_x, inc_y))
-
-        # Bottomleft
-        if dec_x >= BD_X and inc_y < BD_SZ:
-            valids.append((dec_x, inc_y))
-
-        # Topright
-        if inc_x < BD_SZ and dec_y >= BD_Y:
-            valids.append((inc_x, dec_y))
-            
-        # Topleft
-        if dec_x >= BD_X and dec_y >= BD_Y:
-            valids.append((dec_x, dec_y))      
-
-        # Two squares left and right
         if self.start_pos:
+            # Two squares left and right
             valids.append((x + 2 * SQ_SZ, y))
             valids.append((x - 2 * SQ_SZ, y))
 
@@ -103,12 +99,12 @@ class King(Piece):
                 if abs(dist_x) == 2 * board.SQ_SZ:
                     # Checking if piece present in b/w
                     if dist_x < 0:
-                        k = board.fetch_piece((self.pos[0] - board.SQ_SZ, self.pos[1]))
-                        if k:
+                        temp = board.fetch_piece((self.pos[0] - board.SQ_SZ, self.pos[1]))
+                        if temp:
                             castling_allowed = False
                     else:
-                        k = board.fetch_piece((self.pos[0] + board.SQ_SZ, self.pos[1]))
-                        if k:
+                        temp = board.fetch_piece((self.pos[0] + board.SQ_SZ, self.pos[1]))
+                        if temp:
                             castling_allowed = False
 
                     if castling_allowed:
@@ -130,3 +126,5 @@ class King(Piece):
         # Discovered attack by king
         if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
             under_check = True
+
+        return 0
