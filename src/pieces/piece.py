@@ -1,5 +1,5 @@
 class Piece:
-    def __init__(self, p_no, colour='White'):
+    def __init__(self, p_no=None, colour='White'):
         self.p_no = p_no
         self.colour = colour
         self.captured = False
