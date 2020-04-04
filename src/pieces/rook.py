@@ -85,9 +85,11 @@ class Rook(Piece):
 
                     if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
                         self.move(sq1_pos)
-                        return
+                        return 0
 
                     return 1
+
+                return 0
 
         else:
             if sq2_pos in self.valid_moves():
@@ -100,9 +102,10 @@ class Rook(Piece):
                         if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
                             piece2.captured = False
                             self.move(sq1_pos)
-                            return
+                            return 0
 
                     return 1
+                return 0
 
         # Check if the move caused a check to king
         if board.king_pos[self.colour] in self.valid_moves() and \

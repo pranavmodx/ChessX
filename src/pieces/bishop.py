@@ -90,6 +90,7 @@ class Bishop(Piece):
                         return 0
 
                     return 1
+                return 0
 
         else:
             if sq2_pos in self.valid_moves():
@@ -105,6 +106,7 @@ class Bishop(Piece):
                             return 0
 
                     return 1
+                return 0
 
         # Check if the move caused a check to king
         if board.king_pos[self.colour] in self.valid_moves() and \

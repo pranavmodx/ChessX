@@ -75,6 +75,7 @@ class Pawn(Piece):
 					self.start_pos = False
 
 				return 1
+			return 0
 
 		else:
 			if sq2_pos in self.valid_moves(board.is_flipped):
@@ -97,12 +98,11 @@ class Pawn(Piece):
 							self.start_pos = False
 
 						return 1
+			return 0
 
 		if board.king_pos[self.colour] in self.valid_moves(board.is_flipped) or \
 			board.is_controlled_sq(board.king_pos[self.colour], self.colour):
 			return -1
-
-		return 0
 
 	def handle_promotion(self):
 		pass
