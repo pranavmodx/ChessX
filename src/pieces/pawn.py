@@ -88,11 +88,10 @@ class Pawn(Piece):
 						piece2.captured = True
 						self.move(sq2_pos)
 
-						if under_check:
-							if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-								piece2.captured = False
-								self.move(sq1_pos)
-								return 0
+						if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+							piece2.captured = False
+							self.move(sq1_pos)
+							return 0
 
 						if self.start_pos == True:
 							self.start_pos = False

@@ -75,40 +75,7 @@ class Bishop(Piece):
 
         return False
 
-    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
-        piece2 = board.fetch_piece(sq2_pos)
-
-        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-
-        if not piece2:
-            if sq2_pos in self.valid_moves():
-                if not self.move_through(board, sq1_pos, dist_x, dist_y):
-                    self.move(sq2_pos)
-
-                    if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-                        self.move(sq1_pos)
-                        return 0
-
-                    return 1
-                return 0
-
-        else:
-            if sq2_pos in self.valid_moves():
-                if self.colour != piece2.colour and \
-                    not self.move_through(board, sq1_pos, dist_x, dist_y):
-                    piece2.captured = True
-                    self.move(sq2_pos)
-
-                    if under_check:
-                        if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-                            piece2.captured = False
-                            self.move(sq1_pos)
-                            return 0
-
-                    return 1
-                return 0
-
-        # Check if the move caused a check to king
+    def move_checks_king(self, board ,sq2_pos):
         if board.king_pos[self.colour] in self.valid_moves() and \
             not self.move_through(
                 board,
@@ -117,6 +84,40 @@ class Bishop(Piece):
                 board.king_pos[self.colour][1] - sq2_pos[1]
             ) or \
             board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-            return -1
+            return True
+
+    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+        piece2 = board.fetch_piece(sq2_pos)
+
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
+
+        if not piece2:
+            if not self.move_through(board, sq1_pos, dist_x, dist_y):
+                self.move(sq2_pos)
+
+                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                    self.move(sq1_pos)
+                    return 0
+
+                return 1
+            return 0
+
+        else:
+            if self.colour != piece2.colour and \
+                not self.move_through(board, sq1_pos, dist_x, dist_y):
+                piece2.captured = True
+                self.move(sq2_pos)
+
+                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                    piece2.captured = False
+                    self.move(sq1_pos)
+                    return 0
+
+                return 1
+            return 0
+
+        # Check if the move caused a check to king
+            if self.move_checks_king(board, sq2_pos):
+                return -1
 
         return 0

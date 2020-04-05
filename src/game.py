@@ -10,7 +10,7 @@ class Game:
         pygame.display.set_caption('ChessX')
 
         # Initialize screen
-        self.screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + 75))
+        self.screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + SQ_SZ))
         self.screen.fill(Colour['WHITE'])
 
         # Initialize board
