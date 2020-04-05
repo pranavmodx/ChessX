@@ -91,8 +91,8 @@ class King(Piece):
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
-        if not piece2:
-            if sq2_pos in self.valid_moves() and not board.is_controlled_sq(sq2_pos, self.colour):
+        if not board.is_controlled_sq(sq2_pos, self.colour):
+            if not piece2:
                 if not under_check:
                     castling_allowed = True
                 # Checking for castling
@@ -117,19 +117,17 @@ class King(Piece):
                     self.start_pos = False
                     self.colour = self.next_turn()
                     return 1
-        
-        else:
-            if not board.is_controlled_sq(sq2_pos, self.colour):
+            
+            else:
                 if self.colour != piece2.colour:
                     piece2.captured = True
                     self.move(sq2_pos)
                     board.king_pos[self.colour] = sq2_pos
                     return 1
-            return 0
-
+        
         # Discovered attack by king
-        if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+        else:
             under_check = True
             return -1
-
+            
         return 0
