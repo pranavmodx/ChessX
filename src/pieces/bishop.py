@@ -45,33 +45,27 @@ class Bishop(Piece):
 
     @staticmethod
     def move_through(board, req_pos, dist_x, dist_y):
-        # Topleft
-        if dist_x < 0 and dist_y < 0:
-            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
-                if temp:
-                    return True
+        for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
+            # Left
+            if dist_x < 0:
+                # Up
+                if dist_y < 0:
+                    temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))            
+                # Down
+                elif dist_y > 0:
+                    temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
 
-        # Topright
-        elif dist_x > 0 and dist_y < 0:
-            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
-                if temp:
-                    return True
+            # Right
+            elif dist_x > 0:
+                # Up
+                if dist_y < 0:
+                    temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                # Down
+                elif dist_y > 0:    
+                    temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
 
-        # Bottomleft
-        elif dist_x < 0 and dist_y > 0:
-            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
-                if temp:
-                    return True
-
-        # Bottomright
-        elif dist_x > 0 and dist_y > 0:
-            for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
-                temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
-                if temp:
-                    return True
+            if temp:
+                return True        
 
         return False
 

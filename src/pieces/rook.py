@@ -47,25 +47,23 @@ class Rook(Piece):
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
                 # Up
                 if dist_y < 0:
-                    temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))
-             
+                    temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))   
                 # Down
-                if dist_y > 0:
+                elif dist_y > 0:
                     temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
-                
-                if temp:
-                        return True
 
-        if dist_y == 0:
+                if temp:
+                    return True   
+        
+        elif dist_y == 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
                 # Right
                 if dist_x > 0:
                     temp = board.fetch_piece((sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
-
                 # Left
-                if dist_x < 0:
+                elif dist_x < 0:
                     temp = board.fetch_piece((sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
-                
+
                 if temp:
                     return True            
 
