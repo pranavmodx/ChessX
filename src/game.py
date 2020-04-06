@@ -5,47 +5,71 @@ import pygame
 
 class Game:
     def __init__(self):
-        # Initialize pygame module
-        pygame.init()
-        pygame.display.set_caption('ChessX')
-
-        # Initialize screen
-        self.screen = pygame.display.set_mode((S_WIDTH, S_HEIGHT + SQ_SZ))
-        self.screen.fill(Colour['WHITE'])
-
-        # Initialize board
-        self.board = Board((BD_X, BD_Y))
-        self.board.load_all_img()
-        self.board.set_pos_all()
-
-        # Set flip board icon
-        flip_board_pos = (int(S_WIDTH / 2.2), int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
-        flip_board_icon = self.screen.blit(
-            pygame.image.load(flip_board_rel_path + 'flip_board' + img_ext), 
-            flip_board_pos,
-        )
-
-        # Set reset board icon
-        reset_board_pos = (int(S_WIDTH / 2.2) + 100, int(S_HEIGHT + (self.board.BD_SZ / 8) / 4))
-        reset_board_icon = self.screen.blit(
-            pygame.image.load(reset_board_rel_path + 'reset_board' + img_ext), 
-            reset_board_pos,
-        )
+        self.init_pygame()
+        self.init_board()
+        self.set_icons()
 
         # Initialize game parameters
         self.turn = 'White'
         self.valid_moves = []
         self.under_check = False
 
-    def next_turn(self):
+    def init_pygame(self):
+        '''Initializes pygame and sets screen'''
+
+        pygame.init()
+        pygame.display.set_caption('ChessX')
+        # Initialize screen
+        self.screen = pygame.display.set_mode(
+            (S_WIDTH, S_HEIGHT + SQ_SZ)
+        )
+        self.screen.fill(Colour['WHITE'])
+
+    def init_board(self):
+        '''Initializes Chess game board and pieces'''
+
+        self.board = Board((BD_X, BD_Y))
+        self.board.load_all_img()
+        self.board.set_pos_all()
+        # missing annotate?
+
+    def set_icons(self):
+        '''Sets game icons'''
+
+        # Flip board icon
+        flip_board_pos = (
+            int(S_WIDTH / 2.2), 
+            int(S_HEIGHT + (self.board.BD_SZ / 8) / 4)
+        )
+        flip_board_icon = self.screen.blit(
+            pygame.image.load(
+                flip_board_rel_path + 'flip_board' + img_ext
+            ), 
+            flip_board_pos,
+        )
+        # Reset board icon
+        reset_board_pos = (
+            int(S_WIDTH / 2.2) + 100, 
+            int(S_HEIGHT + (self.board.BD_SZ / 8) / 4)
+        )
+        reset_board_icon = self.screen.blit(
+            pygame.image.load(
+                reset_board_rel_path + 'reset_board' + img_ext
+            ), 
+            reset_board_pos,
+        )
+
+    def set_next_turn(self):
+        '''Switches the turn to next player'''
+
         if self.turn == 'White':
             self.turn = 'Black'
         else:
             self.turn = 'White'
-    
+
     # Main method
     def start(self):
-        '''Main game loop'''
+        '''Main method for game loop'''
 
         sq1_pos = None
         sq2_pos = None
@@ -53,20 +77,56 @@ class Game:
         clicked_once = False
         move_status = ''
 
+        def highlight_move():
+            # Highlight non-king square
+            if clicked_once:
+                self.board.highlight_square(
+                    self.screen, 
+                    Colour['RED'], 
+                    sq1_pos
+                )
+
+                for valid_move in self.valid_moves:
+                    self.board.highlight_square(
+                        self.screen, Colour['GREEN'], 
+                        valid_move
+                    )
+
+            # Highlight king's square if under check
+            if self.under_check:
+                self.board.highlight_square(
+                    self.screen, Colour['RED'], 
+                    self.board.king_pos[self.turn]
+                )
+
+        def handle_flip():
+            # Flip board
+            pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
+            if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
+                mouse_pos[1] in range(pos[1], pos[1] + 100):
+                self.board.flip_board()
+
+        def handle_reset():
+            # Reset board
+            pos2 = (
+                int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(SQ_SZ / 4)
+            )
+            if mouse_pos[0] in range(pos2[0], pos2[0] + 100) and \
+                mouse_pos[1] in range(pos2[1], pos2[1] + 100):
+                del self.board
+                self.board = Board((BD_X, BD_Y))
+                self.board.load_all_img()
+                self.board.set_pos_all()
+                self.board.annotate_board()
+                self.turn = 'White'
+
+        # Game loop
         while not game_over:
             # Display board
             self.board.display_all(self.screen)
 
-            # Highlight squares
-            if clicked_once:
-                self.board.highlight_square(self.screen, Colour['RED'], sq1_pos)
-
-                for valid_move in self.valid_moves:
-                    self.board.highlight_square(self.screen, Colour['GREEN'], valid_move)
-
-            # Highlight king if under check
-            if self.under_check:
-                self.board.highlight_square(self.screen, Colour['RED'], self.board.king_pos[self.turn])
+            # Highlight moves
+            highlight_move()
 
             # Event loop
             for event in pygame.event.get():
@@ -75,39 +135,26 @@ class Game:
                     exit()
 
                 # Click 1
-                elif event.type == pygame.MOUSEBUTTONDOWN and not clicked_once:
+                elif event.type == pygame.MOUSEBUTTONDOWN and \
+                    not clicked_once:
                     mouse_pos = pygame.mouse.get_pos()
                     print(mouse_pos)
 
-                    # Flip board
-                    pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(75 / 4))
-                    if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
-                        mouse_pos[1] in range(pos[1], pos[1] + 100):
-                        self.board.flip_board()
-
-                    # Reset board
-                    pos2 = (int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(75 / 4))
-                    if mouse_pos[0] in range(pos2[0], pos2[0] + 100) and \
-                        mouse_pos[1] in range(pos2[1], pos2[1] + 100):
-                        del self.board
-                        self.board = Board((BD_X, BD_Y))
-                        self.board.load_all_img()
-                        self.board.set_pos_all()
-                        self.board.annotate_board()
-                        self.turn = 'White'
-
+                    handle_flip()
+                    handle_reset()
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
-                    print(sq1_pos)
-                    print(self.board.get_notation(sq1_pos))
                     piece1 = self.board.fetch_piece_by_turn(sq1_pos, self.turn)
-                    if piece1:
-                        print(piece1)
-                        print(piece1.pos)
+
+                    # print(sq1_pos)
+                    # print(self.board.get_notation(sq1_pos))
+                    # if piece1:
+                    #     print(piece1)
+                    #     print(piece1.pos)
 
                     if piece1 and piece1.colour == self.turn:
                         clicked_once = True
-                        # Pawn valid moves - handle flip board
+                        # To handle special flip board case for pawns
                         if type(piece1).__name__ == 'Pawn':
                             self.valid_moves = piece1.valid_moves(self.board.is_flipped)
                         else:
@@ -128,9 +175,9 @@ class Game:
                             move_status = piece1.handle_move(self.board, sq1_pos, sq2_pos, self.under_check)
                         print(move_status)
                         if move_status == 1:
-                            self.next_turn()
+                            self.set_next_turn()
                         elif move_status == -1:
-                            self.next_turn()
+                            self.set_next_turn()
                             self.under_check = True
 
             pygame.display.flip()
