@@ -31,7 +31,7 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        # missing annotate?
+        self.board.annotate_board()
 
     def set_icons(self):
         '''Sets game icons'''
@@ -77,6 +77,8 @@ class Game:
         clicked_once = False
         move_status = ''
 
+        mouse_pos = None
+
         def highlight_move():
             # Highlight non-king square
             if clicked_once:
@@ -108,11 +110,11 @@ class Game:
 
         def handle_reset():
             # Reset board
-            pos2 = (
+            pos = (
                 int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(SQ_SZ / 4)
             )
-            if mouse_pos[0] in range(pos2[0], pos2[0] + 100) and \
-                mouse_pos[1] in range(pos2[1], pos2[1] + 100):
+            if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
+                mouse_pos[1] in range(pos[1], pos[1] + 100):
                 del self.board
                 self.board = Board((BD_X, BD_Y))
                 self.board.load_all_img()
@@ -138,27 +140,25 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONDOWN and \
                     not clicked_once:
                     mouse_pos = pygame.mouse.get_pos()
-                    print(mouse_pos)
 
                     handle_flip()
                     handle_reset()
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
-                    piece1 = self.board.fetch_piece_by_turn(sq1_pos, self.turn)
-
-                    # print(sq1_pos)
-                    # print(self.board.get_notation(sq1_pos))
-                    # if piece1:
-                    #     print(piece1)
-                    #     print(piece1.pos)
+                    piece1 = self.board.fetch_piece_by_turn(
+                        sq1_pos, self.turn
+                    )
 
                     if piece1 and piece1.colour == self.turn:
                         clicked_once = True
                         # To handle special flip board case for pawns
                         if type(piece1).__name__ == 'Pawn':
-                            self.valid_moves = piece1.valid_moves(self.board.is_flipped)
+                            self.valid_moves = piece1.valid_moves(
+                                self.board.is_flipped
+                            )
                         else:
-                            self.valid_moves = piece1.valid_moves() # For highlighting beforehand
+                            self.valid_moves = piece1.valid_moves() 
+                            # For highlighting beforehand
 
                 # Click 2
                 elif event.type == pygame.MOUSEBUTTONDOWN and clicked_once:
@@ -170,10 +170,13 @@ class Game:
                     # If second click is not the same as first, move the piece
                     if sq2_pos != sq1_pos and sq2_pos in self.valid_moves:
                         if not self.under_check:
-                            move_status = piece1.handle_move(self.board, sq1_pos, sq2_pos)
+                            move_status = piece1.handle_move(
+                                self.board, sq1_pos, sq2_pos
+                            )
                         else:
-                            move_status = piece1.handle_move(self.board, sq1_pos, sq2_pos, self.under_check)
-                        print(move_status)
+                            move_status = piece1.handle_move(
+                                self.board, sq1_pos, sq2_pos, self.under_check
+                            )
                         if move_status == 1:
                             self.set_next_turn()
                         elif move_status == -1:
