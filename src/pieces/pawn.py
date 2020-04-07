@@ -58,13 +58,34 @@ class Pawn(Piece):
 
 		return moves()
 
-	def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+	def handle_move(self, board, sq1_pos, sq2_pos):
 		piece2 = board.fetch_piece(sq2_pos)
 
 		dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
-		if not piece2:
-			if dist_x == 0 and sq2_pos in self.valid_moves(board.is_flipped):
+		if piece2:
+			# If there's a piece directly in front of self
+			# 1 or 2 squares (2 if at start pos)
+			if (abs(dist_y) != board.SQ_SZ and \
+				abs(dist_y) != 2 * board.SQ_SZ) \
+				or abs(dist_x) == board.SQ_SZ:
+				if self.colour != piece2.colour:
+					piece2.captured = True
+					self.move(sq2_pos)
+
+					if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+						piece2.captured = False
+						self.move(sq1_pos)
+						return 0
+
+					if self.start_pos == True:
+						self.start_pos = False
+
+					return 1
+			return 0
+
+		else:
+			if dist_x == 0:
 				self.move(sq2_pos)
 
 				if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
@@ -75,28 +96,6 @@ class Pawn(Piece):
 					self.start_pos = False
 
 				return 1
-			return 0
-
-		else:
-			if sq2_pos in self.valid_moves(board.is_flipped):
-				# If there's a piece directly in front of self
-				# 1 or 2 squares (2 if at start pos)
-				if (abs(dist_y) != board.SQ_SZ and \
-					abs(dist_y) != 2 * board.SQ_SZ) \
-					or abs(dist_x) == board.SQ_SZ:
-					if self.colour != piece2.colour:
-						piece2.captured = True
-						self.move(sq2_pos)
-
-						if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-							piece2.captured = False
-							self.move(sq1_pos)
-							return 0
-
-						if self.start_pos == True:
-							self.start_pos = False
-
-						return 1
 			return 0
 
 		if board.king_pos[self.colour] in self.valid_moves(board.is_flipped) or \

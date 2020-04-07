@@ -12,7 +12,6 @@ class Game:
         # Initialize game parameters
         self.turn = 'White'
         self.valid_moves = []
-        self.under_check = False
 
     def init_pygame(self):
         '''Initializes pygame and sets screen'''
@@ -95,9 +94,10 @@ class Game:
                     )
 
             # Highlight king's square if under check
-            if self.under_check:
+            if self.board.under_check:
                 self.board.highlight_square(
-                    self.screen, Colour['RED'], 
+                    self.screen, 
+                    Colour['RED'], 
                     self.board.king_pos[self.turn]
                 )
 
@@ -169,19 +169,11 @@ class Game:
 
                     # If second click is not the same as first, move the piece
                     if sq2_pos != sq1_pos and sq2_pos in self.valid_moves:
-                        if not self.under_check:
-                            move_status = piece1.handle_move(
-                                self.board, sq1_pos, sq2_pos
-                            )
-                        else:
-                            move_status = piece1.handle_move(
-                                self.board, sq1_pos, sq2_pos, self.under_check
-                            )
+                        move_status = piece1.handle_move(
+                            self.board, sq1_pos, sq2_pos
+                        )
                         if move_status == 1:
                             self.set_next_turn()
-                        elif move_status == -1:
-                            self.set_next_turn()
-                            self.under_check = True
 
             pygame.display.flip()
 

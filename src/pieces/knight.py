@@ -72,19 +72,10 @@ class Knight(Piece):
             board.is_controlled_sq(board.king_pos[self.colour], self.colour):
             return True
 
-    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+    def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
 
-        if not piece2:
-            self.move(sq2_pos)
-
-            if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-                self.move(sq1_pos)
-                return 0
-
-            return 1
-
-        else:
+        if piece2:
             if self.colour != piece2.colour:
                 piece2.captured = True
                 self.move(sq2_pos)
@@ -94,10 +85,15 @@ class Knight(Piece):
                     self.move(sq1_pos)
                     return 0
 
-                return 1
+        else:
+            self.move(sq2_pos)
+
+            if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                self.move(sq1_pos)
+                return 0
 
         # Check if the move caused a check to king
         if self.move_checks_king(board):
             under_check = True
 
-        return 0
+        return 1

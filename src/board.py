@@ -19,6 +19,8 @@ class Board:
             'White': None,
             'Black': None,
         }
+        self.under_check = False
+        
         self.coords = [(x,y) for x in range(0,BD_SZ,SQ_SZ) 
                     for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
                     ]
