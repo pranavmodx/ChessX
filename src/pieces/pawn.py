@@ -1,5 +1,5 @@
 from pieces import Piece
-
+from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
 class Pawn(Piece): 
 	value = 1 
@@ -11,9 +11,6 @@ class Pawn(Piece):
 	def valid_moves(self, is_flipped=False):
 		x = self.pos[0]
 		y = self.pos[1]
-
-		SQ_SZ = self.size()
-		BD_SZ = SQ_SZ * 8
 
 		valids = []
 		start_pos = self.start_pos

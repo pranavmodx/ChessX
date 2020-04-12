@@ -1,6 +1,5 @@
 from .piece import Piece
-from config import BD_X, BD_Y
-
+from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
 class Rook(Piece):
     value = 5
@@ -13,8 +12,6 @@ class Rook(Piece):
         x = self.pos[0]
         y = self.pos[1]
 
-        SQ_SZ = self.size()
-        BD_SZ = SQ_SZ * 8
         valids = []
 
         for i in range(1, 8):
@@ -71,16 +68,10 @@ class Rook(Piece):
         return False
 
     def move_checks_king(self, board ,sq2_pos):
-        if board.king_pos[self.next_turn()] in self.valid_moves() and \
-        not self.move_through(
-            board,
-            sq2_pos,
-            board.king_pos[self.next_turn()][0] - sq2_pos[0],
-            board.king_pos[self.next_turn()][1] - sq2_pos[1]
-        ) or \
+        if board.king_pos[self.next_turn()] in self.valid_moves() or \
         board.is_controlled_sq(
             board.king_pos[self.next_turn()], 
-            self.colour
+            self.next_turn()
         ):
             return True
 

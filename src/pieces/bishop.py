@@ -1,6 +1,5 @@
 from pieces import Piece
-from config import BD_X, BD_Y
-
+from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
 class Bishop(Piece):
     value = 3
@@ -11,9 +10,6 @@ class Bishop(Piece):
     def valid_moves(self):
         x = self.pos[0]
         y = self.pos[1]
-
-        SQ_SZ = self.size()
-        BD_SZ = SQ_SZ * 8
 
         valids = []
 

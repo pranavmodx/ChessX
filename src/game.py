@@ -148,6 +148,10 @@ class Game:
                     piece1 = self.board.fetch_piece_by_turn(
                         sq1_pos, self.turn
                     )
+                    if type(piece1).__name__ == 'King':
+                        print(piece1.pos)
+                        print(self.board.king_pos[self.turn])
+                        print(piece1.valid_moves())
 
                     if piece1 and piece1.colour == self.turn:
                         clicked_once = True

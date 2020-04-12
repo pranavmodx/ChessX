@@ -1,6 +1,5 @@
 from pieces import Piece
-from config import BD_X, BD_Y
-
+from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
 class King(Piece):
     value = None
@@ -12,9 +11,6 @@ class King(Piece):
     def valid_moves(self):
         x = self.pos[0]
         y = self.pos[1]
-
-        SQ_SZ = self.size()
-        BD_SZ = SQ_SZ * 8
 
         valids = []
 
@@ -93,7 +89,7 @@ class King(Piece):
         piece2 = board.fetch_piece(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-        
+
         if piece2:
             if self.colour != piece2.colour:
                 piece2.captured = True

@@ -1,6 +1,4 @@
 from pieces import Bishop, Rook
-from config import BD_X, BD_Y
-
 
 class Queen(Bishop, Rook):
     value = Bishop.value + Rook.value + 1
