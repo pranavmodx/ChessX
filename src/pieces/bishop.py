@@ -71,12 +71,12 @@ class Bishop(Piece):
         return False
 
     def move_checks_king(self, board, sq2_pos):
-        if board.king_pos[self.colour] in self.valid_moves() and \
+        if board.king_pos[self.next_turn()] in self.valid_moves() and \
         not self.move_through(
             board,
             sq2_pos,
-            board.king_pos[self.colour][0] - sq2_pos[0],
-            board.king_pos[self.colour][1] - sq2_pos[1]
+            board.king_pos[self.next_turn()][0] - sq2_pos[0],
+            board.king_pos[self.next_turn()][1] - sq2_pos[1]
         ) or \
         board.is_controlled_sq(
             board.king_pos[self.next_turn()], 
@@ -98,7 +98,7 @@ class Bishop(Piece):
                 piece2.captured = True
                 self.move(sq2_pos)
 
-                # Undo move...
+                # Undo move if own king comes under attack by the move
                 if board.under_check and \
                 board.is_controlled_sq(
                     board.king_pos[self.colour], self.colour
@@ -111,7 +111,7 @@ class Bishop(Piece):
             else:
                 self.move(sq2_pos)
 
-                # Undo move if own king comes under attack by the move
+                # Undo move...
                 if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
                     self.move(sq1_pos)
                     return 0
@@ -120,5 +120,7 @@ class Bishop(Piece):
             if self.move_checks_king(board, sq2_pos):
                 # Some issue here -> highlights both kings alternately after this
                 board.under_check = True
+            else:
+                board.under_check = False
 
             return 1

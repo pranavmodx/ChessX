@@ -71,15 +71,15 @@ class Rook(Piece):
         return False
 
     def move_checks_king(self, board ,sq2_pos):
-        if board.king_pos[self.colour] in self.valid_moves() and \
+        if board.king_pos[self.next_turn()] in self.valid_moves() and \
         not self.move_through(
             board,
             sq2_pos,
-            board.king_pos[self.colour][0] - sq2_pos[0],
-            board.king_pos[self.colour][1] - sq2_pos[1]
+            board.king_pos[self.next_turn()][0] - sq2_pos[0],
+            board.king_pos[self.next_turn()][1] - sq2_pos[1]
         ) or \
         board.is_controlled_sq(
-            board.king_pos[self.colour], 
+            board.king_pos[self.next_turn()], 
             self.colour
         ):
             return True
@@ -112,6 +112,8 @@ class Rook(Piece):
             # Check if the move caused a check to king
             if self.move_checks_king(board, sq2_pos):
                 board.under_check = True
+            else:
+                board.under_check = False
 
             return 1
             

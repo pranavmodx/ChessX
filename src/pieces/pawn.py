@@ -100,7 +100,9 @@ class Pawn(Piece):
 
 		if board.king_pos[self.colour] in self.valid_moves(board.is_flipped) or \
 			board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-			return -1
+			board.under_check = True
+		else:
+			board.under_check = False
 
 	def handle_promotion(self):
 		pass
