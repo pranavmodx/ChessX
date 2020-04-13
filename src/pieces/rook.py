@@ -1,6 +1,5 @@
 from .piece import Piece
-from config import BD_X, BD_Y
-
+from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
 class Rook(Piece):
     value = 5
@@ -13,8 +12,6 @@ class Rook(Piece):
         x = self.pos[0]
         y = self.pos[1]
 
-        SQ_SZ = self.size()
-        BD_SZ = SQ_SZ * 8
         valids = []
 
         for i in range(1, 8):
@@ -43,6 +40,7 @@ class Rook(Piece):
 
     @staticmethod
     def move_through(board, sq1_pos, dist_x, dist_y):
+        temp = None
         if dist_x == 0:
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
                 # Up
@@ -70,36 +68,23 @@ class Rook(Piece):
         return False
 
     def move_checks_king(self, board ,sq2_pos):
-        if board.king_pos[self.colour] in self.valid_moves() and \
-            not self.move_through(
-                board,
-                sq2_pos,
-                board.king_pos[self.colour][0] - sq2_pos[0],
-                board.king_pos[self.colour][1] - sq2_pos[1]
-            ) or \
-            board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+        if board.king_pos[self.next_turn()] in self.valid_moves() or \
+        board.is_controlled_sq(
+            board.king_pos[self.next_turn()], 
+            self.next_turn()
+        ):
             return True
 
-    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
+    def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
-        if not piece2:
-            if not self.move_through(board, sq1_pos, dist_x, dist_y):
-                self.move(sq2_pos)
-
-                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
-                    self.move(sq1_pos)
-                    return 0
-
-                return 1
-
+        if self.move_through(board, sq1_pos, dist_x, dist_y):
             return 0
 
         else:
-            if self.colour != piece2.colour and \
-                not self.move_through(board, sq1_pos, dist_x, dist_y):
+            if piece2 and self.colour != piece2.colour:
                 piece2.captured = True
                 self.move(sq2_pos)
 
@@ -108,12 +93,18 @@ class Rook(Piece):
                     self.move(sq1_pos)
                     return 0
 
-                return 1
-            return 0
+            else:
+                self.move(sq2_pos)
 
-        # Check if the move caused a check to king
-        if self.move_checks_king(board, sq2_pos):
-            return -1
+                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                    self.move(sq1_pos)
+                    return 0
 
-        return 0
-        
+            # Check if the move caused a check to king
+            if self.move_checks_king(board, sq2_pos):
+                board.under_check = True
+            else:
+                board.under_check = False
+
+            return 1
+            

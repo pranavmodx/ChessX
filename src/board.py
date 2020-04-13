@@ -19,14 +19,14 @@ class Board:
             'White': None,
             'Black': None,
         }
-        self.coords = [(x,y) for x in range(0,BD_SZ,SQ_SZ) 
-                    for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
-                    ]
-        self.files = [chr(x) for x in range(97,105)]
-        self.ranks = list(range(1,9))
-        self.notations = [f'{fil}{rank}' for rank in self.ranks for fil in self.files]
+        self.under_check = False
+        
+        self.init_notations()
         self.annotate_board()
 
+        self.init_all_pieces()
+
+    def init_all_pieces(self):
         # Piece attributes
         self.pieces = {
             'w_pawns': [Pawn(i + 1) for i in range(8)],
@@ -52,6 +52,14 @@ class Board:
                             Rook(2, 'Black'),
                         ]
         }
+
+    def init_notations(self):
+        self.coords = [(x,y) for x in range(0,BD_SZ,SQ_SZ) 
+                    for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
+                    ]
+        self.files = [chr(x) for x in range(97,105)]
+        self.ranks = list(range(1,9))
+        self.notations = [f'{fil}{rank}' for rank in self.ranks for fil in self.files]
 
     def load_img(self, img):
         '''Loads the board image'''

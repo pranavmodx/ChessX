@@ -1,6 +1,4 @@
 from pieces import Bishop, Rook
-from config import BD_X, BD_Y
-
 
 class Queen(Bishop, Rook):
     value = Bishop.value + Rook.value + 1
@@ -23,5 +21,5 @@ class Queen(Bishop, Rook):
             Rook.move_through(board, req_pos, dist_x, dist_y)
         )
 
-    def handle_move(self, board, sq1_pos, sq2_pos, under_check=False):
-        return Bishop.handle_move(self, board, sq1_pos, sq2_pos, under_check)
+    def handle_move(self, board, sq1_pos, sq2_pos):
+        return Bishop.handle_move(self, board, sq1_pos, sq2_pos)
