@@ -25,7 +25,7 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        self.board.annotate_board()
+        self.board.set_notation()
 
     def set_icons(self):
         '''Sets game icons'''
@@ -106,7 +106,7 @@ class Game:
                 self.board = Board((BD_X, BD_Y))
                 self.board.load_all_img()
                 self.board.set_pos_all()
-                self.board.annotate_board()
+                self.board.set_notation()
                 self.board.turn = 'White'
 
         # Game loop
