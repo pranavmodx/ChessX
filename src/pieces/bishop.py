@@ -72,15 +72,17 @@ class Bishop(Piece):
         return False
 
     def move_checks_king(self, board, sq2_pos):
-        if board.king_pos[board.get_next_turn()] in self.valid_moves() and \
+        opp_king_pos = board.king_pos[board.get_next_turn()]
+
+        if opp_king_pos in self.valid_moves() and \
             not self.move_through(
             board,
             sq2_pos,
-            board.king_pos[board.get_next_turn()][0] - sq2_pos[0],
-            board.king_pos[board.get_next_turn()][1] - sq2_pos[1]
+            opp_king_pos[0] - sq2_pos[0],
+            opp_king_pos[1] - sq2_pos[1]
         ) or \
             board.is_controlled_sq(
-            board.king_pos[board.get_next_turn()],
+            opp_king_pos,
             board.turn,
         ):
             return True
@@ -89,6 +91,8 @@ class Bishop(Piece):
         piece2 = board.fetch_piece(sq2_pos)
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
+
+        own_king_pos = board.king_pos[board.turn]
 
         # If piece is present in b/w the 2 sqs
         if self.move_through(board, sq1_pos, dist_x, dist_y):
@@ -102,7 +106,7 @@ class Bishop(Piece):
                 # Undo move if own king comes under attack by the move
                 if board.under_check and \
                         board.is_controlled_sq(
-                            board.king_pos[board.turn], board.get_next_turn(),
+                            own_king_pos, board.get_next_turn(),
                         ):
                     piece2.captured = False
                     self.move(sq1_pos)
@@ -113,7 +117,7 @@ class Bishop(Piece):
                 self.move(sq2_pos)
 
                 # Undo move...
-                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
+                if board.is_controlled_sq(own_king_pos, board.get_next_turn()):
                     self.move(sq1_pos)
                     return 0
 

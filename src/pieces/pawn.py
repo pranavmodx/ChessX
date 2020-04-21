@@ -61,6 +61,8 @@ class Pawn(Piece):
 
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
+        own_king_pos = board.king_pos[board.turn]
+
         if piece2:
             # If there's a piece directly in front of self
             # 1 or 2 squares (2 if at start pos)
@@ -71,7 +73,7 @@ class Pawn(Piece):
                     piece2.captured = True
                     self.move(sq2_pos)
 
-                    if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
+                    if board.is_controlled_sq(own_king_pos, board.get_next_turn()):
                         piece2.captured = False
                         self.move(sq1_pos)
                         return 0
@@ -86,7 +88,7 @@ class Pawn(Piece):
             if dist_x == 0:
                 self.move(sq2_pos)
 
-                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
+                if board.is_controlled_sq(own_king_pos, board.get_next_turn()):
                     self.move(sq1_pos)
                     return 0
 
@@ -96,8 +98,8 @@ class Pawn(Piece):
                 return 1
             return 0
 
-        if board.king_pos[board.turn] in self.valid_moves(board.is_flipped) or \
-                board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
+        if own_king_pos in self.valid_moves(board.is_flipped) or \
+                board.is_controlled_sq(own_king_pos, board.get_next_turn()):
             board.under_check = True
         else:
             board.under_check = False
