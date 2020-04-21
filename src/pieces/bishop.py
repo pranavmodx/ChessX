@@ -87,6 +87,7 @@ class Bishop(Piece):
             board.turn,
         ):
             return True
+        return False
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)

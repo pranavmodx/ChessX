@@ -85,6 +85,7 @@ class King(Piece):
         opp_king_pos = board.king_pos[board.get_next_turn()]
         if board.is_controlled_sq(opp_king_pos, board.turn):
             return True
+        return False
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         # Only applies to king
@@ -100,6 +101,8 @@ class King(Piece):
                 piece2.captured = True
                 self.move(sq2_pos)
                 board.king_pos[board.turn] = sq2_pos
+            else:
+                return 0
 
         else:
             if not board.under_check:
@@ -111,15 +114,24 @@ class King(Piece):
                 if dist_x < 0:
                     temp = board.fetch_piece(
                         (self.pos[0] - board.SQ_SZ, self.pos[1]))
+                    if temp is None:
+                        temp = board.fetch_piece(
+                          self.pos[0] - 2 * board.SQ_SZ, self.pos[1])  
+      
                 else:
                     temp = board.fetch_piece(
                         (self.pos[0] + board.SQ_SZ, self.pos[1]))
+                    if temp is None:
+                        board.fetch_piece(
+                        (self.pos[0] + 2 * board.SQ_SZ, self.pos[1]))
 
-                if temp:
+                if temp is not None:
                     castling_allowed = False
 
                 if castling_allowed:
                     self.castle(board, sq1_pos, sq2_pos)
+                else:
+                    return 0
 
             else:
                 self.move(sq2_pos)

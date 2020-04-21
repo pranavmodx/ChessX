@@ -56,12 +56,18 @@ class Pawn(Piece):
 
         return moves()
 
+    def move_checks_king(self, board, sq2_pos):
+        opp_king_pos = board.king_pos[board.get_next_turn()]
+
+        if opp_king_pos in self.valid_moves(board.is_flipped) or \
+        board.is_controlled_sq(opp_king_pos, board.turn):
+            return True
+        return False
+
     def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
-
-        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-
         own_king_pos = board.king_pos[board.turn]
+        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if piece2:
             # If there's a piece directly in front of self
@@ -81,8 +87,8 @@ class Pawn(Piece):
                     if self.start_pos == True:
                         self.start_pos = False
 
-                    return 1
-            return 0
+            else:
+                return 0
 
         else:
             if dist_x == 0:
@@ -94,15 +100,15 @@ class Pawn(Piece):
 
                 if self.start_pos:
                     self.start_pos = False
+            else:
+                return 0
 
-                return 1
-            return 0
-
-        if own_king_pos in self.valid_moves(board.is_flipped) or \
-                board.is_controlled_sq(own_king_pos, board.get_next_turn()):
+        if self.move_checks_king(board, sq2_pos):
             board.under_check = True
         else:
             board.under_check = False
+
+        return 1
 
     def handle_promotion(self):
         pass

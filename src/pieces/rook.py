@@ -83,11 +83,12 @@ class Rook(Piece):
         opp_king_pos = board.king_pos[board.get_next_turn()]
 
         if opp_king_pos in self.valid_moves() or \
-            board.is_controlled_sq(
+        board.is_controlled_sq(
             opp_king_pos,
             board.turn,
         ):
             return True
+        return False
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
