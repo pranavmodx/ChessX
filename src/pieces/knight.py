@@ -66,7 +66,7 @@ class Knight(Piece):
 
     def move_checks_king(self, board):
         if board.king_pos[board.get_next_turn()] in self.valid_moves() or \
-                board.is_controlled_sq(board.king_pos[board.get_next_turn()], board.get_next_turn()):
+                board.is_controlled_sq(board.king_pos[board.get_next_turn()], board.turn):
             return True
 
     def handle_move(self, board, sq1_pos, sq2_pos):
@@ -77,7 +77,7 @@ class Knight(Piece):
                 piece2.captured = True
                 self.move(sq2_pos)
 
-                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                     piece2.captured = False
                     self.move(sq1_pos)
                     return 0
@@ -85,13 +85,12 @@ class Knight(Piece):
         else:
             self.move(sq2_pos)
 
-            if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+            if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                 self.move(sq1_pos)
                 return 0
 
         # Check if the move caused a check to king
         if self.move_checks_king(board):
-            print('why god')
             board.under_check = True
         else:
             board.under_check = False

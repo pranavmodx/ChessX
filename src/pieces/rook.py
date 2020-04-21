@@ -76,7 +76,7 @@ class Rook(Piece):
         if board.king_pos[board.get_next_turn()] in self.valid_moves() or \
             board.is_controlled_sq(
             board.king_pos[board.get_next_turn()],
-            board.get_next_turn()
+            board.turn,
         ):
             return True
 
@@ -93,7 +93,7 @@ class Rook(Piece):
                 piece2.captured = True
                 self.move(sq2_pos)
 
-                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                     piece2.captured = False
                     self.move(sq1_pos)
                     return 0
@@ -101,7 +101,7 @@ class Rook(Piece):
             else:
                 self.move(sq2_pos)
 
-                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                     self.move(sq1_pos)
                     return 0
 

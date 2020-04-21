@@ -71,7 +71,7 @@ class Pawn(Piece):
                     piece2.captured = True
                     self.move(sq2_pos)
 
-                    if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                    if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                         piece2.captured = False
                         self.move(sq1_pos)
                         return 0
@@ -86,7 +86,7 @@ class Pawn(Piece):
             if dist_x == 0:
                 self.move(sq2_pos)
 
-                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                     self.move(sq1_pos)
                     return 0
 
@@ -96,8 +96,8 @@ class Pawn(Piece):
                 return 1
             return 0
 
-        if board.king_pos[self.colour] in self.valid_moves(board.is_flipped) or \
-                board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+        if board.king_pos[board.turn] in self.valid_moves(board.is_flipped) or \
+                board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
             board.under_check = True
         else:
             board.under_check = False

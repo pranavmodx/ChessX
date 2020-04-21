@@ -81,7 +81,7 @@ class Bishop(Piece):
         ) or \
             board.is_controlled_sq(
             board.king_pos[board.get_next_turn()],
-            board.get_next_turn()
+            board.turn,
         ):
             return True
 
@@ -102,7 +102,7 @@ class Bishop(Piece):
                 # Undo move if own king comes under attack by the move
                 if board.under_check and \
                         board.is_controlled_sq(
-                            board.king_pos[self.colour], self.colour
+                            board.king_pos[board.turn], board.get_next_turn(),
                         ):
                     piece2.captured = False
                     self.move(sq1_pos)
@@ -113,7 +113,7 @@ class Bishop(Piece):
                 self.move(sq2_pos)
 
                 # Undo move...
-                if board.is_controlled_sq(board.king_pos[self.colour], self.colour):
+                if board.is_controlled_sq(board.king_pos[board.turn], board.get_next_turn()):
                     self.move(sq1_pos)
                     return 0
 

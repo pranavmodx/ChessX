@@ -82,11 +82,12 @@ class King(Piece):
             rook2.start_pos = False
 
     def move_checks_king(self, board):
-        if board.is_controlled_sq(board.king_pos[board.get_next_turn()], self.colour):
+        if board.is_controlled_sq(board.king_pos[board.get_next_turn()], board.turn):
             return True
 
     def handle_move(self, board, sq1_pos, sq2_pos):
-        if board.is_controlled_sq(sq2_pos, self.colour):
+        # Only applies to king
+        if board.is_controlled_sq(sq2_pos, board.get_next_turn()):
             return 0
 
         piece2 = board.fetch_piece(sq2_pos)
@@ -97,7 +98,7 @@ class King(Piece):
             if self.colour != piece2.colour:
                 piece2.captured = True
                 self.move(sq2_pos)
-                board.king_pos[self.colour] = sq2_pos
+                board.king_pos[board.turn] = sq2_pos
                 return 1
 
         else:
@@ -123,7 +124,7 @@ class King(Piece):
 
             else:
                 self.move(sq2_pos)
-                board.king_pos[self.colour] = sq2_pos
+                board.king_pos[board.turn] = sq2_pos
                 self.start_pos = False
                 return 1
 

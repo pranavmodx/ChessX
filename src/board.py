@@ -277,14 +277,17 @@ class Board:
                 self.pieces['b_pieces'].remove(piece)
 
     def is_controlled_sq(self, req_pos, turn):
-        '''Checks whether a square is controlled by a piece'''
+        '''
+        Checks whether a square is controlled by a piece.
+        'turn' means controlled by piece of which colour/turn
+        '''
 
         # Along knight routes (L)
         knight = Knight(0)
         knight.set_pos(req_pos)
         for move in knight.valid_moves():
             piece = self.fetch_piece(move)
-            if piece and type(piece).__name__ == 'Knight' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'Knight' and piece.colour == turn:
                 del knight
                 return True
 
@@ -298,7 +301,7 @@ class Board:
 
             if piece and (type(piece).__name__ == 'Bishop' or
                           type(piece).__name__ == 'Queen') and \
-                    piece.colour != turn and \
+                    piece.colour == turn and \
                     not piece.move_through(self, req_pos, dist_x, dist_y):
                 del bishop
                 return True
@@ -313,7 +316,7 @@ class Board:
 
             if piece and (type(piece).__name__ == 'Rook' or
                           type(piece).__name__ == 'Queen') and \
-                    piece.colour != turn and \
+                    piece.colour == turn and \
                     not piece.move_through(self, req_pos, dist_x, dist_y):
                 del rook
                 return True
@@ -323,7 +326,7 @@ class Board:
         king.set_pos(req_pos)
         for move in king.valid_moves():
             piece = self.fetch_piece(move)
-            if piece and type(piece).__name__ == 'King' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'King' and piece.colour == turn:
                 del king
                 return True
 
@@ -338,7 +341,7 @@ class Board:
             if move[0] - req_pos[0] == 0:
                 continue
             piece = self.fetch_piece(move)
-            if piece and type(piece).__name__ == 'Pawn' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'Pawn' and piece.colour == turn:
                 del pawn
                 return True
 
