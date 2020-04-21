@@ -2,15 +2,12 @@ from board import Board
 from config import *
 import pygame
 
+
 class Game:
     def __init__(self):
         self.init_pygame()
         self.init_board()
         self.set_icons()
-
-        # Initialize game parameters
-        self.turn = 'White'
-        self.valid_moves = []
 
     def init_pygame(self):
         '''Initializes pygame and sets screen'''
@@ -29,41 +26,33 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        self.board.annotate_board()
+        self.board.set_notation()
 
     def set_icons(self):
         '''Sets game icons'''
 
         # Flip board icon
         flip_board_pos = (
-            int(S_WIDTH / 2.2), 
+            int(S_WIDTH / 2.2),
             int(S_HEIGHT + (self.board.BD_SZ / 8) / 4)
         )
         flip_board_icon = self.screen.blit(
             pygame.image.load(
                 flip_board_rel_path + 'flip_board' + img_ext
-            ), 
+            ),
             flip_board_pos,
         )
         # Reset board icon
         reset_board_pos = (
-            int(S_WIDTH / 2.2) + 100, 
+            int(S_WIDTH / 2.2) + 100,
             int(S_HEIGHT + (self.board.BD_SZ / 8) / 4)
         )
         reset_board_icon = self.screen.blit(
             pygame.image.load(
                 reset_board_rel_path + 'reset_board' + img_ext
-            ), 
+            ),
             reset_board_pos,
         )
-
-    def set_next_turn(self):
-        '''Switches the turn to next player'''
-
-        if self.turn == 'White':
-            self.turn = 'Black'
-        else:
-            self.turn = 'White'
 
     # Main method
     def start(self):
@@ -73,7 +62,7 @@ class Game:
         sq2_pos = None
         game_over = False
         clicked_once = False
-        move_status = ''
+        move_status = -1
 
         mouse_pos = None
 
@@ -81,30 +70,30 @@ class Game:
             # Highlight non-king square
             if clicked_once:
                 self.board.highlight_square(
-                    self.screen, 
-                    Colour['RED'], 
+                    self.screen,
+                    Colour['RED'],
                     sq1_pos
                 )
 
-                for valid_move in self.valid_moves:
+                for valid_move in self.board.valid_moves:
                     self.board.highlight_square(
-                        self.screen, Colour['GREEN'], 
+                        self.screen, Colour['GREEN'],
                         valid_move
                     )
 
             # Highlight king's square if under check
             if self.board.under_check:
                 self.board.highlight_square(
-                    self.screen, 
-                    Colour['RED'], 
-                    self.board.king_pos[self.turn]
+                    self.screen,
+                    Colour['RED'],
+                    self.board.king_pos[self.board.turn]
                 )
 
         def handle_flip():
             # Flip board
             pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
             if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
-                mouse_pos[1] in range(pos[1], pos[1] + 100):
+                    mouse_pos[1] in range(pos[1], pos[1] + 100):
                 self.board.flip_board()
 
         def handle_reset():
@@ -113,13 +102,13 @@ class Game:
                 int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(SQ_SZ / 4)
             )
             if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
-                mouse_pos[1] in range(pos[1], pos[1] + 100):
+                    mouse_pos[1] in range(pos[1], pos[1] + 100):
                 del self.board
                 self.board = Board((BD_X, BD_Y))
                 self.board.load_all_img()
                 self.board.set_pos_all()
-                self.board.annotate_board()
-                self.turn = 'White'
+                self.board.set_notation()
+                self.board.turn = 'White'
 
         # Game loop
         while not game_over:
@@ -137,7 +126,7 @@ class Game:
 
                 # Click 1
                 elif event.type == pygame.MOUSEBUTTONDOWN and \
-                    not clicked_once:
+                        not clicked_once:
                     mouse_pos = pygame.mouse.get_pos()
 
                     handle_flip()
@@ -145,22 +134,22 @@ class Game:
 
                     sq1_pos = self.board.calc_sq_pos(mouse_pos)
                     piece1 = self.board.fetch_piece_by_turn(
-                        sq1_pos, self.turn
+                        sq1_pos, self.board.turn
                     )
                     if type(piece1).__name__ == 'King':
                         print(piece1.pos)
-                        print(self.board.king_pos[self.turn])
+                        print(self.board.king_pos[self.board.turn])
                         print(piece1.valid_moves())
 
-                    if piece1 and piece1.colour == self.turn:
+                    if piece1 and piece1.colour == self.board.turn:
                         clicked_once = True
                         # To handle special flip board case for pawns
                         if type(piece1).__name__ == 'Pawn':
-                            self.valid_moves = piece1.valid_moves(
+                            self.board.valid_moves = piece1.valid_moves(
                                 self.board.is_flipped
                             )
                         else:
-                            self.valid_moves = piece1.valid_moves() 
+                            self.board.valid_moves = piece1.valid_moves()
                             # For highlighting beforehand
 
                 # Click 2
@@ -171,12 +160,12 @@ class Game:
                     sq2_pos = self.board.calc_sq_pos(mouse_pos)
 
                     # If second click is not the same as first, move the piece
-                    if sq2_pos != sq1_pos and sq2_pos in self.valid_moves:
+                    if sq2_pos != sq1_pos and sq2_pos in self.board.valid_moves:
                         move_status = piece1.handle_move(
                             self.board, sq1_pos, sq2_pos
                         )
                         if move_status == 1:
-                            self.set_next_turn()
+                            self.board.set_next_turn()
 
             pygame.display.flip()
 
@@ -184,5 +173,6 @@ class Game:
 def main():
     new_game = Game()
     new_game.start()
+
 
 main()

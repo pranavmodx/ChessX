@@ -1,5 +1,6 @@
 from pieces import Bishop, Rook
 
+
 class Queen(Bishop, Rook):
     value = Bishop.value + Rook.value + 1
 

@@ -15,7 +15,7 @@ class Piece:
             sz = self.img.get_height()
             return sz
         except:
-            return 75 # Change later :P
+            return 75  # Change later :P
 
     def display(self, screen):
         '''Displays image on screen'''
@@ -27,12 +27,6 @@ class Piece:
 
     def move(self, pos):
         self.pos = pos
-
-    def next_turn(self):
-        if self.colour == 'White':
-            return 'Black'
-        else:
-            return 'White'
 
     def __repr__(self):
         if self.p_no:
