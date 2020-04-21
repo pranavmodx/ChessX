@@ -15,11 +15,11 @@ class Queen(Bishop, Rook):
         return valids
 
     @staticmethod
-    def move_through(board, req_pos, dist_x, dist_y):
+    def move_through(board, source, dest):
         return (
-            Bishop.move_through(board, req_pos, dist_x, dist_y)
+            Bishop.move_through(board, source, dest)
             or
-            Rook.move_through(board, req_pos, dist_x, dist_y)
+            Rook.move_through(board, source, dest)
         )
 
     def handle_move(self, board, sq1_pos, sq2_pos):

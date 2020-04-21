@@ -7,7 +7,7 @@ class Game:
     def __init__(self):
         self.init_pygame()
         self.init_board()
-        self.set_icons()
+        # self.set_icons()
 
     def init_pygame(self):
         '''Initializes pygame and sets screen'''
@@ -16,7 +16,8 @@ class Game:
         pygame.display.set_caption('ChessX')
         # Initialize screen
         self.screen = pygame.display.set_mode(
-            (S_WIDTH, S_HEIGHT + SQ_SZ)
+            # (S_WIDTH, S_HEIGHT + SQ_SZ)
+            (S_WIDTH, S_HEIGHT)
         )
         self.screen.fill(Colour['WHITE'])
 
@@ -104,11 +105,7 @@ class Game:
             if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
                     mouse_pos[1] in range(pos[1], pos[1] + 100):
                 del self.board
-                self.board = Board((BD_X, BD_Y))
-                self.board.load_all_img()
-                self.board.set_pos_all()
-                self.board.set_notation()
-                self.board.turn = 'White'
+                self.init_board()
 
         # Game loop
         while not game_over:

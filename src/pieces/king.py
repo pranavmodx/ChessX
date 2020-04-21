@@ -56,7 +56,7 @@ class King(Piece):
         return valids
 
     def castle(self, board, sq1_pos, sq2_pos):
-        if self.colour == 'White':
+        if board.turn == 'White':
             rook1 = board.pieces['w_pieces'][0]
             rook2 = board.pieces['w_pieces'][-1]
         else:
@@ -66,7 +66,7 @@ class King(Piece):
         # Short castling
         if sq1_pos[0] < sq2_pos[0] and rook2.start_pos:
             self.move(sq2_pos)
-            board.king_pos[self.colour] = sq2_pos
+            board.king_pos[board.turn] = sq2_pos
             self.start_pos = False
             rook2.move((rook2.pos[0] - 2 * board.SQ_SZ, rook2.pos[1]))
             rook2.start_pos = False
@@ -75,18 +75,20 @@ class King(Piece):
         # Long castling
         elif sq1_pos[0] > sq2_pos[0] and rook1.start_pos:
             self.move(sq2_pos)
-            board.king_pos[self.colour] = sq2_pos
+            board.king_pos[board.turn] = sq2_pos
             self.start_pos = False
             rook1.move((rook1.pos[0] + 3 * board.SQ_SZ, rook1.pos[1]))
             rook1.start_pos = False
             rook2.start_pos = False
 
     def move_checks_king(self, board):
-        if board.is_controlled_sq(board.king_pos[board.get_next_turn()], self.colour):
+        opp_king_pos = board.king_pos[board.get_next_turn()]
+        if board.is_controlled_sq(opp_king_pos, board.turn):
             return True
 
     def handle_move(self, board, sq1_pos, sq2_pos):
-        if board.is_controlled_sq(sq2_pos, self.colour):
+        # Only applies to king
+        if board.is_controlled_sq(sq2_pos, board.get_next_turn()):
             return 0
 
         piece2 = board.fetch_piece(sq2_pos)
@@ -94,11 +96,10 @@ class King(Piece):
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
 
         if piece2:
-            if self.colour != piece2.colour:
+            if board.turn != piece2.colour:
                 piece2.captured = True
                 self.move(sq2_pos)
-                board.king_pos[self.colour] = sq2_pos
-                return 1
+                board.king_pos[board.turn] = sq2_pos
 
         else:
             if not board.under_check:
@@ -119,16 +120,16 @@ class King(Piece):
 
                 if castling_allowed:
                     self.castle(board, sq1_pos, sq2_pos)
-                    return 1
 
             else:
                 self.move(sq2_pos)
-                board.king_pos[self.colour] = sq2_pos
+                board.king_pos[board.turn] = sq2_pos
                 self.start_pos = False
-                return 1
 
         # Discovered attack by king
         if self.move_checks_king(board):
             board.under_check = True
         else:
             board.under_check = False
+
+        return 1

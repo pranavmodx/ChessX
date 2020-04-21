@@ -208,10 +208,15 @@ class Board:
         return (self.SQ_SZ * coeff_x, self.SQ_SZ * coeff_y)
 
     @staticmethod
-    def calc_sq_dist(sq1_pos, sq2_pos):
+    def calc_sq_dist(source, dest):
+        '''
+        Return distance b/w source and destination positions.
+        (dest - source)
+        '''
+
         return (
-            sq2_pos[0] - sq1_pos[0],
-            sq2_pos[1] - sq1_pos[1],
+            dest[0] - source[0],
+            dest[1] - source[1],
         )
 
     def highlight_square(self, surface, color, rect_dim, width=3):
@@ -277,14 +282,17 @@ class Board:
                 self.pieces['b_pieces'].remove(piece)
 
     def is_controlled_sq(self, req_pos, turn):
-        '''Checks whether a square is controlled by a piece'''
+        '''
+        Checks whether a square is controlled by a piece.
+        'turn' means controlled by piece of which colour/turn
+        '''
 
         # Along knight routes (L)
         knight = Knight(0)
         knight.set_pos(req_pos)
         for move in knight.valid_moves():
             piece = self.fetch_piece(move)
-            if piece and type(piece).__name__ == 'Knight' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'Knight' and piece.colour == turn:
                 del knight
                 return True
 
@@ -293,13 +301,11 @@ class Board:
         bishop.set_pos(req_pos)
         for move in bishop.valid_moves():
             piece = self.fetch_piece(move)
-            dist_x = move[0] - req_pos[0]
-            dist_y = move[1] - req_pos[1]
 
             if piece and (type(piece).__name__ == 'Bishop' or
                           type(piece).__name__ == 'Queen') and \
-                    piece.colour != turn and \
-                    not piece.move_through(self, req_pos, dist_x, dist_y):
+                    piece.colour == turn and \
+                    not piece.move_through(self, req_pos, move):
                 del bishop
                 return True
 
@@ -308,13 +314,11 @@ class Board:
         rook.set_pos(req_pos)
         for move in rook.valid_moves():
             piece = self.fetch_piece(move)
-            dist_x = move[0] - req_pos[0]
-            dist_y = move[1] - req_pos[1]
 
             if piece and (type(piece).__name__ == 'Rook' or
                           type(piece).__name__ == 'Queen') and \
-                    piece.colour != turn and \
-                    not piece.move_through(self, req_pos, dist_x, dist_y):
+                    piece.colour == turn and \
+                    not piece.move_through(self, req_pos, move):
                 del rook
                 return True
 
@@ -323,7 +327,7 @@ class Board:
         king.set_pos(req_pos)
         for move in king.valid_moves():
             piece = self.fetch_piece(move)
-            if piece and type(piece).__name__ == 'King' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'King' and piece.colour == turn:
                 del king
                 return True
 
@@ -338,7 +342,7 @@ class Board:
             if move[0] - req_pos[0] == 0:
                 continue
             piece = self.fetch_piece(move)
-            if piece and type(piece).__name__ == 'Pawn' and piece.colour != turn:
+            if piece and type(piece).__name__ == 'Pawn' and piece.colour == turn:
                 del pawn
                 return True
 
