@@ -8,11 +8,11 @@ img_names = [
     'rook',
     'knight',
     'bishop',
-    'queen', 
-    'king', 
-    'bishop',  
+    'queen',
+    'king',
+    'bishop',
     'knight',
-    'rook', 
+    'rook',
 ]
 img_ext = '.png'
 
@@ -30,9 +30,9 @@ SQ_SZ = BD_SZ // 8
 
 # Main colours
 Colour = {
-    'BLACK' : (0, 0, 0),
-    'WHITE' : (255, 255, 255),
-    'RED' : (255, 0, 0),
-    'GREEN' : (0, 255, 0),
-    'BLUE' : (0, 0, 255),
+    'BLACK': (0, 0, 0),
+    'WHITE': (255, 255, 255),
+    'RED': (255, 0, 0),
+    'GREEN': (0, 255, 0),
+    'BLUE': (0, 0, 255),
 }

@@ -15,7 +15,7 @@ class Piece:
             sz = self.img.get_height()
             return sz
         except:
-            return 75 # Change later :P
+            return 75  # Change later :P
 
     def display(self, screen):
         '''Displays image on screen'''

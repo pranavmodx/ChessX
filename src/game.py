@@ -2,6 +2,7 @@ from board import Board
 from config import *
 import pygame
 
+
 class Game:
     def __init__(self):
         self.init_pygame()
@@ -32,24 +33,24 @@ class Game:
 
         # Flip board icon
         flip_board_pos = (
-            int(S_WIDTH / 2.2), 
+            int(S_WIDTH / 2.2),
             int(S_HEIGHT + (self.board.BD_SZ / 8) / 4)
         )
         flip_board_icon = self.screen.blit(
             pygame.image.load(
                 flip_board_rel_path + 'flip_board' + img_ext
-            ), 
+            ),
             flip_board_pos,
         )
         # Reset board icon
         reset_board_pos = (
-            int(S_WIDTH / 2.2) + 100, 
+            int(S_WIDTH / 2.2) + 100,
             int(S_HEIGHT + (self.board.BD_SZ / 8) / 4)
         )
         reset_board_icon = self.screen.blit(
             pygame.image.load(
                 reset_board_rel_path + 'reset_board' + img_ext
-            ), 
+            ),
             reset_board_pos,
         )
 
@@ -69,22 +70,22 @@ class Game:
             # Highlight non-king square
             if clicked_once:
                 self.board.highlight_square(
-                    self.screen, 
-                    Colour['RED'], 
+                    self.screen,
+                    Colour['RED'],
                     sq1_pos
                 )
 
                 for valid_move in self.board.valid_moves:
                     self.board.highlight_square(
-                        self.screen, Colour['GREEN'], 
+                        self.screen, Colour['GREEN'],
                         valid_move
                     )
 
             # Highlight king's square if under check
             if self.board.under_check:
                 self.board.highlight_square(
-                    self.screen, 
-                    Colour['RED'], 
+                    self.screen,
+                    Colour['RED'],
                     self.board.king_pos[self.board.turn]
                 )
 
@@ -92,7 +93,7 @@ class Game:
             # Flip board
             pos = (int(S_WIDTH / 2.2), S_HEIGHT + int(SQ_SZ / 4))
             if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
-                mouse_pos[1] in range(pos[1], pos[1] + 100):
+                    mouse_pos[1] in range(pos[1], pos[1] + 100):
                 self.board.flip_board()
 
         def handle_reset():
@@ -101,7 +102,7 @@ class Game:
                 int(S_WIDTH / 2.2) + 100, S_HEIGHT + int(SQ_SZ / 4)
             )
             if mouse_pos[0] in range(pos[0], pos[0] + 100) and \
-                mouse_pos[1] in range(pos[1], pos[1] + 100):
+                    mouse_pos[1] in range(pos[1], pos[1] + 100):
                 del self.board
                 self.board = Board((BD_X, BD_Y))
                 self.board.load_all_img()
@@ -125,7 +126,7 @@ class Game:
 
                 # Click 1
                 elif event.type == pygame.MOUSEBUTTONDOWN and \
-                    not clicked_once:
+                        not clicked_once:
                     mouse_pos = pygame.mouse.get_pos()
 
                     handle_flip()
@@ -148,7 +149,7 @@ class Game:
                                 self.board.is_flipped
                             )
                         else:
-                            self.board.valid_moves = piece1.valid_moves() 
+                            self.board.valid_moves = piece1.valid_moves()
                             # For highlighting beforehand
 
                 # Click 2
@@ -172,5 +173,6 @@ class Game:
 def main():
     new_game = Game()
     new_game.start()
+
 
 main()

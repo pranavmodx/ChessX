@@ -1,12 +1,13 @@
 from .piece import Piece
 from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
+
 class Rook(Piece):
     value = 5
 
     def __init__(self, p_no=None, colour='White'):
         super().__init__(p_no, colour)
-        self.start_pos = True # For checking castling ability
+        self.start_pos = True  # For checking castling ability
 
     def valid_moves(self):
         x = self.pos[0]
@@ -45,32 +46,36 @@ class Rook(Piece):
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
                 # Up
                 if dist_y < 0:
-                    temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))   
+                    temp = board.fetch_piece(
+                        (sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))
                 # Down
                 elif dist_y > 0:
-                    temp = board.fetch_piece((sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
+                    temp = board.fetch_piece(
+                        (sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
 
                 if temp:
-                    return True   
-        
+                    return True
+
         elif dist_y == 0:
             for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
                 # Right
                 if dist_x > 0:
-                    temp = board.fetch_piece((sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
+                    temp = board.fetch_piece(
+                        (sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
                 # Left
                 elif dist_x < 0:
-                    temp = board.fetch_piece((sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
+                    temp = board.fetch_piece(
+                        (sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
 
                 if temp:
-                    return True            
+                    return True
 
         return False
 
-    def move_checks_king(self, board ,sq2_pos):
+    def move_checks_king(self, board, sq2_pos):
         if board.king_pos[board.get_next_turn()] in self.valid_moves() or \
-        board.is_controlled_sq(
-            board.king_pos[board.get_next_turn()], 
+            board.is_controlled_sq(
+            board.king_pos[board.get_next_turn()],
             board.get_next_turn()
         ):
             return True
@@ -107,4 +112,3 @@ class Rook(Piece):
                 board.under_check = False
 
             return 1
-            

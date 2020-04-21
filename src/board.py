@@ -9,6 +9,7 @@ from pieces import (
 )
 import pygame
 
+
 class Board:
     def __init__(self, pos):
         # Board attributes
@@ -34,38 +35,38 @@ class Board:
             'w_pawns': [Pawn(i + 1) for i in range(8)],
             'b_pawns': [Pawn(i + 1, 'Black') for i in range(8)],
             'w_pieces': [
-                            Rook(1),
-                            Knight(1),
-                            Bishop(1),
-                            Queen(),
-                            King(),
-                            Bishop(2),
-                            Knight(2),
-                            Rook(2),
-                        ],
+                Rook(1),
+                Knight(1),
+                Bishop(1),
+                Queen(),
+                King(),
+                Bishop(2),
+                Knight(2),
+                Rook(2),
+            ],
             'b_pieces': [
-                            Rook(1, 'Black'),
-                            Knight(1, 'Black'),
-                            Bishop(1, 'Black'),
-                            Queen(colour='Black'),
-                            King(colour='Black'),
-                            Bishop(2, 'Black'),
-                            Knight(2, 'Black'),
-                            Rook(2, 'Black'),
-                        ]
+                Rook(1, 'Black'),
+                Knight(1, 'Black'),
+                Bishop(1, 'Black'),
+                Queen(colour='Black'),
+                King(colour='Black'),
+                Bishop(2, 'Black'),
+                Knight(2, 'Black'),
+                Rook(2, 'Black'),
+            ]
         }
 
     def init_notation_params(self):
         self.coords = [
-            (x,y) 
-            for x in range(0,BD_SZ,SQ_SZ) 
+            (x, y)
+            for x in range(0, BD_SZ, SQ_SZ)
             for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
         ]
-        self.files = [chr(x) for x in range(97,105)]
-        self.ranks = list(range(1,9))
+        self.files = [chr(x) for x in range(97, 105)]
+        self.ranks = list(range(1, 9))
         self.notations = [
-            f'{fil}{rank}' 
-            for rank in self.ranks 
+            f'{fil}{rank}'
+            for rank in self.ranks
             for fil in self.files
         ]
 
@@ -125,15 +126,16 @@ class Board:
 
         x_change = 0
         for pawn in self.pieces['w_pawns']:
-            pawn.set_pos((BD_X + x_change, BD_Y + self.BD_SZ - 2 * self.SQ_SZ)) 
+            pawn.set_pos((BD_X + x_change, BD_Y + self.BD_SZ - 2 * self.SQ_SZ))
             x_change += self.SQ_SZ
 
         for i, w_piece in enumerate(self.pieces['w_pieces']):
-            w_piece.set_pos((BD_X + self.SQ_SZ * i, BD_Y + self.BD_SZ - self.SQ_SZ))
+            w_piece.set_pos(
+                (BD_X + self.SQ_SZ * i, BD_Y + self.BD_SZ - self.SQ_SZ))
 
         x_change = 0
         for pawn in self.pieces['b_pawns']:
-            pawn.set_pos((BD_X + x_change, BD_Y + self.SQ_SZ)) 
+            pawn.set_pos((BD_X + x_change, BD_Y + self.SQ_SZ))
             x_change += self.SQ_SZ
 
         for i, b_piece in enumerate(self.pieces['b_pieces']):
@@ -158,17 +160,17 @@ class Board:
 
     def set_notation(self):
         self.annotations = {
-            key:value for (key,value) in 
+            key: value for (key, value) in
             zip(sorted(
-                    sorted(
-                        self.notations, key=lambda x: x[1], reverse=self.is_flipped), 
-                        key=lambda x: x[0], 
-                        reverse=self.is_flipped
-                    ),
+                sorted(
+                    self.notations, key=lambda x: x[1], reverse=self.is_flipped),
+                key=lambda x: x[0],
+                reverse=self.is_flipped
+            ),
                 self.coords
             )
         }
-        
+
     def get_notation(self, req_coord):
         for notation, coord in self.annotations.items():
             if coord == req_coord:
@@ -199,7 +201,7 @@ class Board:
 
     def calc_sq_pos(self, mouse_pos):
         '''Calculates and returns topleft position of the square clicked'''
-        
+
         coeff_x = mouse_pos[0] // self.SQ_SZ
         coeff_y = mouse_pos[1] // self.SQ_SZ
 
@@ -251,7 +253,7 @@ class Board:
 
     def fetch_piece(self, req_pos):
         '''Fetches piece present at a given position on the board'''
-        
+
         for pieces in self.pieces.values():
             for piece in pieces:
                 if piece.pos == req_pos and not piece.captured:
@@ -294,10 +296,10 @@ class Board:
             dist_x = move[0] - req_pos[0]
             dist_y = move[1] - req_pos[1]
 
-            if piece and (type(piece).__name__ == 'Bishop' or \
-                type(piece).__name__ == 'Queen') and \
-                piece.colour != turn and \
-                not piece.move_through(self, req_pos, dist_x, dist_y):
+            if piece and (type(piece).__name__ == 'Bishop' or
+                          type(piece).__name__ == 'Queen') and \
+                    piece.colour != turn and \
+                    not piece.move_through(self, req_pos, dist_x, dist_y):
                 del bishop
                 return True
 
@@ -309,10 +311,10 @@ class Board:
             dist_x = move[0] - req_pos[0]
             dist_y = move[1] - req_pos[1]
 
-            if piece and (type(piece).__name__ == 'Rook' or \
-                type(piece).__name__ == 'Queen') and \
-                piece.colour != turn and \
-                not piece.move_through(self, req_pos, dist_x, dist_y):
+            if piece and (type(piece).__name__ == 'Rook' or
+                          type(piece).__name__ == 'Queen') and \
+                    piece.colour != turn and \
+                    not piece.move_through(self, req_pos, dist_x, dist_y):
                 del rook
                 return True
 
@@ -341,4 +343,3 @@ class Board:
                 return True
 
         return False
-

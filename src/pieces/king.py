@@ -1,12 +1,13 @@
 from pieces import Piece
 from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
+
 class King(Piece):
     value = None
 
     def __init__(self, colour='White'):
         super().__init__(colour=colour)
-        self.start_pos = True # For checking castling ability
+        self.start_pos = True  # For checking castling ability
 
     def valid_moves(self):
         x = self.pos[0]
@@ -37,7 +38,7 @@ class King(Piece):
                 valids.append((dec_x, inc_y))
             # Up
             if dec_y >= BD_Y:
-                valids.append((dec_x, dec_y))  
+                valids.append((dec_x, dec_y))
 
         # Down
         if inc_y < BD_SZ:
@@ -56,8 +57,8 @@ class King(Piece):
 
     def castle(self, board, sq1_pos, sq2_pos):
         if self.colour == 'White':
-                        rook1 = board.pieces['w_pieces'][0]
-                        rook2 = board.pieces['w_pieces'][-1]
+            rook1 = board.pieces['w_pieces'][0]
+            rook2 = board.pieces['w_pieces'][-1]
         else:
             rook1 = board.pieces['b_pieces'][0]
             rook2 = board.pieces['b_pieces'][-1]
@@ -107,9 +108,11 @@ class King(Piece):
                 temp = None
                 # Checking if piece present in b/w
                 if dist_x < 0:
-                    temp = board.fetch_piece((self.pos[0] - board.SQ_SZ, self.pos[1]))
+                    temp = board.fetch_piece(
+                        (self.pos[0] - board.SQ_SZ, self.pos[1]))
                 else:
-                    temp = board.fetch_piece((self.pos[0] + board.SQ_SZ, self.pos[1]))
+                    temp = board.fetch_piece(
+                        (self.pos[0] + board.SQ_SZ, self.pos[1]))
 
                 if temp:
                     castling_allowed = False

@@ -1,6 +1,7 @@
 from pieces import Piece
 from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 
+
 class Bishop(Piece):
     value = 3
 
@@ -47,35 +48,39 @@ class Bishop(Piece):
             if dist_x < 0:
                 # Up
                 if dist_y < 0:
-                    temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))            
+                    temp = board.fetch_piece(
+                        (req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
                 # Down
                 elif dist_y > 0:
-                    temp = board.fetch_piece((req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                    temp = board.fetch_piece(
+                        (req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
 
             # Right
             elif dist_x > 0:
                 # Up
                 if dist_y < 0:
-                    temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                    temp = board.fetch_piece(
+                        (req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
                 # Down
-                elif dist_y > 0:    
-                    temp = board.fetch_piece((req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                elif dist_y > 0:
+                    temp = board.fetch_piece(
+                        (req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
 
             if temp:
-                return True        
+                return True
 
         return False
 
     def move_checks_king(self, board, sq2_pos):
         if board.king_pos[board.get_next_turn()] in self.valid_moves() and \
-        not self.move_through(
+            not self.move_through(
             board,
             sq2_pos,
             board.king_pos[board.get_next_turn()][0] - sq2_pos[0],
             board.king_pos[board.get_next_turn()][1] - sq2_pos[1]
         ) or \
-        board.is_controlled_sq(
-            board.king_pos[board.get_next_turn()], 
+            board.is_controlled_sq(
+            board.king_pos[board.get_next_turn()],
             board.get_next_turn()
         ):
             return True
@@ -96,9 +101,9 @@ class Bishop(Piece):
 
                 # Undo move if own king comes under attack by the move
                 if board.under_check and \
-                board.is_controlled_sq(
-                    board.king_pos[self.colour], self.colour
-                ):
+                        board.is_controlled_sq(
+                            board.king_pos[self.colour], self.colour
+                        ):
                     piece2.captured = False
                     self.move(sq1_pos)
                     return 0
