@@ -21,6 +21,11 @@ class Piece:
         screen_obj = screen.blit(self.img, self.pos)
 
     def set_pos(self, pos):
+        '''Set initial position of piece'''
+        self.pos = pos
+
+    def move(self, pos):
+        '''Move piece to required position'''
         self.pos = pos
 
     def __repr__(self):

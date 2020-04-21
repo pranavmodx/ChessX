@@ -100,7 +100,6 @@ class King(Piece):
                 piece2.captured = True
                 self.move(sq2_pos)
                 board.king_pos[board.turn] = sq2_pos
-                return 1
 
         else:
             if not board.under_check:
@@ -121,16 +120,16 @@ class King(Piece):
 
                 if castling_allowed:
                     self.castle(board, sq1_pos, sq2_pos)
-                    return 1
 
             else:
                 self.move(sq2_pos)
                 board.king_pos[board.turn] = sq2_pos
                 self.start_pos = False
-                return 1
 
         # Discovered attack by king
         if self.move_checks_king(board):
             board.under_check = True
         else:
             board.under_check = False
+
+        return 1
