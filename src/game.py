@@ -2,7 +2,6 @@ from board import Board
 from config import *
 import pygame
 
-
 class Game:
     def __init__(self):
         self.init_pygame()

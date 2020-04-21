@@ -80,7 +80,9 @@ class King(Piece):
             rook1.start_pos = False
             rook2.start_pos = False
 
-        self.colour = self.next_turn()
+    def move_checks_king(self, board):
+        if board.is_controlled_sq(board.king_pos[self.next_turn()], self.colour):
+            return True
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         if board.is_controlled_sq(sq2_pos, self.colour):
@@ -108,7 +110,7 @@ class King(Piece):
                     temp = board.fetch_piece((self.pos[0] - board.SQ_SZ, self.pos[1]))
                 else:
                     temp = board.fetch_piece((self.pos[0] + board.SQ_SZ, self.pos[1]))
-    
+
                 if temp:
                     castling_allowed = False
 
@@ -120,10 +122,10 @@ class King(Piece):
                 self.move(sq2_pos)
                 board.king_pos[self.colour] = sq2_pos
                 self.start_pos = False
-                self.colour = self.next_turn()
                 return 1
 
         # Discovered attack by king
-        # else:
-            # board.under_check = True
-            # return -1
+        if self.move_checks_king(board):
+            board.under_check = True
+        else:
+            board.under_check = False

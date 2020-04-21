@@ -5,10 +5,9 @@ from pieces import (
     Knight,
     Rook,
     Queen,
-    King
+    King,
 )
 import pygame
-
 
 class Board:
     def __init__(self, pos):
@@ -20,8 +19,8 @@ class Board:
             'Black': None,
         }
         self.under_check = False
-        
-        self.init_notations()
+
+        self.init_notation_params()
         self.annotate_board()
 
         self.init_all_pieces()
@@ -53,17 +52,23 @@ class Board:
                         ]
         }
 
-    def init_notations(self):
-        self.coords = [(x,y) for x in range(0,BD_SZ,SQ_SZ) 
-                    for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
-                    ]
+    def init_notation_params(self):
+        self.coords = [
+            (x,y) 
+            for x in range(0,BD_SZ,SQ_SZ) 
+            for y in range(BD_SZ - SQ_SZ, -SQ_SZ, -SQ_SZ)
+        ]
         self.files = [chr(x) for x in range(97,105)]
         self.ranks = list(range(1,9))
-        self.notations = [f'{fil}{rank}' for rank in self.ranks for fil in self.files]
+        self.notations = [
+            f'{fil}{rank}' 
+            for rank in self.ranks 
+            for fil in self.files
+        ]
 
     def load_img(self, img):
         '''Loads the board image'''
-        
+
         self.img = img
         self.BD_SZ = self.img.get_height()
         self.SQ_SZ = self.BD_SZ / 8
@@ -114,7 +119,7 @@ class Board:
 
     def set_pos_all(self):
         '''Sets the position of all the pieces'''
-        
+
         x_change = 0
         for pawn in self.pieces['w_pawns']:
             pawn.set_pos((BD_X + x_change, BD_Y + self.BD_SZ - 2 * self.SQ_SZ)) 
@@ -302,7 +307,7 @@ class Board:
             if piece and type(piece).__name__ == 'King' and piece.colour != turn:
                 del king
                 return True
-        
+
         # Pawns
         if turn == 'White':
             pawn = Pawn()
