@@ -40,18 +40,25 @@ class Rook(Piece):
         return valids
 
     @staticmethod
-    def move_through(board, sq1_pos, dist_x, dist_y):
+    def move_through(board, source, dest):
+        '''
+        Checks whether there's an obstruction in the path 
+        (b/w source and dest => dest - source)
+        '''
+
+        dist_x, dist_y = board.calc_sq_dist(source, dest)
+
         temp = None
         if dist_x == 0:
             for i in range(1, int(abs(dist_y) / board.SQ_SZ)):
                 # Up
                 if dist_y < 0:
                     temp = board.fetch_piece(
-                        (sq1_pos[0], sq1_pos[1] - i * board.SQ_SZ))
+                        (source[0], source[1] - i * board.SQ_SZ))
                 # Down
                 elif dist_y > 0:
                     temp = board.fetch_piece(
-                        (sq1_pos[0], sq1_pos[1] + i * board.SQ_SZ))
+                        (source[0], source[1] + i * board.SQ_SZ))
 
                 if temp:
                     return True
@@ -61,11 +68,11 @@ class Rook(Piece):
                 # Right
                 if dist_x > 0:
                     temp = board.fetch_piece(
-                        (sq1_pos[0] + i * board.SQ_SZ, sq1_pos[1]))
+                        (source[0] + i * board.SQ_SZ, source[1]))
                 # Left
                 elif dist_x < 0:
                     temp = board.fetch_piece(
-                        (sq1_pos[0] - i * board.SQ_SZ, sq1_pos[1]))
+                        (source[0] - i * board.SQ_SZ, source[1]))
 
                 if temp:
                     return True
@@ -84,12 +91,9 @@ class Rook(Piece):
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
-
-        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-
         own_king_pos = board.king_pos[board.turn]
 
-        if self.move_through(board, sq1_pos, dist_x, dist_y):
+        if self.move_through(board, sq1_pos, sq2_pos):
             return 0
 
         else:

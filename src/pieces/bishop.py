@@ -41,7 +41,14 @@ class Bishop(Piece):
         return valids
 
     @staticmethod
-    def move_through(board, req_pos, dist_x, dist_y):
+    def move_through(board, source, dest):
+        '''
+        Checks whether there's an obstruction in the path 
+        (b/w source and dest => dest - source)
+        '''
+
+        dist_x, dist_y = board.calc_sq_dist(source, dest)
+
         temp = None
         for i in range(1, int(abs(dist_x) / board.SQ_SZ)):
             # Left
@@ -49,22 +56,22 @@ class Bishop(Piece):
                 # Up
                 if dist_y < 0:
                     temp = board.fetch_piece(
-                        (req_pos[0] - i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                        (source[0] - i * board.SQ_SZ, source[1] - i * board.SQ_SZ))
                 # Down
                 elif dist_y > 0:
                     temp = board.fetch_piece(
-                        (req_pos[0] - i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                        (source[0] - i * board.SQ_SZ, source[1] + i * board.SQ_SZ))
 
             # Right
             elif dist_x > 0:
                 # Up
                 if dist_y < 0:
                     temp = board.fetch_piece(
-                        (req_pos[0] + i * board.SQ_SZ, req_pos[1] - i * board.SQ_SZ))
+                        (source[0] + i * board.SQ_SZ, source[1] - i * board.SQ_SZ))
                 # Down
                 elif dist_y > 0:
                     temp = board.fetch_piece(
-                        (req_pos[0] + i * board.SQ_SZ, req_pos[1] + i * board.SQ_SZ))
+                        (source[0] + i * board.SQ_SZ, source[1] + i * board.SQ_SZ))
 
             if temp:
                 return True
@@ -74,13 +81,7 @@ class Bishop(Piece):
     def move_checks_king(self, board, sq2_pos):
         opp_king_pos = board.king_pos[board.get_next_turn()]
 
-        if opp_king_pos in self.valid_moves() and \
-            not self.move_through(
-            board,
-            sq2_pos,
-            opp_king_pos[0] - sq2_pos[0],
-            opp_king_pos[1] - sq2_pos[1]
-        ) or \
+        if opp_king_pos in self.valid_moves() or \
             board.is_controlled_sq(
             opp_king_pos,
             board.turn,
@@ -89,13 +90,10 @@ class Bishop(Piece):
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
-
-        dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
-
         own_king_pos = board.king_pos[board.turn]
 
         # If piece is present in b/w the 2 sqs
-        if self.move_through(board, sq1_pos, dist_x, dist_y):
+        if self.move_through(board, sq1_pos, sq2_pos):
             return 0
         else:
             # If occupied square

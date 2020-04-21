@@ -10,7 +10,6 @@ class Piece:
 
     def size(self):
         '''Returns size (or default size) of piece image'''
-
         try:
             sz = self.img.get_height()
             return sz
@@ -19,20 +18,16 @@ class Piece:
 
     def display(self, screen):
         '''Displays image on screen'''
-
         screen_obj = screen.blit(self.img, self.pos)
 
     def set_pos(self, pos):
-        self.pos = pos
-
-    def move(self, pos):
         self.pos = pos
 
     def __repr__(self):
         if self.p_no:
             return f"{type(self).__name__}{self.p_no + 1}('{self.colour}')"
         else:
-            return f"{self.p_type}('{self.colour}')"
+            return f"{type(self).__name__}('{self.colour}')"
 
     def __str__(self):
         if self.p_no:
