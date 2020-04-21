@@ -64,8 +64,8 @@ class Knight(Piece):
         return valids
 
     def move_checks_king(self, board):
-        if board.king_pos[self.next_turn()] in self.valid_moves() or \
-            board.is_controlled_sq(board.king_pos[self.next_turn()], self.next_turn()):
+        if board.king_pos[board.get_next_turn()] in self.valid_moves() or \
+            board.is_controlled_sq(board.king_pos[board.get_next_turn()], board.get_next_turn()):
             return True
 
     def handle_move(self, board, sq1_pos, sq2_pos):

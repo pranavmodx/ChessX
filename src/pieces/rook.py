@@ -68,10 +68,10 @@ class Rook(Piece):
         return False
 
     def move_checks_king(self, board ,sq2_pos):
-        if board.king_pos[self.next_turn()] in self.valid_moves() or \
+        if board.king_pos[board.get_next_turn()] in self.valid_moves() or \
         board.is_controlled_sq(
-            board.king_pos[self.next_turn()], 
-            self.next_turn()
+            board.king_pos[board.get_next_turn()], 
+            board.get_next_turn()
         ):
             return True
 

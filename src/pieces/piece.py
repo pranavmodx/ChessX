@@ -28,12 +28,6 @@ class Piece:
     def move(self, pos):
         self.pos = pos
 
-    def next_turn(self):
-        if self.colour == 'White':
-            return 'Black'
-        else:
-            return 'White'
-
     def __repr__(self):
         if self.p_no:
             return f"{type(self).__name__}{self.p_no + 1}('{self.colour}')"

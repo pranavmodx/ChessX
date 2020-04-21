@@ -14,16 +14,19 @@ class Board:
         # Board attributes
         self.pos = pos
         self.is_flipped = False
+        self.init_notation_params()
+        self.set_notation()
+
+        self.init_all_pieces()
+
+        # Move params
+        self.turn = 'White'
+        self.valid_moves = []
         self.king_pos = {
             'White': None,
             'Black': None,
         }
         self.under_check = False
-
-        self.init_notation_params()
-        self.annotate_board()
-
-        self.init_all_pieces()
 
     def init_all_pieces(self):
         # Piece attributes
@@ -139,7 +142,21 @@ class Board:
         self.king_pos['White'] = self.pieces['w_pieces'][4].pos
         self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
 
-    def annotate_board(self):
+    def set_next_turn(self):
+        '''Switches the turn to next player'''
+        if self.turn == 'White':
+            self.turn = 'Black'
+        else:
+            self.turn = 'White'
+
+    def get_next_turn(self):
+        '''Returns the next turn'''
+        if self.turn == 'White':
+            return 'Black'
+        else:
+            return 'White'
+
+    def set_notation(self):
         self.annotations = {
             key:value for (key,value) in 
             zip(sorted(
@@ -178,7 +195,7 @@ class Board:
         self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
 
         # Update notations
-        self.annotate_board()
+        self.set_notation()
 
     def calc_sq_pos(self, mouse_pos):
         '''Calculates and returns topleft position of the square clicked'''
