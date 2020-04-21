@@ -73,7 +73,7 @@ class Knight(Piece):
         piece2 = board.fetch_piece(sq2_pos)
 
         if piece2:
-            if self.colour != piece2.colour:
+            if board.turn != piece2.colour:
                 piece2.captured = True
                 self.move(sq2_pos)
 

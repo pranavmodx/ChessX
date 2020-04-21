@@ -67,7 +67,7 @@ class Pawn(Piece):
             if (abs(dist_y) != board.SQ_SZ and
                     abs(dist_y) != 2 * board.SQ_SZ) \
                     or abs(dist_x) == board.SQ_SZ:
-                if self.colour != piece2.colour:
+                if board.turn != piece2.colour:
                     piece2.captured = True
                     self.move(sq2_pos)
 

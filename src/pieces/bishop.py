@@ -95,7 +95,7 @@ class Bishop(Piece):
             return 0
         else:
             # If occupied square
-            if piece2 and piece2.colour != self.colour:
+            if piece2 and piece2.colour != board.turn:
                 piece2.captured = True
                 self.move(sq2_pos)
 

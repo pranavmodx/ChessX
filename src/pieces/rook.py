@@ -89,7 +89,7 @@ class Rook(Piece):
             return 0
 
         else:
-            if piece2 and self.colour != piece2.colour:
+            if piece2 and board.turn != piece2.colour:
                 piece2.captured = True
                 self.move(sq2_pos)
 
