@@ -27,7 +27,7 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        self.board.set_notation()
+        self.board.set_notations()
 
     def set_icons(self):
         '''Sets game icons'''
@@ -133,6 +133,9 @@ class Game:
                     piece1 = self.board.fetch_piece_by_turn(
                         sq1_pos, self.board.turn
                     )
+                    # print(self.board.get_notation(sq1_pos))
+                    # print(self.board.annotations.items())
+                    # print(self.board.get_coord_from_notation(self.board.get_notation(sq1_pos)))
                     # if type(piece1).__name__ == 'King':
                     #     print(piece1.pos)
                     #     print(self.board.king_pos[self.board.turn])
@@ -158,10 +161,12 @@ class Game:
 
                     # If second click is not the same as first, move the piece
                     if sq2_pos != sq1_pos and sq2_pos in self.board.valid_moves:
+                        # print(self.board.get_notation(sq2_pos))
                         move_status = piece1.handle_move(
                             self.board, sq1_pos, sq2_pos
                         )
                         if move_status == 1:
+                            self.board.checkmate()
                             self.board.set_next_turn()
 
             pygame.display.flip()

@@ -65,6 +65,8 @@ class Pawn(Piece):
         return False
 
     def handle_move(self, board, sq1_pos, sq2_pos):
+        self.handle_promotion(sq2_pos)
+
         piece2 = board.fetch_piece(sq2_pos)
         own_king_pos = board.king_pos[board.turn]
         dist_x, dist_y = board.calc_sq_dist(sq1_pos, sq2_pos)
@@ -110,5 +112,25 @@ class Pawn(Piece):
 
         return 1
 
-    def handle_promotion(self):
+    def handle_promotion(self, pos):
         pass
+        # self.captured = True
+        # provide choice to promote to
+        # make dialog box to pop up and close accordingly
+
+        # if choice Queen
+        # make new queen at this pos
+        # else other chosen piece
+        # and so on...
+
+        # also see if it causes check to king
+
+        # handle case for promotion after capturing and occupying last rank
+
+    def en_passant_move(self, pos):
+        pass
+
+        # if opp. pawn is at 4th or 5th rank (black or white resp) 
+        # and i make a double pawn push, enable en_passant
+        
+

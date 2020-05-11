@@ -16,7 +16,7 @@ class Board:
         self.pos = pos
         self.is_flipped = False
         self.init_notation_params()
-        self.set_notation()
+        self.set_notations()
 
         self.init_all_pieces()
 
@@ -30,6 +30,8 @@ class Board:
         self.under_check = False
 
     def init_all_pieces(self):
+        '''Initializes all chess pieces'''
+
         # Piece attributes
         self.pieces = {
             'w_pawns': [Pawn(i + 1) for i in range(8)],
@@ -57,6 +59,8 @@ class Board:
         }
 
     def init_notation_params(self):
+        '''Initializes all board notation parameters'''
+
         self.coords = [
             (x, y)
             for x in range(0, BD_SZ, SQ_SZ)
@@ -158,7 +162,8 @@ class Board:
         else:
             return 'White'
 
-    def set_notation(self):
+    def set_notations(self):
+        '''Set board notations'''
         self.annotations = {
             key: value for (key, value) in
             zip(sorted(
@@ -172,9 +177,17 @@ class Board:
         }
 
     def get_notation(self, req_coord):
+        '''Get square notation'''
         for notation, coord in self.annotations.items():
             if coord == req_coord:
                 return notation
+
+    def get_coord_from_notation(self, notation):
+        for key, value in self.annotations.items():
+            if notation == key: 
+                return value
+
+        return None
 
     def flip_board(self):
         '''Flips the board and the pieces'''
@@ -197,7 +210,7 @@ class Board:
         self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
 
         # Update notations
-        self.set_notation()
+        self.set_notations()
 
     def calc_sq_pos(self, mouse_pos):
         '''Calculates and returns topleft position of the square clicked'''
@@ -347,3 +360,31 @@ class Board:
                 return True
 
         return False
+
+    def checkmate(self):
+        king = self.fetch_piece_by_turn(self.king_pos[self.turn], self.turn)
+        
+        # print('King pos:', king.pos)
+        # print('Valids :' ,king.valid_moves())
+        # for move in king.valid_moves():
+        #     if self.is_controlled_sq(move, self.get_next_turn):
+        #         print('Yes')
+        #     else:
+        #         print('No')
+
+        # Check all valid moves of king: 
+            # Do following (in inc order of amt of computation):
+            # Check if all are occupied
+            # Check if piece causing check can be captured
+            # Also check if another piece can block check - this isn't needed in case of knight
+
+    def stalemate(self):
+        king = self.fetch_piece_by_turn(self.king_pos[self.turn], self.turn)
+
+        # Do following (in inc order of amt of computation):
+        # Check if other pieces have valid move
+        # Check if king has any valid move
+        
+    # def store_move(self):
+    #     pass
+
