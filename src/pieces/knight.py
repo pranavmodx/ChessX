@@ -74,7 +74,6 @@ class Knight(Piece):
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         piece2 = board.fetch_piece(sq2_pos)
-
         own_king_pos = board.king_pos[board.turn]
 
         if piece2:
