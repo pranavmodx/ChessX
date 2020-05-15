@@ -15,8 +15,8 @@ class Board:
         # Board attributes
         self.pos = pos
         self.is_flipped = False
-        self.init_notation_params()
-        self.set_notations()
+        self.init_bd_notation_params()
+        self.set_bd_notations()
 
         self.init_all_pieces()
 
@@ -58,7 +58,7 @@ class Board:
             ]
         }
 
-    def init_notation_params(self):
+    def init_bd_notation_params(self):
         '''Initializes all board notation parameters'''
 
         self.coords = [
@@ -162,7 +162,7 @@ class Board:
         else:
             return 'White'
 
-    def set_notations(self):
+    def set_bd_notations(self):
         '''Set board notations'''
         self.annotations = {
             key: value for (key, value) in
@@ -176,7 +176,7 @@ class Board:
             )
         }
 
-    def get_notation(self, req_coord):
+    def get_sq_notation(self, req_coord):
         '''Get square notation'''
         for notation, coord in self.annotations.items():
             if coord == req_coord:
@@ -210,7 +210,7 @@ class Board:
         self.king_pos['Black'] = self.pieces['b_pieces'][4].pos
 
         # Update notations
-        self.set_notations()
+        self.set_bd_notations()
 
     def calc_sq_pos(self, mouse_pos):
         '''Calculates and returns topleft position of the square clicked'''
@@ -346,9 +346,9 @@ class Board:
 
         # Pawns
         if turn == 'White':
-            pawn = Pawn()
-        else:
             pawn = Pawn(colour='Black')
+        else:
+            pawn = Pawn()
         pawn.set_pos(req_pos)
         for move in pawn.valid_moves(self.is_flipped):
             # If directly in front/back
