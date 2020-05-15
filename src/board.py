@@ -318,7 +318,7 @@ class Board:
             if piece and (type(piece).__name__ == 'Bishop' or
                           type(piece).__name__ == 'Queen') and \
                     piece.colour == turn and \
-                    not piece.move_through(self, req_pos, move):
+                    not piece.is_path_obstructed(self, req_pos, move):
                 del bishop
                 return True
 
@@ -331,7 +331,7 @@ class Board:
             if piece and (type(piece).__name__ == 'Rook' or
                           type(piece).__name__ == 'Queen') and \
                     piece.colour == turn and \
-                    not piece.move_through(self, req_pos, move):
+                    not piece.is_path_obstructed(self, req_pos, move):
                 del rook
                 return True
 
