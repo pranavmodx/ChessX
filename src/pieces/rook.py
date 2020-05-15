@@ -40,7 +40,7 @@ class Rook(Piece):
         return valids
 
     @staticmethod
-    def move_through(board, source, dest):
+    def is_path_obstructed(board, source, dest):
         '''
         Checks whether there's an obstruction in the path 
         (b/w source and dest => dest - source)
@@ -82,7 +82,7 @@ class Rook(Piece):
     def move_checks_king(self, board, sq2_pos):
         opp_king_pos = board.king_pos[board.get_next_turn()]
 
-        if opp_king_pos in self.valid_moves() or \
+        if opp_king_pos in self.valid_moves() and \
         board.is_controlled_sq(
             opp_king_pos,
             board.turn,
@@ -94,7 +94,7 @@ class Rook(Piece):
         piece2 = board.fetch_piece(sq2_pos)
         own_king_pos = board.king_pos[board.turn]
 
-        if self.move_through(board, sq1_pos, sq2_pos):
+        if self.is_path_obstructed(board, sq1_pos, sq2_pos):
             return 0
 
         else:
