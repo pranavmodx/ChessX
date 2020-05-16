@@ -85,6 +85,7 @@ class Knight(Piece):
                     piece2.captured = False
                     self.move(sq1_pos)
                     return 0
+            return 0
 
         else:
             self.move(sq2_pos)
