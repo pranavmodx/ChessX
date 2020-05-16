@@ -89,8 +89,15 @@ class King(Piece):
 
     def handle_move(self, board, sq1_pos, sq2_pos):
         # Only applies to king
+        # Temporarily remove king from path and check whether sq2_pos
+        # is controlled by any piece 
+        # (else 'is_path_obstructed' in 'is_controlled_sq' returns true 
+        # because king comes in the way)
+        self.captured = True
         if board.is_controlled_sq(sq2_pos, board.get_next_turn()):
+            self.captured = False
             return 0
+        self.captured = False
 
         piece2 = board.fetch_piece(sq2_pos)
 
