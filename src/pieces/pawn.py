@@ -88,8 +88,10 @@ class Pawn(Piece):
 
                     if self.start_pos == True:
                         self.start_pos = False
+                else:
+                    return 0
+            else:
                 return 0
-            return 0
 
         else:
             if dist_x == 0:
