@@ -98,18 +98,20 @@ class Bishop(Piece):
             return 0
         else:
             # If occupied square
-            if piece2 and piece2.colour != board.turn:
-                piece2.captured = True
-                self.move(sq2_pos)
+            if piece2:
+                if piece2.colour != board.turn:
+                    piece2.captured = True
+                    self.move(sq2_pos)
 
-                # Undo move if own king comes under attack by the move
-                if board.under_check and \
-                        board.is_controlled_sq(
-                            own_king_pos, board.get_next_turn(),
-                        ):
-                    piece2.captured = False
-                    self.move(sq1_pos)
-                    return 0
+                    # Undo move if own king comes under attack by the move
+                    if board.under_check and \
+                    board.is_controlled_sq(
+                        own_king_pos, board.get_next_turn(),
+                    ):
+                        piece2.captured = False
+                        self.move(sq1_pos)
+                        return 0
+                return 0
 
             # If empty square
             else:

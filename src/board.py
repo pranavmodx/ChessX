@@ -315,11 +315,13 @@ class Board:
         for move in bishop.valid_moves():
             piece = self.fetch_piece(move)
 
-            if piece and (type(piece).__name__ == 'Bishop' or
-                          type(piece).__name__ == 'Queen') and \
-                    piece.colour == turn and \
-                    not piece.is_path_obstructed(self, req_pos, move):
+            if piece and \
+            (type(piece).__name__ == 'Bishop' or
+            type(piece).__name__ == 'Queen') and \
+            piece.colour == turn and \
+            not piece.is_path_obstructed(self, req_pos, move):
                 del bishop
+                print('Obstruct')
                 return True
 
         # Along ranks and files
@@ -329,9 +331,9 @@ class Board:
             piece = self.fetch_piece(move)
 
             if piece and (type(piece).__name__ == 'Rook' or
-                          type(piece).__name__ == 'Queen') and \
-                    piece.colour == turn and \
-                    not piece.is_path_obstructed(self, req_pos, move):
+            type(piece).__name__ == 'Queen') and \
+            piece.colour == turn and \
+            not piece.is_path_obstructed(self, req_pos, move):
                 del rook
                 return True
 
@@ -359,6 +361,9 @@ class Board:
                 del pawn
                 return True
 
+        del knight, bishop, rook, king, pawn
+
+        print('Nope')
         return False
 
     def checkmate(self):
