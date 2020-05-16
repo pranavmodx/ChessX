@@ -101,8 +101,8 @@ class King(Piece):
                 piece2.captured = True
                 self.move(sq2_pos)
                 board.king_pos[board.turn] = sq2_pos
-                
-            return 0
+            else:    
+                return 0
 
         else:
             if not board.under_check:
