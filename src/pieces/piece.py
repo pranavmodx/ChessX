@@ -1,8 +1,10 @@
 class Piece:
-    def __init__(self, p_no=None, colour='White'):
+    def __init__(self, p_no=None, colour='White', is_captured=False):
         self.p_no = p_no
         self.colour = colour
-        self.captured = False
+        self.is_captured = is_captured
+        self.pos = None
+        self.img = None
 
     def load_img(self, img):
         '''Loads image of piece'''

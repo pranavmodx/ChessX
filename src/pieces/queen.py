@@ -4,8 +4,8 @@ from pieces import Bishop, Rook
 class Queen(Bishop, Rook):
     value = Bishop.value + Rook.value + 1
 
-    def __init__(self, p_no=1, colour='White'):
-        super().__init__(p_no, colour)
+    def __init__(self, p_no=1, colour='White', is_captured=False):
+        super().__init__(p_no, colour, is_captured)
 
     def valid_moves(self):
         valids = []

@@ -5,8 +5,8 @@ from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 class King(Piece):
     value = None
 
-    def __init__(self, colour='White'):
-        super().__init__(colour=colour)
+    def __init__(self, colour='White', is_captured=False):
+        super().__init__(colour=colour, is_captured=is_captured)
         self.start_pos = True  # For checking castling ability
 
     def valid_moves(self):
@@ -93,11 +93,11 @@ class King(Piece):
         # is controlled by any piece 
         # (else 'is_path_obstructed' in 'is_controlled_sq' returns true 
         # because king comes in the way)
-        self.captured = True
+        self.is_captured = True
         if board.is_controlled_sq(sq2_pos, board.get_next_turn()):
-            self.captured = False
+            self.is_captured = False
             return 0
-        self.captured = False
+        self.is_captured = False
 
         piece2 = board.fetch_piece(sq2_pos)
 
@@ -105,7 +105,7 @@ class King(Piece):
 
         if piece2:
             if board.turn != piece2.colour:
-                piece2.captured = True
+                piece2.is_captured = True
                 self.move(sq2_pos)
                 board.king_pos[board.turn] = sq2_pos
             else:    

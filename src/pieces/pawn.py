@@ -5,8 +5,8 @@ from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 class Pawn(Piece):
     value = 1
 
-    def __init__(self, p_no=None, colour='White'):
-        super().__init__(p_no, colour)
+    def __init__(self, p_no=None, colour='White', is_captured=False):
+        super().__init__(p_no, colour, is_captured)
         self.start_pos = True  # Special case for pawn - double push
 
     def valid_moves(self, is_flipped=False):
@@ -78,11 +78,11 @@ class Pawn(Piece):
                     abs(dist_y) != 2 * board.SQ_SZ) \
                     or abs(dist_x) == board.SQ_SZ:
                 if board.turn != piece2.colour:
-                    piece2.captured = True
+                    piece2.is_captured = True
                     self.move(sq2_pos)
 
                     if board.is_controlled_sq(own_king_pos, board.get_next_turn()):
-                        piece2.captured = False
+                        piece2.is_captured = False
                         self.move(sq1_pos)
                         return 0
 
@@ -115,7 +115,7 @@ class Pawn(Piece):
 
     def handle_promotion(self, pos):
         pass
-        # self.captured = True
+        # self.is_captured = True
         # provide choice to promote to
         # make dialog box to pop up and close accordingly
 
