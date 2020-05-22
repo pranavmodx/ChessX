@@ -5,8 +5,8 @@ from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 class Knight(Piece):
     value = 3
 
-    def __init__(self, p_no=None, colour='White'):
-        super().__init__(p_no, colour)
+    def __init__(self, p_no=None, colour='White', is_captured=False):
+        super().__init__(p_no, colour, is_captured)
 
     def valid_moves(self):
         x = self.pos[0]
@@ -78,11 +78,11 @@ class Knight(Piece):
 
         if piece2:
             if board.turn != piece2.colour:
-                piece2.captured = True
+                piece2.is_captured = True
                 self.move(sq2_pos)
 
                 if board.is_controlled_sq(own_king_pos, board.get_next_turn()):
-                    piece2.captured = False
+                    piece2.is_captured = False
                     self.move(sq1_pos)
                     return 0
             else:

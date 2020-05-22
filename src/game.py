@@ -27,7 +27,6 @@ class Game:
         self.board = Board((BD_X, BD_Y))
         self.board.load_all_img()
         self.board.set_pos_all()
-        self.board.set_bd_notations()
 
     def set_icons(self):
         '''Sets game icons'''
@@ -135,7 +134,7 @@ class Game:
                     )
                     # print(self.board.get_sq_notation(sq1_pos))
                     # print(self.board.annotations.items())
-                    # print(self.board.get_coord_from_notation(self.board.get_sq_notation(sq1_pos)))
+                    # print(self.board.get_sq_coord(self.board.get_sq_notation(sq1_pos)))
                     # if type(piece1).__name__ == 'King':
                     #     print(piece1.pos)
                     #     print(self.board.king_pos[self.board.turn])
@@ -166,7 +165,8 @@ class Game:
                             self.board, sq1_pos, sq2_pos
                         )
                         if move_status == 1:
-                            self.board.checkmate()
+                            self.board.show_move(piece1)
+                            self.board.is_checkmate()
                             self.board.set_next_turn()
 
             pygame.display.flip()

@@ -13,6 +13,8 @@ import pygame
 class Board:
     def __init__(self, pos):
         # Board attributes
+        self.BD_SZ = BD_SZ
+        self.SQ_SZ = SQ_SZ
         self.pos = pos
         self.is_flipped = False
         self.init_bd_notation_params()
@@ -28,33 +30,34 @@ class Board:
             'Black': None,
         }
         self.under_check = False
+        self.pos_of_piece_causing_check = None
 
-    def init_all_pieces(self):
+    def init_all_pieces(self, is_captured=False):
         '''Initializes all chess pieces'''
 
         # Piece attributes
         self.pieces = {
-            'w_pawns': [Pawn(i + 1) for i in range(8)],
-            'b_pawns': [Pawn(i + 1, 'Black') for i in range(8)],
+            'w_pawns': [Pawn(i + 1, is_captured=is_captured) for i in range(8)],
+            'b_pawns': [Pawn(i + 1, colour='Black', is_captured=is_captured) for i in range(8)],
             'w_pieces': [
-                Rook(1),
-                Knight(1),
-                Bishop(1),
-                Queen(),
-                King(),
-                Bishop(2),
-                Knight(2),
-                Rook(2),
+                Rook(1, is_captured=is_captured),
+                Knight(1, is_captured=is_captured),
+                Bishop(1, is_captured=is_captured),
+                Queen(is_captured=is_captured),
+                King(is_captured=is_captured),
+                Bishop(2, is_captured=is_captured),
+                Knight(2, is_captured=is_captured),
+                Rook(2, is_captured=is_captured),
             ],
             'b_pieces': [
-                Rook(1, 'Black'),
-                Knight(1, 'Black'),
-                Bishop(1, 'Black'),
-                Queen(colour='Black'),
-                King(colour='Black'),
-                Bishop(2, 'Black'),
-                Knight(2, 'Black'),
-                Rook(2, 'Black'),
+                Rook(1, colour='Black', is_captured=is_captured),
+                Knight(1, colour='Black', is_captured=is_captured),
+                Bishop(1, colour='Black', is_captured=is_captured),
+                Queen(colour='Black', is_captured=is_captured),
+                King(colour='Black', is_captured=is_captured),
+                Bishop(2, colour='Black', is_captured=is_captured),
+                Knight(2, colour='Black', is_captured=is_captured),
+                Rook(2, colour='Black', is_captured=is_captured),
             ]
         }
 
@@ -69,17 +72,14 @@ class Board:
         self.files = [chr(x) for x in range(97, 105)]
         self.ranks = list(range(1, 9))
         self.notations = [
-            f'{fil}{rank}'
+            f'{fil}{rank}' 
             for rank in self.ranks
             for fil in self.files
         ]
 
     def load_img(self, img):
         '''Loads the board image'''
-
         self.img = img
-        self.BD_SZ = self.img.get_height()
-        self.SQ_SZ = self.BD_SZ / 8
 
     def load_all_img(self):
         '''Loads the images of board and all the pieces'''
@@ -118,7 +118,7 @@ class Board:
 
         for piece_list in self.pieces.values():
             for piece in piece_list:
-                if not piece.captured:
+                if not piece.is_captured:
                     piece.display(screen)
 
     def set_pos(self, pos):
@@ -177,23 +177,27 @@ class Board:
         }
 
     def get_sq_notation(self, req_coord):
-        '''Get square notation'''
+        '''Get square notation from coordinates'''
         for notation, coord in self.annotations.items():
             if coord == req_coord:
                 return notation
 
-    def get_coord_from_notation(self, notation):
+    def get_sq_coord(self, notation):
+        '''Get square coordinates from notation'''
         for key, value in self.annotations.items():
             if notation == key: 
                 return value
 
         return None
 
+    def show_move(self, piece):
+        print(f'{piece} to {self.get_sq_notation(piece.pos)}')
+
     def flip_board(self):
         '''Flips the board and the pieces'''
 
         self.is_flipped = not self.is_flipped
-        print(self.is_flipped)
+        # print(self.is_flipped)
 
         # Update position of all pieces
         for pieces in self.pieces.values():
@@ -251,20 +255,20 @@ class Board:
 
         if turn == 'White':
             for w_pawn in self.pieces['w_pawns']:
-                if w_pawn.pos == req_pos and not w_pawn.captured:
+                if w_pawn.pos == req_pos and not w_pawn.is_captured:
                     return w_pawn
 
             for w_piece in self.pieces['w_pieces']:
-                if w_piece.pos == req_pos and not w_piece.captured:
+                if w_piece.pos == req_pos and not w_piece.is_captured:
                     return w_piece
 
         else:
             for b_pawn in self.pieces['b_pawns']:
-                if b_pawn.pos == req_pos and not b_pawn.captured:
+                if b_pawn.pos == req_pos and not b_pawn.is_captured:
                     return b_pawn
 
             for b_piece in self.pieces['b_pieces']:
-                if b_piece.pos == req_pos and not b_piece.captured:
+                if b_piece.pos == req_pos and not b_piece.is_captured:
                     return b_piece
 
         return None
@@ -274,7 +278,7 @@ class Board:
 
         for pieces in self.pieces.values():
             for piece in pieces:
-                if piece.pos == req_pos and not piece.captured:
+                if piece.pos == req_pos and not piece.is_captured:
                     return piece
 
         return None
@@ -303,9 +307,15 @@ class Board:
         # Along knight routes (L)
         knight = Knight(0)
         knight.set_pos(req_pos)
+        # print(self.get_sq_notation(req_pos))
+        # print()
         for move in knight.valid_moves():
+            # print(self.get_sq_notation(move), end=': ')
             piece = self.fetch_piece(move)
+            # print(piece)
             if piece and type(piece).__name__ == 'Knight' and piece.colour == turn:
+                # self.pos_of_piece_causing_check = move
+                # print('yeah')
                 del knight
                 return True
 
@@ -320,20 +330,26 @@ class Board:
             type(piece).__name__ == 'Queen') and \
             piece.colour == turn and \
             not piece.is_path_obstructed(self, req_pos, move):
+                # print('yes')
+                # self.pos_of_piece_causing_check = move
                 del bishop
-                print('Obstruct')
+                # print('Obstruct')
                 return True
 
         # Along ranks and files
         rook = Rook(0)
         rook.set_pos(req_pos)
         for move in rook.valid_moves():
+            # print(self.get_sq_notation(move), end=": ")
             piece = self.fetch_piece(move)
+            # print(piece)
 
             if piece and (type(piece).__name__ == 'Rook' or
             type(piece).__name__ == 'Queen') and \
             piece.colour == turn and \
             not piece.is_path_obstructed(self, req_pos, move):
+                # self.pos_of_piece_causing_check = move
+                # print('here')
                 del rook
                 return True
 
@@ -343,8 +359,11 @@ class Board:
         for move in king.valid_moves():
             piece = self.fetch_piece(move)
             if piece and type(piece).__name__ == 'King' and piece.colour == turn:
-                del king
-                return True
+                if not self.is_controlled_sq(move, self.turn):
+                    # print('here')
+                    # self.pos_of_piece_causing_check = move
+                    del king
+                    return True
 
         # Pawns
         if turn == 'White':
@@ -358,38 +377,73 @@ class Board:
                 continue
             piece = self.fetch_piece(move)
             if piece and type(piece).__name__ == 'Pawn' and piece.colour == turn:
+                # self.pos_of_piece_causing_check = move
                 del pawn
                 return True
 
         del knight, bishop, rook, king, pawn
 
-        print('Nope')
+        # print('Nope')
         return False
 
-    def checkmate(self):
-        king = self.fetch_piece_by_turn(self.king_pos[self.turn], self.turn)
-        
-        # print('King pos:', king.pos)
-        # print('Valids :' ,king.valid_moves())
-        # for move in king.valid_moves():
-        #     if self.is_controlled_sq(move, self.get_next_turn):
-        #         print('Yes')
-        #     else:
-        #         print('No')
+    def is_checkmate(self):
+        # print(self.turn)
+        opp_king = self.fetch_piece(self.king_pos[self.get_next_turn()])
+        # print(opp_king)
 
-        # Check all valid moves of king: 
-            # Do following (in inc order of amt of computation):
-            # Check if all are occupied
-            # Check if piece causing check can be captured
-            # Also check if another piece can block check - this isn't needed in case of knight
+        if self.pos_of_piece_causing_check != None:
+            # print(self.pos_of_piece_causing_check)
+            # print(self.get_sq_notation(self.pos_of_piece_causing_check))
+            if self.is_controlled_sq(self.pos_of_piece_causing_check, self.get_next_turn()):
+                # self.pos_of_piece_causing_check = None
+                # print('here')
+                return False
 
-    def stalemate(self):
-        king = self.fetch_piece_by_turn(self.king_pos[self.turn], self.turn)
+        valid_moves = opp_king.valid_moves()
+        if opp_king.start_pos:
+            if opp_king.colour == 'Black':
+                valid_moves.remove(self.get_sq_coord('c8'))
+                valid_moves.remove(self.get_sq_coord('g8'))
+            else:
+                valid_moves.remove(self.get_sq_coord('c1'))
+                valid_moves.remove(self.get_sq_coord('g1'))
 
-        # Do following (in inc order of amt of computation):
-        # Check if other pieces have valid move
-        # Check if king has any valid move
-        
-    # def store_move(self):
-    #     pass
+        for move in valid_moves:
+            # print(self.get_sq_notation(move))
+            if not self.is_controlled_sq(move, self.turn):
+                temp = self.fetch_piece(move)
+                if temp.colour != self.get_next_turn():
+                    return False
+                    
 
+        return True
+
+    def is_stalemate(self):
+        if self.turn == 'White':
+            # for pawn in self.pieces['w_pawns']:
+            #     if not pawn.is_captured:
+            #         for move in pawn.valid_moves(self.is_flipped):
+            #             if not self.is_controlled_sq(move, self.get_next_turn()):
+            #                 print(self.get_sq_notation(move))
+            #                 self.show_move(pawn)
+            #                 return False
+
+            for piece in self.pieces['w_pieces']:
+                if not piece.is_captured:
+                    for move in piece.valid_moves():
+                        if not self.is_controlled_sq(move, self.get_next_turn()):
+                            return False
+        else:
+            # for pawn in self.pieces['b_pawns']:
+            #     if not pawn.is_captured:
+            #         for move in pawn.valid_moves(self.is_flipped):
+            #             if not self.is_controlled_sq(move, self.get_next_turn()):
+            #                 return False
+            
+            for piece in self.pieces['b_pieces']:
+                if not piece.is_captured:
+                    for move in piece.valid_moves():
+                        if not self.is_controlled_sq(move, self.get_next_turn()):
+                            return False
+
+        return True
