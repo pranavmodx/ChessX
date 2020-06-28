@@ -5,9 +5,9 @@ from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 class Rook(Piece):
     value = 5
 
-    def __init__(self, p_no=None, colour='White', is_captured=False):
+    def __init__(self, p_no=None, colour='White', is_captured=False, start_pos=True):
         super().__init__(p_no, colour, is_captured)
-        self.start_pos = True  # For checking castling ability
+        self.start_pos = start_pos  # For checking castling ability
 
     def valid_moves(self):
         x = self.pos[0]

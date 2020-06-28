@@ -13,7 +13,7 @@ from pieces import (
 class TestStalemate(unittest.TestCase):
     def setUp(self):
         self.board = Board((BD_X, BD_Y))
-        self.board.init_all_pieces(is_captured=True)
+        self.board.init_all_pieces(is_captured=True, p_start_pos=False, k_start_pos=False)
         self.board.set_pos_all()
 
     def test_stalemate(self):

@@ -7,6 +7,7 @@ from pieces import (
     Queen,
     King,
 )
+
 import pygame
 
 
@@ -32,19 +33,19 @@ class Board:
         self.under_check = False
         self.pos_of_piece_causing_check = None
 
-    def init_all_pieces(self, is_captured=False):
+    def init_all_pieces(self, is_captured=False, p_start_pos=False, k_start_pos=False):
         '''Initializes all chess pieces'''
 
         # Piece attributes
         self.pieces = {
-            'w_pawns': [Pawn(i + 1, is_captured=is_captured) for i in range(8)],
-            'b_pawns': [Pawn(i + 1, colour='Black', is_captured=is_captured) for i in range(8)],
+            'w_pawns': [Pawn(i + 1, is_captured=is_captured, start_pos=p_start_pos) for i in range(8)],
+            'b_pawns': [Pawn(i + 1, colour='Black', is_captured=is_captured, start_pos=p_start_pos) for i in range(8)],
             'w_pieces': [
                 Rook(1, is_captured=is_captured),
                 Knight(1, is_captured=is_captured),
                 Bishop(1, is_captured=is_captured),
                 Queen(is_captured=is_captured),
-                King(is_captured=is_captured),
+                King(is_captured=is_captured, start_pos=k_start_pos),
                 Bishop(2, is_captured=is_captured),
                 Knight(2, is_captured=is_captured),
                 Rook(2, is_captured=is_captured),
@@ -54,7 +55,7 @@ class Board:
                 Knight(1, colour='Black', is_captured=is_captured),
                 Bishop(1, colour='Black', is_captured=is_captured),
                 Queen(colour='Black', is_captured=is_captured),
-                King(colour='Black', is_captured=is_captured),
+                King(colour='Black', is_captured=is_captured, start_pos=k_start_pos),
                 Bishop(2, colour='Black', is_captured=is_captured),
                 Knight(2, colour='Black', is_captured=is_captured),
                 Rook(2, colour='Black', is_captured=is_captured),
@@ -189,9 +190,6 @@ class Board:
                 return value
 
         return None
-
-    def show_move(self, piece):
-        print(f'{piece} to {self.get_sq_notation(piece.pos)}')
 
     def flip_board(self):
         '''Flips the board and the pieces'''
@@ -414,36 +412,38 @@ class Board:
                 temp = self.fetch_piece(move)
                 if temp.colour != self.get_next_turn():
                     return False
-                    
 
         return True
 
     def is_stalemate(self):
         if self.turn == 'White':
-            # for pawn in self.pieces['w_pawns']:
-            #     if not pawn.is_captured:
-            #         for move in pawn.valid_moves(self.is_flipped):
-            #             if not self.is_controlled_sq(move, self.get_next_turn()):
-            #                 print(self.get_sq_notation(move))
-            #                 self.show_move(pawn)
-            #                 return False
+            for pawn in self.pieces['w_pawns']:
+                if not pawn.is_captured:
+                    pawn_valid_moves = pawn.valid_moves(self.is_flipped)
+                    pawn_valid_moves2 = pawn.refine_valid_moves(self, pawn_valid_moves)
+                    if pawn_valid_moves2 != None:
+                        return False
 
-            for piece in self.pieces['w_pieces']:
-                if not piece.is_captured:
-                    for move in piece.valid_moves():
+            # for piece in self.pieces['w_pieces']:
+            #     if not piece.is_captured:
+            #         for move in piece.valid_moves():
+            #             if not self.is_controlled_sq(move, self.turn):
+            #                 temp = self.fetch_piece(move)
+            #                 if temp.colour != self.get_next_turn():
+            #                     return False
+        else:
+            for pawn in self.pieces['b_pawns']:
+                if not pawn.is_captured:
+                    for move in pawn.valid_moves(self.is_flipped):
                         if not self.is_controlled_sq(move, self.get_next_turn()):
                             return False
-        else:
-            # for pawn in self.pieces['b_pawns']:
-            #     if not pawn.is_captured:
-            #         for move in pawn.valid_moves(self.is_flipped):
-            #             if not self.is_controlled_sq(move, self.get_next_turn()):
-            #                 return False
-            
+
             for piece in self.pieces['b_pieces']:
                 if not piece.is_captured:
                     for move in piece.valid_moves():
-                        if not self.is_controlled_sq(move, self.get_next_turn()):
-                            return False
+                        if not self.is_controlled_sq(move, self.turn):
+                            temp = self.fetch_piece(move)
+                            if temp.colour != self.get_next_turn():
+                                return False
 
         return True
