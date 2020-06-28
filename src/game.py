@@ -1,25 +1,16 @@
 from board import Board
 from config import *
+
 import pygame
+import pygame_menu
 
 
 class Game:
-    def __init__(self):
-        self.init_pygame()
-        self.init_board()
-        # self.set_icons()
-
-    def init_pygame(self):
-        '''Initializes pygame and sets screen'''
-
-        pygame.init()
-        pygame.display.set_caption('ChessX')
-        # Initialize screen
-        self.screen = pygame.display.set_mode(
-            # (S_WIDTH, S_HEIGHT + SQ_SZ)
-            (S_WIDTH, S_HEIGHT)
-        )
+    def __init__(self, screen):
+        self.screen = screen
         self.screen.fill(Colour['WHITE'])
+        self.init_board()
+        # self.set_icons()        
 
     def init_board(self):
         '''Initializes Chess game board and pieces'''
@@ -172,9 +163,38 @@ class Game:
             pygame.display.flip()
 
 
-def main():
-    new_game = Game()
-    new_game.start()
+def init_pygame():
+    '''Initializes pygame and returns screen object'''
 
+    pygame.init()
+    pygame.display.set_caption('ChessX')
+    # Initialize screen
+    screen = pygame.display.set_mode(
+        # (S_WIDTH, S_HEIGHT + SQ_SZ)
+        (S_WIDTH, S_HEIGHT)
+    )
+
+    return screen
+
+
+def game_menu(screen):
+    def start_game():
+        new_game = Game(screen)
+        new_game.start()
+
+    menu = pygame_menu.Menu(height=S_HEIGHT,
+                            width=S_WIDTH,
+                            theme=pygame_menu.themes.THEME_DEFAULT,
+                            title='ChessX')
+
+    menu.add_button('Play', start_game)
+    menu.add_button('Quit', pygame_menu.events.EXIT)
+    menu.mainloop(screen)
+
+
+def main():
+    screen = init_pygame()
+    game_menu(screen)
+        
 
 main()

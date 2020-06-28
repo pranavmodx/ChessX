@@ -5,9 +5,9 @@ from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 class Pawn(Piece):
     value = 1
 
-    def __init__(self, p_no=None, colour='White', is_captured=False):
+    def __init__(self, p_no=None, colour='White', is_captured=False, start_pos=True):
         super().__init__(p_no, colour, is_captured)
-        self.start_pos = True  # Special case for pawn - double push
+        self.start_pos = start_pos  # Special case for pawn - double push
 
     def valid_moves(self, is_flipped=False):
         x = self.pos[0]
@@ -17,11 +17,13 @@ class Pawn(Piece):
         start_pos = self.start_pos
 
         def gen_valids1():
-            # Diagonal moves
-            valids.append((x - SQ_SZ, y + SQ_SZ))
-            valids.append((x + SQ_SZ, y + SQ_SZ))
-            # Straight 1 sq
-            valids.append((x, y + SQ_SZ))
+            if y + SQ_SZ < BD_SZ:
+                # Diagonal moves
+                if x - SQ_SZ >= BD_X:
+                    valids.append((x - SQ_SZ, y + SQ_SZ))
+                valids.append((x + SQ_SZ, y + SQ_SZ))
+                # Straight 1 sq
+                valids.append((x, y + SQ_SZ))
 
             if start_pos:
                 # Straight 2 sq
@@ -30,11 +32,13 @@ class Pawn(Piece):
             return valids
 
         def gen_valids2():
-            # Diagonal moves
-            valids.append((x - SQ_SZ, y - SQ_SZ))
-            valids.append((x + SQ_SZ, y - SQ_SZ))
-            # Straight 1 sq
-            valids.append((x, y - SQ_SZ))
+            if y - SQ_SZ >= BD_Y:
+                # Diagonal moves
+                if x - SQ_SZ >= BD_X:
+                    valids.append((x - SQ_SZ, y - SQ_SZ))
+                valids.append((x + SQ_SZ, y - SQ_SZ))
+                # Straight 1 sq
+                valids.append((x, y - SQ_SZ))
 
             if start_pos:
                 # Straight 2 sq
@@ -55,6 +59,37 @@ class Pawn(Piece):
                 moves = gen_valids2
 
         return moves()
+
+    def refine_valid_moves(self, board, old_valid_moves):
+        new_valid_moves = []
+        
+        for move in old_valid_moves:
+            # print(board.get_sq_notation(move))
+            temp = board.fetch_piece(move)
+            if temp:
+                if temp.colour != board.get_next_turn():
+                    new_valid_moves.append(move)
+            else:
+                if self.colour == 'Black':
+                    if not board.is_flipped:
+                        if move == (self.pos[0] + SQ_SZ, self.pos[1]) or \
+                        move == (self.pos[0] + 2 * SQ_SZ, self.pos[1]):
+                            new_valid_moves.append(move)
+                        else:
+                            if move == (self.pos[0] - SQ_SZ, self.pos[1]) or \
+                            move == (self.pos[0] - 2 * SQ_SZ, self.pos[1]):
+                                new_valid_moves.append(move)
+                else:
+                    if not board.is_flipped:
+                        if move == (self.pos[0] - SQ_SZ, self.pos[1]) or \
+                        move == (self.pos[0] - 2 * SQ_SZ, self.pos[1]):
+                            new_valid_moves.append(move)
+                    else:
+                        if move == (self.pos[0] + SQ_SZ, self.pos[1]) or \
+                        move == (self.pos[0] + 2 * SQ_SZ, self.pos[1]):
+                            new_valid_moves.append(move)
+
+        return new_valid_moves
 
     def move_checks_king(self, board, sq2_pos):
         opp_king_pos = board.king_pos[board.get_next_turn()]

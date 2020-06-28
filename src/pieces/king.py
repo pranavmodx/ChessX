@@ -5,9 +5,9 @@ from config import BD_X, BD_Y, BD_SZ, SQ_SZ
 class King(Piece):
     value = None
 
-    def __init__(self, colour='White', is_captured=False):
+    def __init__(self, colour='White', is_captured=False, start_pos=True):
         super().__init__(colour=colour, is_captured=is_captured)
-        self.start_pos = True  # For checking castling ability
+        self.start_pos = start_pos  # For checking castling ability
 
     def valid_moves(self):
         x = self.pos[0]
