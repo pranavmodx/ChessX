@@ -79,7 +79,7 @@ class Board:
         ]
 
     def load_img(self, img):
-        '''Loads the board image'''
+        '''Loads the image of the board'''
         self.img = img
 
     def load_all_img(self):
@@ -112,10 +112,15 @@ class Board:
             )
             b_piece.load_img(img_obj)
 
+    def display(self, screen):
+        '''Displays the board'''
+
+        screen.blit(self.img, self.pos)
+
     def display_all(self, screen):
         '''Displays the board and all the pieces'''
 
-        bd_scrn_obj = screen.blit(self.img, self.pos)
+        self.display(screen)
 
         for piece_list in self.pieces.values():
             for piece in piece_list:

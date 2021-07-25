@@ -1,6 +1,8 @@
 from board import Board
 from config import *
 
+from visualisations.knights_tour import KnightsTour
+
 import pygame
 import pygame_menu
 
@@ -182,12 +184,17 @@ def game_menu(screen):
         new_game = Game(screen)
         new_game.start()
 
+    def start_visualisation():
+        new_tour = KnightsTour(screen)
+        new_tour.start()
+
     menu = pygame_menu.Menu(height=S_HEIGHT,
                             width=S_WIDTH,
                             theme=pygame_menu.themes.THEME_DEFAULT,
                             title='ChessX')
 
     menu.add_button('Play', start_game)
+    menu.add_button('Visualisation', start_visualisation)
     menu.add_button('Quit', pygame_menu.events.EXIT)
     menu.mainloop(screen)
 
